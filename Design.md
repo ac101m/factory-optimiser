@@ -164,6 +164,8 @@ Per solved model (per N):
     
 *   **Marginal analysis:** via sweep deltas (see §3) — empirical points/min per: additional augmenter, additional Somersloop, additional unit of each map resource. This answers "which bottleneck to expand / which sloop to hunt / augmenter vs production-slooping" — and is more robust than MIP shadow prices.
     
+*   **Consistency check (`check` subcommand):** audits the loaded config before any solve — semantic issues that would otherwise surface as silently-wrong optima or all-zero solves. Runs as a pre-flight gate on *every* command (errors refuse to proceed, exit non-zero; warnings print to stderr and never block). Findings (deterministic order, errors first): unknown machine types referenced by recipes; items referenced but missing from the items config; unused machine specs / unused item entries; `max_sloops` beyond the grade table (clamped); non-positive rates / `max_machines`; items consumed but never produced and uncapped; produced items that are unsinkable and never consumed (dead end); power consumers with no generator; extractor recipes without a `max_machines` cap; `resources` caps on items that are also produced. It is pure data inspection — it never solves a MILP. `check --strict` additionally fails on warnings (for CI).
+    
 
 ## 8. Parameters needing in-game confirmation (config table / TODOs)
 

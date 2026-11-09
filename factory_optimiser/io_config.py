@@ -114,7 +114,6 @@ class Config:
     recipes: list[Recipe]
     parameters: Parameters
     machines: dict[str, MachineSpec] = field(default_factory=dict)
-    warnings: list[str] = field(default_factory=list)
     recipes_dir: Path = Path("recipes")
     machines_dir: Path = Path("machines")
 
@@ -320,36 +319,6 @@ def load_config(
         recipes_dir=Path(recipes_dir),
         machines_dir=Path(machines_dir),
     )
-
-    # Cross-check: warn about items referenced by recipes that have no entry.
-    referenced = set()
-    for recipe in recipes:
-        referenced.update(recipe.inputs)
-        referenced.update(recipe.outputs)
-    referenced.discard(POWER_ITEM)
-    for item_id in sorted(referenced):
-        if item_id not in items:
-            config.warnings.append(
-                f"item {item_id!r} referenced by recipes has no entry in {items_path} "
-                f"(assuming sinkable with 0 sink points)"
-            )
-    # Warn about recipes for unknown machine types (they fall back to defaults).
-    known_machines = set(machines) | {"default"}
-    for recipe in recipes:
-        if recipe.machine not in known_machines:
-            config.warnings.append(
-                f"recipe {recipe.id!r} uses unknown machine {recipe.machine!r} "
-                f"(no spec in {machines_dir}; using defaults: {DEFAULT_MAX_SLOOPS} max sloops, "
-                f"{DEFAULT_MACHINE.power_draw} MW)"
-            )
-    # Warn about resource caps for items that are also produced.
-    produced = set(config.produced_items)
-    for item_id in parameters.resources:
-        if item_id in produced:
-            config.warnings.append(
-                f"resource {item_id!r} is both produced by a recipe and map-capped; "
-                f"the cap applies to total consumption"
-            )
     return config
 
 

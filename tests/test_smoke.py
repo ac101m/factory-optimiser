@@ -250,6 +250,40 @@ def test_machine_specs_load_from_files() -> None:
     check("load_machines: specs load recursively, fields + defaults correct")
 
 
+def test_consistency_check_and_cli_gate() -> None:
+    # The audit must be silent on a consistent config...
+    from factory_optimiser.consistency import check_config
+
+    cfg = load_example()
+    assert not check_config(cfg), "baseline example config must audit clean"
+
+    # ...but flag a recipe on an unknown machine type as an error.
+    cfg2 = load_example()
+    cfg2.recipes[0] = Recipe(
+        id="bar", name="Bar", machine="nonexistent",
+        inputs={"ore": 30.0}, outputs={"bar": 30.0},
+    )
+    codes = {i.code for i in check_config(cfg2) if i.severity == "error"}
+    assert "unknown-machine" in codes
+
+    # ...and an item referenced but missing from the items config.
+    cfg3 = load_example()
+    cfg3.recipes.append(
+        Recipe(id="mystery", name="Mystery", machine="constructor",
+               inputs={"ore": 1.0}, outputs={"mystery_item": 1.0})
+    )
+    codes = {i.code for i in check_config(cfg3) if i.severity == "error"}
+    assert "missing-item" in codes
+
+    # The CLI gate: 'check' runs the audit and exits 0 on the real project data.
+    env = dict(os.environ, PYTHONPATH=str(ROOT))
+    py = str(ROOT / ".venv" / "bin" / "python")
+    proc = subprocess.run([py, "main.py", "check"], env=env, capture_output=True, text=True)
+    assert proc.returncode == 0, proc.stderr
+    assert "consistency check" in proc.stdout
+    check("consistency: check_config flags errors; CLI 'check' gate exits 0 on clean data")
+
+
 if __name__ == "__main__":
     test_milp_basic()
     test_scarcity_routing()
@@ -261,5 +295,6 @@ if __name__ == "__main__":
     test_power_draw_inherited_from_machine_type()
     test_extractor_recipe_bounds_supply()
     test_machine_specs_load_from_files()
+    test_consistency_check_and_cli_gate()
     test_cli_launcher_and_json()
     print(f"\nAll {_CHECKS} smoke checks passed.")

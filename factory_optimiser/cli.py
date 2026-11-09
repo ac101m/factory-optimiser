@@ -1,11 +1,15 @@
 """Command-line interface (docopt) for the factory optimizer.
 
-Three subcommands:
+Commands:
 
+    check                   audit the data model for consistency (no solve)
     optimize                best build plan (includes the augmenter sweep)
     sweep augmenters        points/min per augmenter count (marginal curve)
     sweep somersloops       points/min per total Somersloop budget
     sweep resources         points/min per unit of each map resource (marginal)
+
+The consistency audit also runs before every other command; errors stop the
+command (non-zero exit), warnings print to stderr and never block.
 """
 
 from __future__ import annotations
@@ -21,6 +25,7 @@ warnings.filterwarnings("ignore", category=SyntaxWarning, module=r"docopt")
 from docopt import DocoptExit, docopt  # noqa: E402
 
 from . import __version__
+from .consistency import audit_text, check_config, has_errors, has_warnings
 from .io_config import ConfigError, load_config
 from .report import (
     augmenter_curve_text,
@@ -40,12 +45,15 @@ USAGE = """\
 Satisfactory sink-point factory optimizer (MILP).
 
 Usage:
+  factory_optimiser check [options] [--strict]
   factory_optimiser optimize [options]
   factory_optimiser sweep (augmenters | somersloops | resources) [options]
   factory_optimiser --version
   factory_optimiser --help
 
 Commands:
+  check                   Audit the data model for consistency (no solve; also
+                          runs before every other command).
   optimize                Solve the optimal build plan (augmenter sweep included).
   sweep augmenters        Marginal-value curve: points/min per augmenter count.
   sweep somersloops       Marginal-value curve: points/min per Somersloop budget.
@@ -59,6 +67,7 @@ Options:
                             Parameters JSON                      [default: config/parameters.json]
   --max-augmenters N        Cap augmenter count (default: floor(Somersloop budget / cost))
   --no-augmenters           Force N=0 (no Alien Power Augmenters)
+  --strict                  Treat audit warnings as failures too (check only).
   -j, --json                Emit machine-readable JSON instead of a table.
   -h, --help                Show this message.
   --version                 Show version.
@@ -80,8 +89,20 @@ def main(argv: list[str] | None = None) -> int:
         print(f"error: {exc}", file=sys.stderr)
         return 2
 
-    for warning in config.warnings:
-        print(f"warning: {warning}", file=sys.stderr)
+    # Consistency audit runs before anything else.
+    issues = check_config(config)
+    audit = audit_text(config, issues)
+
+    if args["check"]:
+        print(audit)
+        if has_errors(issues) or (args["--strict"] and has_warnings(issues)):
+            return 1
+        return 0
+
+    if issues:
+        print(audit, file=sys.stderr)
+        if has_errors(issues):
+            return 1
 
     try:
         if args["optimize"]:
