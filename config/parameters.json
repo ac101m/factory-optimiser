@@ -10,10 +10,8 @@
   },
 
   "resources": {
-    "iron_ore": 240.0,
-    "copper_ore": 150.0,
-    "limestone": 90.0,
-    "coal": 120.0
+    "_note": "OPTIONAL extra per-item cap on total recipe consumption. Map extraction is modeled as MINER/MACHINE recipes (see recipes/*, machine type 'miner'): the per-node limit is that recipe's max_machines. Leave this table empty when miners are modeled as recipes (as here) so supply is not double-limited.",
+    "_example_cap_on_a_raw_item": {"water": 300.0}
   },
 
   "sloop_grades": {
@@ -29,6 +27,7 @@
     "constructor":    {"power_draw": 4.0,  "max_sloops": 3},
     "assembler":      {"power_draw": 12.0, "max_sloops": 3},
     "foundry":        {"power_draw": 16.0, "max_sloops": 3},
+    "miner":          {"power_draw": 5.0,  "max_sloops": 3},
     "coal_generator": {"power_draw": 0.0,  "max_sloops": 1}
   }
 }

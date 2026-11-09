@@ -198,6 +198,35 @@ def test_power_draw_inherited_from_machine_type() -> None:
     check("MILP: power draw inherited from machine type is enforced")
 
 
+def test_extractor_recipe_bounds_supply() -> None:
+    # A miner (no-input) recipe is the only ore source; its max_machines cap IS
+    # the map resource limit. And because it draws power, no generator -> no ore.
+    cfg = load_example()
+    cfg.recipes.clear()
+    cfg.parameters.resources = {}
+    cfg.parameters.somersloop_budget = 0.0  # isolate max_machines from sloop multipliers
+    cfg.parameters.machines["miner"] = MachineSpec(power_draw=0.0, max_sloops=3)
+    cfg.parameters.machines["constructor"] = MachineSpec(power_draw=0.0, max_sloops=3)
+    cfg.recipes.append(
+        Recipe(id="miner", name="Miner", machine="miner",
+               inputs={}, outputs={"ore": 60.0}, max_machines=2.0)
+    )
+    cfg.recipes.append(
+        Recipe(id="smelter", name="Smelter", machine="constructor",
+               inputs={"ore": 30.0}, outputs={"bar": 30.0})
+    )
+    cfg.items["ore"] = Item("ore", "Ore", sinkable=False)
+    cfg.items["bar"] = Item("bar", "Bar", sinkable=True, points=10.0)
+    sol = solve(build_problem(cfg, n_augmenters=0))
+    # 2 miners x 60 ore/min = 120 ore/min -> 4 smelters -> 120 bar. No more.
+    assert abs(sol.sinks["bar"] - 120.0) < 1e-6, "extractor max_machines must cap supply"
+    # Now give the miner a power draw and remove any generator: nothing may run.
+    cfg.parameters.machines["miner"] = MachineSpec(power_draw=5.0, max_sloops=3)
+    sol2 = solve(build_problem(cfg, n_augmenters=0))
+    assert sol2.objective == 0.0, "miner power draw must be enforced"
+    check("MILP: extractor recipes cap supply via max_machines and draw power")
+
+
 if __name__ == "__main__":
     test_milp_basic()
     test_scarcity_routing()
@@ -207,5 +236,6 @@ if __name__ == "__main__":
     test_downconvert_includes_grade_multiplier()
     test_machine_cap_enforced()
     test_power_draw_inherited_from_machine_type()
+    test_extractor_recipe_bounds_supply()
     test_cli_launcher_and_json()
     print(f"\nAll {_CHECKS} smoke checks passed.")

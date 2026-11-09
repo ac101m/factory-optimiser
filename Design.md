@@ -94,6 +94,17 @@ This one family does three jobs at once:
 Σ_r Σ_k κ_k·α[r][raw] · x[r][k] ≤ R[raw]   # total extraction ≤ map availability
 ```
 
+> **Decision (revised, 2026-11-09):** map extraction is no longer a bare
+> per-item cap `R`. Raw materials are produced by **extractor recipes** —
+> recipes with empty inputs (miners, pumps) whose output is the raw item and
+> whose optional `max_machines` is the number of that node purity available.
+> That machine cap replaces `R`, and extraction now costs power via the
+> extractor's machine type (and can accept Somersloops). This is strictly more
+> faithful: mining draw is real, and a power-tight optimum must pay for its own
+> ore. The old `resources` table is retained only as an *optional* extra cap on
+> total consumption of an item; it must not be combined with an extractor
+> recipe for the same item (the loader warns). See §9.
+
 **Global Somersloop budget:**
 
 ```
@@ -162,7 +173,7 @@ Per solved model (per N):
 | Per-grade multipliers ρ, κ, π | 2^k? or other | **confirm** (esp. input & power when slooped) |
 | Augmenter sloop cost | 10 | confirmed |
 | Augmenter stacking | additive +10%/unit of base | confirmed |
-| Map extraction limits R[raw] | per map | config input |
+| Map extraction limits | **revised:** extractor recipes with `max_machines` = node count (see §5.3 note); optional `resources` table for an extra consumption cap | done |
 | Sink points p[i] | per item | config input |
 | Do power buildings accept sloops, same K? | ? | **confirm** |
 

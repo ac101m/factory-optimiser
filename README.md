@@ -24,7 +24,7 @@ venv and deps:
 .venv/bin/factory-optimiser optimize --no-augmenters
 .venv/bin/factory-optimiser sweep augmenters      # pts/min per augmenter count
 .venv/bin/factory-optimiser sweep somersloops     # pts/min per Somersloop budget
-.venv/bin/factory-optimiser sweep resources       # marginal value of each map resource
+.venv/bin/factory-optimiser sweep resources       # pts/min per extra extractor node per raw material
 .venv/bin/factory-optimiser --help
 ```
 
@@ -33,8 +33,10 @@ relative to the working directory; override with `-r/-t/-p`).
 
 ## How recipes are expressed (JSON)
 
-Every file in `recipes/` describes **one recipe**, i.e. one machine model at
-100% clock. Items are plain string ids. Example (`recipes/iron_plate.json`):
+Every file under `recipes/` describes **one recipe**, i.e. one machine model at
+100% clock. Subdirectories are just for organizing the collection (e.g.
+`recipes/mining/`, `recipes/manufacturing/`) — the loader recursively picks up
+every `*.json`. Items are plain string ids. Example (`recipes/manufacturing/iron_plate.json`):
 
 ```json
 {
@@ -54,20 +56,30 @@ Every file in `recipes/` describes **one recipe**, i.e. one machine model at
 * A generator is expressed by listing `"power": <MW>` in `outputs` (it consumes
   fuel like any recipe and produces the special `power` item). Consumers draw
   power via `power_draw` (or the machine-type default).
+* **Extractors** (miners, pumps) are recipes with **empty `inputs`** that output
+  the raw material; their `max_machines` is the number of that node purity on
+  the map. So map supply is a *recipe*, not a global number — extractors draw
+  power (via the `miner`/`pump` machine type) and can even accept Somersloops.
+  Node purities are separate recipes, e.g. `iron_ore_pure` (120/min, ×2 nodes)
+  vs `iron_ore_impure` (30/min, ×1 node). Use `sweep resources` to see the
+  marginal value of one more node of each type.
 * `machine` refers to a building type defined in `config/parameters.json` (power
   draw default, max Somersloops). Unknown machines fall back to defaults and
   print a warning.
 * `max_machines` is optional; without it recipes are limited only by map
-  resources (Design.md §4).
+  resources (Design.md §4). For extractor recipes, `max_machines` is the node
+  count.
 
 Supporting config:
 
 * `config/items.json` — item id → `{name, sinkable, sink_points}`. Items
   referenced by recipes but absent here get defaults (sinkable, 0 points) with
   a warning.
-* `config/parameters.json` — map resource caps, Somersloop budget, per-grade
-  multipliers (ρ output / κ input / π power per Somersloop count), Alien Power
-  Augmenter cost & bonus, per-machine defaults.
+* `config/parameters.json` — Somersloop budget, per-grade multipliers (ρ output
+  / κ input / π power per Somersloop count), Alien Power Augmenter cost &
+  bonus, per-machine power draw & max sloops. An optional `resources` table can
+  still bound total *consumption* of an item, but the preferred way to limit
+  supply is extractor recipes.
 
 The current recipes/items/parameters are **small placeholder examples** with
 plausible-but-unconfirmed numbers; drop in real data later without touching the
@@ -82,7 +94,9 @@ model code.
   `Σ (ρ_k·β − κ_k·α)·x = s[i] ≥ 0` — overflow flows into the sink, and scarce
   items are routed to the consumer with the highest points-per-item (starvation
   of weak recipes is the *optimal* behavior, not a bug).
-* Map resource caps bound total consumption (including raw items sunk directly).
+* Raw materials are produced by extractor recipes whose `max_machines` is the
+  node count — that cap *is* the map resource limit (plus power: miners draw MW
+  like any machine).
 * A global Somersloop budget `Σ k·x ≤ S`.
 * Power is an item: generators produce it, machines consume it, and
   `consumption ≤ m(N)·generation` where `m(N) = 1 + 0.10·N`.

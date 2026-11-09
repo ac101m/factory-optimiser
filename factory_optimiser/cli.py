@@ -29,7 +29,12 @@ from .report import (
     optimize_text,
 )
 from .solve import SolveError
-from .sweep import AugResult, best_augmenter, sweep_augmenters, sweep_resource, sweep_somersloops
+from .sweep import (
+    AugResult,
+    sweep_augmenters,
+    sweep_extractor_nodes,
+    sweep_somersloops,
+)
 
 USAGE = """\
 Satisfactory sink-point factory optimizer (MILP).
@@ -44,7 +49,7 @@ Commands:
   optimize                Solve the optimal build plan (augmenter sweep included).
   sweep augmenters        Marginal-value curve: points/min per augmenter count.
   sweep somersloops       Marginal-value curve: points/min per Somersloop budget.
-  sweep resources         Marginal-value curve: points/min per unit of map resource.
+  sweep resources         Marginal-value curve: pts/min per extra extractor node on each raw material.
 
 Options:
   -r DIR, --recipes DIR     Directory of recipe JSON files        [default: recipes]
@@ -153,31 +158,34 @@ def _cmd_sweep(args, config) -> int:
             )
         return 0
 
-    # resources
-    resource_items = sorted(config.parameters.resources)
+    # resources: in the miner-recipe model, the "map resource" lever is how
+    # many extractor nodes (miner recipes) you can place. Report the marginal
+    # value of one more node for each raw material.
+    nodes = sweep_extractor_nodes(config)
     if args["--json"]:
-        out: dict = {"dimension": "resources", "resources": {}}
-    lines = ["=== Resource marginal-value curve (best N each point) ==="]
+        out: dict = {"dimension": "resources", "extractors": {}}
+    lines = ["=== Extractor node marginal value (best N each point; +1 node each) ==="]
     lines.append(
-        f"  {'resource':24s} {'base cap':>10s} {'pts/min@base':>13s} {'pts/min@+10%':>14s} {'marginal /unit':>16s}"
+        f"  {'node':30s} {'yields':>18s} {'caps':>5s} {'pts/min@base':>13s} {'pts/min@+1 node':>16s} {'marginal':>10s}"
     )
-    for item in resource_items:
-        base_cap = config.parameters.resources[item]
-        base_pts = best_augmenter(config).points_per_min
-        step = base_cap * 0.10 or 1.0
-        bumped = sweep_resource(config, item, [base_cap + step])[0][1]
-        marginal = (bumped - base_pts) / step
-        label = config.item_name(item)
+    for r, cap, base_pts, bumped in nodes:
+        recipe = config.recipes[r]
+        label = f"{recipe.name or recipe.id} [{recipe.machine}]"
+        yields = ", ".join(f"{config.item_name(i, i)} {rate:g}/min" for i, rate in recipe.outputs.items())
+        marginal = bumped - base_pts
         lines.append(
-            f"  {label:24s} {base_cap:>10g} {base_pts:>13,.1f} {bumped:>14,.1f} {marginal:>+16,.1f}"
+            f"  {label:30s} {yields:>18s} {cap:>5g} {base_pts:>13,.1f} {bumped:>16,.1f} {marginal:>+10,.1f}"
         )
         if args["--json"]:
-            out["resources"][item] = {
-                "base_cap": base_cap,
+            out["extractors"][recipe.id] = {
+                "produces": {i: round(r2, 4) for i, r2 in recipe.outputs.items()},
+                "base_nodes": cap,
                 "points_at_base": round(base_pts, 4),
-                "points_at_plus10pct": round(bumped, 4),
-                "marginal_points_per_unit": round(marginal, 4),
+                "points_with_one_more_node": round(bumped, 4),
+                "marginal_points_per_node": round(marginal, 4),
             }
+    if not lines[2:] and not nodes:
+        lines.append("  (no extractor recipes with max_machines caps found)")
     if args["--json"]:
         _dump_json(out)
     else:

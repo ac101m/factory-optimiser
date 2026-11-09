@@ -1,0 +1,8 @@
+{
+  "id": "coal_normal",
+  "name": "Coal (Normal Node)",
+  "machine": "miner",
+  "inputs": {},
+  "outputs": {"coal": 60.0},
+  "max_machines": 2
+}

@@ -111,7 +111,11 @@ def sweep_resource(
     *,
     time_limit: float = 30.0,
 ) -> list[tuple[float, float]]:
-    """Marginal-value curve of one map resource: cap R -> best points/min."""
+    """Marginal-value curve of one map resource: cap R -> best points/min.
+
+    Applies to the optional ``resources`` table only. The canonical way to
+    model map availability is extractor recipes (see :func:`sweep_extractor_nodes`).
+    """
     curve: list[tuple[float, float]] = []
     for cap in caps:
         old = config.parameters.resources.get(item)
@@ -124,3 +128,41 @@ def sweep_resource(
             else:
                 config.parameters.resources[item] = old
     return curve
+
+
+def extractor_recipes(config: Config) -> list[int]:
+    """Indices of *extractor* recipes: no material inputs (miners, pumps, ...).
+
+    These are how raw map resources are created in the recipes model: each
+    node purity is one recipe whose ``max_machines`` is the node count.
+    """
+    return [r for r, recipe in enumerate(config.recipes) if not recipe.inputs]
+
+
+def sweep_extractor_nodes(
+    config: Config,
+    *,
+    time_limit: float = 30.0,
+) -> list[tuple[int, float, float, float]]:
+    """Marginal value of one extra node of each extractor recipe.
+
+    Returns ``(recipe_idx, base_cap, points_at_base, points_at_base_plus_one)``.
+    This is the resource marginal curve under the miner-recipe model — "which
+    node should I expand next?".
+    """
+    import dataclasses
+
+    out: list[tuple[int, float, float, float]] = []
+    for r in extractor_recipes(config):
+        recipe = config.recipes[r]
+        if recipe.max_machines is None:
+            continue  # uncapped extractor: "add a node" is meaningless
+        base_pts = best_augmenter(config, time_limit=time_limit).points_per_min
+        bumped_recipe = dataclasses.replace(recipe, max_machines=recipe.max_machines + 1)
+        config.recipes[r] = bumped_recipe
+        try:
+            bumped = best_augmenter(config, time_limit=time_limit).points_per_min
+        finally:
+            config.recipes[r] = recipe
+        out.append((r, recipe.max_machines, base_pts, bumped))
+    return out

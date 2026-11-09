@@ -2,8 +2,10 @@
 
 Generalised data format ("the JSON way to express a recipe"):
 
-* Every file in a recipes/ directory is one recipe (a single machine model at
-  100% clock), e.g. ``recipes/iron_plate.json``::
+* Every file in a recipes/ tree is one recipe (a single machine model at 100%
+  clock), e.g. ``recipes/manufacturing/iron_plate.json``::
+  Subdirectories are just for organization — loading is a recursive glob that
+  picks up every ``*.json`` anywhere under recipes/.
 
       {
         "id": "iron_plate",
@@ -17,10 +19,18 @@ Generalised data format ("the JSON way to express a recipe"):
 
 * ``inputs``/``outputs`` map item ids to per-machine rates at 100% clock.
   A recipe may list ``"power": <MW>`` in ``outputs`` to be a generator.
+* **Extractor recipes** (miners, water/oil pumps, ...) have **empty ``inputs``**
+  and the raw material in ``outputs``; their ``max_machines`` is the number of
+  that node (purity) type available on the map. This is how map extraction is
+  modeled: supply is capped by extractor machine counts, and extractors draw
+  power via their machine type like any other building. Split node purities
+  into separate recipes (e.g. ``iron_ore_pure`` vs ``iron_ore_impure``).
 * Items are plain ids with optional metadata in a separate items file
   (sink points, sinkable flag). See config/items.json.
-* Game parameters (sloop-grade tables, augmenters, map resources, power
-  defaults per machine, somersloop budget) live in config/parameters.json.
+* Game parameters (sloop-grade tables, augmenters, optional per-item resource
+  caps, power defaults per machine, somersloop budget) live in
+  config/parameters.json. The optional ``resources`` table bounds total
+  *consumption* of an item; prefer extractor recipes for supply limits.
 """
 
 from __future__ import annotations
@@ -188,7 +198,9 @@ def load_recipes(directory: str | Path) -> list[Recipe]:
         raise ConfigError(f"recipes directory not found: {dir_path}")
     recipes: list[Recipe] = []
     seen: set[str] = set()
-    for path in sorted(dir_path.glob("*.json")):
+    # Recursive glob: recipes may live in subdirectories for organization
+    # (e.g. recipes/mining/, recipes/manufacturing/). Sorted for determinism.
+    for path in sorted(dir_path.rglob("*.json")):
         recipe = load_recipe(path)
         if recipe.id in seen:
             raise ConfigError(f"duplicate recipe id {recipe.id!r} in {path}")
