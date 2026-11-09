@@ -230,15 +230,24 @@ def test_extractor_recipe_bounds_supply() -> None:
 
 
 def test_machine_specs_load_from_files() -> None:
+    import tempfile
+
     from factory_optimiser.io_config import load_machines
 
-    machines = load_machines(ROOT / "machines")
-    assert set(machines) >= {"constructor", "assembler", "foundry", "miner", "coal_generator"}
-    assert machines["constructor"].power_draw == 4.0
-    assert machines["constructor"].max_sloops == 3
-    assert machines["coal_generator"].power_draw == 0.0
-    assert machines["coal_generator"].max_sloops == 1
-    check("load_machines: machine specs load from JSON files")
+    with tempfile.TemporaryDirectory() as tmp:
+        (Path(tmp) / "alpha.json").write_text(
+            '{"id": "alpha", "name": "Alpha", "power_draw": 7.5, "max_sloops": 2}'
+        )
+        (Path(tmp) / "sub").mkdir()
+        (Path(tmp) / "sub" / "beta.json").write_text('{"id": "beta", "name": "Beta"}')
+        machines = load_machines(tmp)  # recursive, sorted
+        assert set(machines) == {"alpha", "beta"}
+        assert machines["alpha"].name == "Alpha"
+        assert machines["alpha"].power_draw == 7.5
+        assert machines["alpha"].max_sloops == 2
+        assert machines["beta"].power_draw == 0.0     # defaults applied
+        assert machines["beta"].max_sloops == 3
+    check("load_machines: specs load recursively, fields + defaults correct")
 
 
 if __name__ == "__main__":

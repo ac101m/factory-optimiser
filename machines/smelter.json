@@ -1,0 +1,6 @@
+{
+  "id": "smelter",
+  "name": "Smelter",
+  "power_draw": 4.0,
+  "max_sloops": 1
+}

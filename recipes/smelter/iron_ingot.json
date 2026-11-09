@@ -1,7 +1,7 @@
 {
   "id": "iron_ingot",
   "name": "Iron Ingot",
-  "machine": "constructor",
+  "machine": "smelter",
   "inputs": {"iron_ore": 30.0},
   "outputs": {"iron_ingot": 30.0}
 }
