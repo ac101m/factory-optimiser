@@ -1,0 +1,7 @@
+{
+  "id": "concrete",
+  "name": "Concrete",
+  "machine": "constructor",
+  "inputs": {"limestone": 45.0},
+  "outputs": {"concrete": 15.0}
+}

@@ -1,0 +1,20 @@
+[project]
+name = "factory-optimiser"
+version = "0.1.0"
+description = "MILP factory optimizer: maximize AWESOME sink points/min in Satisfactory"
+requires-python = ">=3.12"
+dependencies = [
+    "numpy>=1.26",
+    "scipy>=1.9",
+    "docopt>=0.6.2",
+]
+
+[project.scripts]
+factory-optimiser = "factory_optimiser.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["factory_optimiser*"]

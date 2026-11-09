@@ -1,0 +1,7 @@
+{
+  "id": "rotor",
+  "name": "Rotor",
+  "machine": "assembler",
+  "inputs": {"iron_rod": 20.0, "screw": 100.0},
+  "outputs": {"rotor": 4.0}
+}

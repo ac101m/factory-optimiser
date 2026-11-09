@@ -1,0 +1,34 @@
+{
+  "_comment": "Game/system parameters. sloop_grades and power values are PLACEHOLDER example values pending in-game confirmation (see Design.md §8).",
+  "somersloop_budget": 10,
+
+  "augmenters": {
+    "cost": 10,
+    "bonus": 0.10,
+    "_note": "Each Alien Power Augmenter costs `cost` Somersloops and adds `bonus` * base (unaugmented) generation, additively (not compounding).",
+    "max": null
+  },
+
+  "resources": {
+    "iron_ore": 240.0,
+    "copper_ore": 150.0,
+    "limestone": 90.0,
+    "coal": 120.0
+  },
+
+  "sloop_grades": {
+    "_note": "Per-grade multipliers on a machine running with k Somersloops: rho = output, kappa = input consumption, pi = power draw. DEFAULT IS A PLACEHOLDER — CONFIRM per Design.md §8. Chosen so sloops are strictly valuable: rho=kappa=2^k (output and input both double, conserving material balance) but pi=1 (slooped machines draw the same power). NOTE: if pi were also 2^k, a slooped machine is exactly equivalent to 2^k extra buildings and Somersloops would only matter via per-recipe machine caps.",
+    "0": {"rho": 1.0, "kappa": 1.0, "pi": 1.0},
+    "1": {"rho": 2.0, "kappa": 2.0, "pi": 1.0},
+    "2": {"rho": 4.0, "kappa": 4.0, "pi": 1.0},
+    "3": {"rho": 8.0, "kappa": 8.0, "pi": 1.0}
+  },
+
+  "machines": {
+    "_note": "power_draw = MW consumed at 100% clock (generators draw 0). max_sloops caps the sloop grades available to this building.",
+    "constructor":    {"power_draw": 4.0,  "max_sloops": 3},
+    "assembler":      {"power_draw": 12.0, "max_sloops": 3},
+    "foundry":        {"power_draw": 16.0, "max_sloops": 3},
+    "coal_generator": {"power_draw": 0.0,  "max_sloops": 1}
+  }
+}

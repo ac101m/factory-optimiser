@@ -1,0 +1,7 @@
+{
+  "id": "reinforced_iron_plate",
+  "name": "Reinforced Iron Plate",
+  "machine": "assembler",
+  "inputs": {"iron_plate": 30.0, "screw": 60.0},
+  "outputs": {"reinforced_iron_plate": 5.0}
+}

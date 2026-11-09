@@ -1,0 +1,7 @@
+{
+  "id": "steel_ingot",
+  "name": "Steel Ingot",
+  "machine": "foundry",
+  "inputs": {"iron_ore": 45.0, "coal": 45.0},
+  "outputs": {"steel_ingot": 45.0}
+}

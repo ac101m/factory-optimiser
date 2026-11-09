@@ -1,0 +1,7 @@
+{
+  "id": "cable",
+  "name": "Cable",
+  "machine": "constructor",
+  "inputs": {"wire": 30.0},
+  "outputs": {"cable": 20.0}
+}
