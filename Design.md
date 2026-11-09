@@ -179,6 +179,12 @@ Per solved model (per N):
 
 Design is parameter-driven so these fill in without touching model code.
 
+> **Note (revised):** building specs (`power_draw`, `max_sloops`) live in
+> `machines/*.json` — one file per building type (id, name, power_draw,
+> max_sloops), loaded like recipes, subdirectories allowed. A recipe's
+> `machine` field refers to one of those ids; unknown ids fall back to 0 MW /
+> max sloops with a loader warning.
+
 ## 9. Python implementation outline
 
 *   **Config module:** items, recipes, sloop-grade tables, sink points, map resource caps, augmenter constants (JSON or const dicts).

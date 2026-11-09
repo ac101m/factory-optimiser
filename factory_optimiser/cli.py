@@ -53,6 +53,7 @@ Commands:
 
 Options:
   -r DIR, --recipes DIR     Directory of recipe JSON files        [default: recipes]
+  -m DIR, --machines DIR    Directory of machine-spec JSON files  [default: machines]
   -t FILE, --items FILE     Items config JSON                    [default: config/items.json]
   -p FILE, --parameters FILE
                             Parameters JSON                      [default: config/parameters.json]
@@ -72,7 +73,9 @@ def main(argv: list[str] | None = None) -> int:
         return 2
 
     try:
-        config = load_config(args["--recipes"], args["--items"], args["--parameters"])
+        config = load_config(
+            args["--recipes"], args["--machines"], args["--items"], args["--parameters"]
+        )
     except ConfigError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2

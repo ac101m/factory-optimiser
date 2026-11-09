@@ -44,11 +44,13 @@ def load_example() -> Config:
             Recipe(id="art", name="Art", machine="constructor", inputs={"bar": 15.0}, outputs={"art": 15.0}),
             Recipe(id="coal_power", name="Coal Power", machine="generator", inputs={"coal": 15.0}, outputs={"power": 75.0}),
         ],
+        machines={
+            "constructor": MachineSpec(id="constructor", power_draw=4.0, max_sloops=3),
+            "generator": MachineSpec(id="generator", power_draw=0.0, max_sloops=1),
+        },
         parameters=Parameters(
             resources={"ore": 60.0, "coal": 30.0},
             sloop_grades={0: Grade(1, 1, 1), 1: Grade(2, 2, 1), 2: Grade(4, 4, 1), 3: Grade(8, 8, 1)},
-            machines={"constructor": MachineSpec(power_draw=4.0, max_sloops=3),
-                      "generator": MachineSpec(power_draw=0.0, max_sloops=1)},
             somersloop_budget=4.0,
             augmenters=Augmenters(cost=10, bonus=0.1),
         ),
@@ -106,7 +108,7 @@ def test_downconvert_includes_grade_multiplier() -> None:
     cfg = load_example()
     cfg.parameters.somersloop_budget = 10.0
     cfg.recipes.clear()
-    cfg.parameters.machines["constructor"] = MachineSpec(power_draw=0.0, max_sloops=3)  # power not under test
+    cfg.machines["constructor"] = MachineSpec(power_draw=0.0, max_sloops=3)  # power not under test
     # max_machines=1 forces the use of sloops to get past the cap: a k=3
     # machine makes 8x the base output, so 80/min from 80 ore.
     cfg.recipes.append(
@@ -129,7 +131,7 @@ def test_machine_cap_enforced() -> None:
     cfg = load_example()
     cfg.parameters.somersloop_budget = 0.0
     cfg.recipes.clear()
-    cfg.parameters.machines["constructor"] = MachineSpec(power_draw=0.0, max_sloops=3)  # power not under test
+    cfg.machines["constructor"] = MachineSpec(power_draw=0.0, max_sloops=3)  # power not under test
     cfg.recipes.append(
         Recipe(id="bar", name="Bar", machine="constructor",
                inputs={"ore": 10.0}, outputs={"bar": 10.0}, max_machines=2.0)
@@ -161,7 +163,7 @@ def test_dominated_recipe_unused() -> None:
     # Two recipes make the same item; the less efficient one is dominated.
     cfg = load_example()
     cfg.recipes.clear()
-    cfg.parameters.machines["constructor"] = MachineSpec(power_draw=0.0, max_sloops=3)  # power not under test
+    cfg.machines["constructor"] = MachineSpec(power_draw=0.0, max_sloops=3)  # power not under test
     cfg.recipes.append(
         Recipe(id="bar_a", name="Bar A", machine="constructor",
                inputs={"ore": 30.0}, outputs={"bar": 30.0})
@@ -180,7 +182,7 @@ def test_dominated_recipe_unused() -> None:
 
 
 def test_power_draw_inherited_from_machine_type() -> None:
-    # Consumers draw power from parameters.machines[type], not from the recipe
+    # Consumers draw power from machines[type], not from the recipe
     # JSON, so that draw must activate the power constraint even with no
     # generator present. Without a generator, no powered machine may run.
     cfg = load_example()
@@ -205,8 +207,8 @@ def test_extractor_recipe_bounds_supply() -> None:
     cfg.recipes.clear()
     cfg.parameters.resources = {}
     cfg.parameters.somersloop_budget = 0.0  # isolate max_machines from sloop multipliers
-    cfg.parameters.machines["miner"] = MachineSpec(power_draw=0.0, max_sloops=3)
-    cfg.parameters.machines["constructor"] = MachineSpec(power_draw=0.0, max_sloops=3)
+    cfg.machines["miner"] = MachineSpec(power_draw=0.0, max_sloops=3)
+    cfg.machines["constructor"] = MachineSpec(power_draw=0.0, max_sloops=3)
     cfg.recipes.append(
         Recipe(id="miner", name="Miner", machine="miner",
                inputs={}, outputs={"ore": 60.0}, max_machines=2.0)
@@ -221,10 +223,22 @@ def test_extractor_recipe_bounds_supply() -> None:
     # 2 miners x 60 ore/min = 120 ore/min -> 4 smelters -> 120 bar. No more.
     assert abs(sol.sinks["bar"] - 120.0) < 1e-6, "extractor max_machines must cap supply"
     # Now give the miner a power draw and remove any generator: nothing may run.
-    cfg.parameters.machines["miner"] = MachineSpec(power_draw=5.0, max_sloops=3)
+    cfg.machines["miner"] = MachineSpec(power_draw=5.0, max_sloops=3)
     sol2 = solve(build_problem(cfg, n_augmenters=0))
     assert sol2.objective == 0.0, "miner power draw must be enforced"
     check("MILP: extractor recipes cap supply via max_machines and draw power")
+
+
+def test_machine_specs_load_from_files() -> None:
+    from factory_optimiser.io_config import load_machines
+
+    machines = load_machines(ROOT / "machines")
+    assert set(machines) >= {"constructor", "assembler", "foundry", "miner", "coal_generator"}
+    assert machines["constructor"].power_draw == 4.0
+    assert machines["constructor"].max_sloops == 3
+    assert machines["coal_generator"].power_draw == 0.0
+    assert machines["coal_generator"].max_sloops == 1
+    check("load_machines: machine specs load from JSON files")
 
 
 if __name__ == "__main__":
@@ -237,5 +251,6 @@ if __name__ == "__main__":
     test_machine_cap_enforced()
     test_power_draw_inherited_from_machine_type()
     test_extractor_recipe_bounds_supply()
+    test_machine_specs_load_from_files()
     test_cli_launcher_and_json()
     print(f"\nAll {_CHECKS} smoke checks passed.")

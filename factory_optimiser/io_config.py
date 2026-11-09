@@ -42,14 +42,27 @@ from pathlib import Path
 #: Special item id for electrical power (MW). Only produced by generators,
 #: only consumed via a recipe's power draw. Not sinkable, no sink points.
 POWER_ITEM = "power"
-
-#: Defaults applied to machine types not present in the parameters file.
-DEFAULT_MACHINE = {"power_draw": 0.0, "max_sloops": 3}
 DEFAULT_MAX_SLOOPS = 3
 
 
 class ConfigError(Exception):
     """Raised when the JSON configuration is malformed or inconsistent."""
+
+
+@dataclass(frozen=True)
+class MachineSpec:
+    """Static spec of a building type: base power draw and max Somersloops."""
+
+    id: str = ""
+    name: str = ""
+    power_draw: float = 0.0
+    max_sloops: int = DEFAULT_MAX_SLOOPS
+
+
+#: Fallback applied to machine types referenced by recipes but without a spec
+#: file (a warning is emitted by the loader). All machines "just work" even if
+#: you never write a spec file: 0 MW, up to 3 sloops.
+DEFAULT_MACHINE = MachineSpec(id="", name="(default)", power_draw=0.0, max_sloops=DEFAULT_MAX_SLOOPS)
 
 
 @dataclass(frozen=True)
@@ -91,22 +104,8 @@ class Augmenters:
 class Parameters:
     resources: dict[str, float]
     sloop_grades: dict[int, Grade]
-    machines: dict[str, "MachineSpec"]
     somersloop_budget: float
     augmenters: Augmenters
-
-    def max_sloops_for(self, machine: str) -> int:
-        spec = self.machines.get(machine, DEFAULT_MACHINE)
-        cap = spec.max_sloops
-        # Clamp by the highest grade present in the grade table.
-        highest = max(self.sloop_grades) if self.sloop_grades else 0
-        return min(cap, highest)
-
-
-@dataclass(frozen=True)
-class MachineSpec:
-    power_draw: float = 0.0
-    max_sloops: int = DEFAULT_MAX_SLOOPS
 
 
 @dataclass
@@ -114,8 +113,10 @@ class Config:
     items: dict[str, Item]
     recipes: list[Recipe]
     parameters: Parameters
+    machines: dict[str, MachineSpec] = field(default_factory=dict)
     warnings: list[str] = field(default_factory=list)
     recipes_dir: Path = Path("recipes")
+    machines_dir: Path = Path("machines")
 
     def item_name(self, item_id: str, fallback: str | None = None) -> str:
         item = self.items.get(item_id)
@@ -124,6 +125,21 @@ class Config:
         if fallback is not None and fallback != item_id:
             return f"{fallback} ({item_id})"
         return item_id
+
+    # -- building / machine helpers -------------------------------------------
+
+    def max_sloops_for(self, machine: str) -> int:
+        """Highest sloop grade available on a machine type, clamped by the grade table."""
+        spec = self.machines.get(machine, DEFAULT_MACHINE)
+        cap = spec.max_sloops
+        highest = max(self.parameters.sloop_grades) if self.parameters.sloop_grades else 0
+        return min(cap, highest)
+
+    def power_draw_for(self, recipe: Recipe) -> float:
+        """Base power draw (MW) for a recipe: its override, else its machine type."""
+        if recipe.power_draw:
+            return recipe.power_draw
+        return self.machines.get(recipe.machine, DEFAULT_MACHINE).power_draw
 
     # -- classification helpers -------------------------------------------------
 
@@ -192,6 +208,46 @@ def load_recipe(path: str | Path) -> Recipe:
     )
 
 
+def load_machine(path: str | Path) -> MachineSpec:
+    """One machine-spec JSON file, e.g. ``machines/constructor.json``.::
+
+        {
+          "id": "constructor",
+          "name": "Constructor",
+          "power_draw": 4.0,   # MW at 100% clock (0 for generators)
+          "max_sloops": 3      # highest Somersloop grade this building accepts
+        }
+
+    The ``id`` is what a recipe's ``machine`` field refers to.
+    """
+    raw = _read_json(path, "machine")
+    machine_id = raw.get("id")
+    if not machine_id:
+        raise ConfigError(f"machine file {path}: missing 'id'")
+    return MachineSpec(
+        id=machine_id,
+        name=raw.get("name", machine_id),
+        power_draw=float(raw.get("power_draw", 0.0)),
+        max_sloops=int(raw.get("max_sloops", DEFAULT_MAX_SLOOPS)),
+    )
+
+
+def load_machines(directory: str | Path) -> dict[str, MachineSpec]:
+    """Load every machine-spec JSON under ``directory`` (recursive, sorted)."""
+    dir_path = Path(directory)
+    if not dir_path.is_dir():
+        raise ConfigError(f"machines directory not found: {dir_path}")
+    machines: dict[str, MachineSpec] = {}
+    for path in sorted(dir_path.rglob("*.json")):
+        spec = load_machine(path)
+        if spec.id in machines:
+            raise ConfigError(f"duplicate machine id {spec.id!r} in {path}")
+        machines[spec.id] = spec
+    if not machines:
+        raise ConfigError(f"no machine JSON files found in {dir_path}")
+    return machines
+
+
 def load_recipes(directory: str | Path) -> list[Recipe]:
     dir_path = Path(directory)
     if not dir_path.is_dir():
@@ -231,16 +287,6 @@ def load_parameters(path: str | Path) -> Parameters:
             rho=float(spec["rho"]), kappa=float(spec["kappa"]), pi=float(spec["pi"])
         )
 
-    machines_raw = raw.get("machines", {})
-    machines: dict[str, MachineSpec] = {}
-    for m, spec in machines_raw.items():
-        if m.startswith("_"):
-            continue
-        machines[m] = MachineSpec(
-            power_draw=float(spec.get("power_draw", 0.0)),
-            max_sloops=int(spec.get("max_sloops", DEFAULT_MAX_SLOOPS)),
-        )
-
     aug_raw = raw.get("augmenters", {})
     augmenters = Augmenters(
         cost=int(aug_raw.get("cost", 10)),
@@ -251,7 +297,6 @@ def load_parameters(path: str | Path) -> Parameters:
     return Parameters(
         resources=resources,
         sloop_grades=sloop_grades,
-        machines=machines,
         somersloop_budget=float(raw.get("somersloop_budget", 0.0)),
         augmenters=augmenters,
     )
@@ -259,17 +304,21 @@ def load_parameters(path: str | Path) -> Parameters:
 
 def load_config(
     recipes_dir: str | Path = "recipes",
+    machines_dir: str | Path = "machines",
     items_path: str | Path = "config/items.json",
     parameters_path: str | Path = "config/parameters.json",
 ) -> Config:
     recipes = load_recipes(recipes_dir)
+    machines = load_machines(machines_dir)
     items = load_items(items_path)
     parameters = load_parameters(parameters_path)
     config = Config(
         items=items,
         recipes=recipes,
         parameters=parameters,
+        machines=machines,
         recipes_dir=Path(recipes_dir),
+        machines_dir=Path(machines_dir),
     )
 
     # Cross-check: warn about items referenced by recipes that have no entry.
@@ -284,13 +333,14 @@ def load_config(
                 f"item {item_id!r} referenced by recipes has no entry in {items_path} "
                 f"(assuming sinkable with 0 sink points)"
             )
-    # Warn about recipes for unknown machine types.
-    known_machines = set(parameters.machines) | {"default"}
+    # Warn about recipes for unknown machine types (they fall back to defaults).
+    known_machines = set(machines) | {"default"}
     for recipe in recipes:
         if recipe.machine not in known_machines:
             config.warnings.append(
                 f"recipe {recipe.id!r} uses unknown machine {recipe.machine!r} "
-                f"(using defaults: {DEFAULT_MAX_SLOOPS} max sloops, {DEFAULT_MACHINE['power_draw']} MW)"
+                f"(no spec in {machines_dir}; using defaults: {DEFAULT_MAX_SLOOPS} max sloops, "
+                f"{DEFAULT_MACHINE.power_draw} MW)"
             )
     # Warn about resource caps for items that are also produced.
     produced = set(config.produced_items)

@@ -1,0 +1,6 @@
+{
+  "id": "miner",
+  "name": "Miner",
+  "power_draw": 5.0,
+  "max_sloops": 0
+}

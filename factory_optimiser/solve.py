@@ -128,11 +128,4 @@ def solve(problem: Problem, *, time_limit: float = 30.0) -> Solution:
 def _power_draw_rates(problem: Problem) -> dict[int, float]:
     """Per-recipe base power draw (MW at 100% clock), resolved against machine defaults."""
     config = problem.config
-    rates: dict[int, float] = {}
-    for r, recipe in enumerate(config.recipes):
-        if recipe.power_draw:
-            rates[r] = recipe.power_draw
-        else:
-            spec = config.parameters.machines.get(recipe.machine)
-            rates[r] = spec.power_draw if spec is not None else 0.0
-    return rates
+    return {r: config.power_draw_for(recipe) for r, recipe in enumerate(config.recipes)}

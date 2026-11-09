@@ -20,14 +20,5 @@
     "1": {"rho": 2.0, "kappa": 2.0, "pi": 1.0},
     "2": {"rho": 4.0, "kappa": 4.0, "pi": 1.0},
     "3": {"rho": 8.0, "kappa": 8.0, "pi": 1.0}
-  },
-
-  "machines": {
-    "_note": "power_draw = MW consumed at 100% clock (generators draw 0). max_sloops caps the sloop grades available to this building.",
-    "constructor":    {"power_draw": 4.0,  "max_sloops": 3},
-    "assembler":      {"power_draw": 12.0, "max_sloops": 3},
-    "foundry":        {"power_draw": 16.0, "max_sloops": 3},
-    "miner":          {"power_draw": 5.0,  "max_sloops": 3},
-    "coal_generator": {"power_draw": 0.0,  "max_sloops": 1}
   }
 }

@@ -63,9 +63,10 @@ every `*.json`. Items are plain string ids. Example (`recipes/manufacturing/iron
   Node purities are separate recipes, e.g. `iron_ore_pure` (120/min, ×2 nodes)
   vs `iron_ore_impure` (30/min, ×1 node). Use `sweep resources` to see the
   marginal value of one more node of each type.
-* `machine` refers to a building type defined in `config/parameters.json` (power
-  draw default, max Somersloops). Unknown machines fall back to defaults and
-  print a warning.
+* `machine` refers to a building type whose spec lives in `machines/*.json`
+  (one file per building: `id`, `name`, `power_draw`, `max_sloops` — same
+  pattern as recipes). Unknown machines fall back to defaults and print a
+  warning.
 * `max_machines` is optional; without it recipes are limited only by map
   resources (Design.md §4). For extractor recipes, `max_machines` is the node
   count.
@@ -75,11 +76,13 @@ Supporting config:
 * `config/items.json` — item id → `{name, sinkable, sink_points}`. Items
   referenced by recipes but absent here get defaults (sinkable, 0 points) with
   a warning.
+* `machines/*.json` — one building per file: `{id, name, power_draw, max_sloops}`
+  (e.g. `machines/constructor.json`). Subdirectories are fine; loading is a
+  recursive glob.
 * `config/parameters.json` — Somersloop budget, per-grade multipliers (ρ output
   / κ input / π power per Somersloop count), Alien Power Augmenter cost &
-  bonus, per-machine power draw & max sloops. An optional `resources` table can
-  still bound total *consumption* of an item, but the preferred way to limit
-  supply is extractor recipes.
+  bonus. An optional `resources` table can still bound total *consumption* of
+  an item, but the preferred way to limit supply is extractor recipes.
 
 The current recipes/items/parameters are **small placeholder examples** with
 plausible-but-unconfirmed numbers; drop in real data later without touching the

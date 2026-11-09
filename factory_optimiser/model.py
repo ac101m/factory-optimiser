@@ -170,7 +170,7 @@ def build_problem(
             for k in _grades(config, r):
                 grade = params.sloop_grades[k]
                 gen = power_multiplier * grade.rho * recipe.outputs.get(POWER_ITEM, 0.0)
-                draw = grade.pi * _power_draw(config, recipe)
+                draw = grade.pi * config.power_draw_for(recipe)
                 val = gen - draw
                 if val != 0.0:
                     row[activity_col[(r, k)]] = row.get(activity_col[(r, k)], 0.0) + val
@@ -212,14 +212,7 @@ def _sinkable_produced(config: Config) -> list[str]:
 
 def _grades(config: Config, r: int) -> list[int]:
     recipe = config.recipes[r]
-    return list(range(config.parameters.max_sloops_for(recipe.machine) + 1))
-
-
-def _power_draw(config: Config, recipe) -> float:
-    if recipe.power_draw:
-        return recipe.power_draw
-    spec = config.parameters.machines.get(recipe.machine)
-    return spec.power_draw if spec is not None else 0.0
+    return list(range(config.max_sloops_for(recipe.machine) + 1))
 
 
 def _gather_machine_columns(config: Config):
@@ -231,7 +224,7 @@ def _gather_machine_columns(config: Config):
         # generator output. Using the resolved value matters: a config whose
         # machines draw power only via their machine type (no explicit
         # power_draw, no generator) must still activate the power constraint.
-        if _power_draw(config, recipe) or recipe.outputs.get(POWER_ITEM, 0.0):
+        if config.power_draw_for(recipe) or recipe.outputs.get(POWER_ITEM, 0.0):
             uses_power = True
         for k in _grades(config, r):
             cols.append((r, k))
