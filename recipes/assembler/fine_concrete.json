@@ -1,0 +1,7 @@
+{
+  "id": "fine_concrete",
+  "name": "Fine Concrete",
+  "machine": "assembler",
+  "inputs": {"silica": 15.0, "limestone": 60.0},
+  "outputs": {"concrete": 50.0}
+}

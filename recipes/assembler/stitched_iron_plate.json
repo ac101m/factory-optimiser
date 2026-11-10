@@ -1,0 +1,7 @@
+{
+  "id": "stitched_iron_plate",
+  "name": "Stitched Iron Plate",
+  "machine": "assembler",
+  "inputs": {"iron_plate": 18.75, "wire": 37.5},
+  "outputs": {"reinforced_iron_plate": 5.625}
+}

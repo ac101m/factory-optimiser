@@ -1,0 +1,7 @@
+{
+  "id": "adhered_iron_plate",
+  "name": "Adhered Iron Plate",
+  "machine": "assembler",
+  "inputs": {"iron_plate": 11.25, "rubber": 3.75},
+  "outputs": {"reinforced_iron_plate": 3.75}
+}
