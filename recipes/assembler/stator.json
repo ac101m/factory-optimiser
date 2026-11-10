@@ -1,0 +1,7 @@
+{
+  "id": "stator",
+  "name": "Stator",
+  "machine": "assembler",
+  "inputs": {"steel_pipe": 15.0, "wire": 40.0},
+  "outputs": {"stator": 5.0}
+}

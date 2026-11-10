@@ -1,0 +1,6 @@
+{
+  "id": "motor",
+  "name": "Motor",
+  "sinkable": true,
+  "sink_points": 1520
+}

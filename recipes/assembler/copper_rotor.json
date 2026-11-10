@@ -1,0 +1,7 @@
+{
+  "id": "copper_rotor",
+  "name": "Copper Rotor",
+  "machine": "assembler",
+  "inputs": {"copper_sheet": 22.5, "screw": 195.0},
+  "outputs": {"rotor": 11.25}
+}

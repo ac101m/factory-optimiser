@@ -1,0 +1,7 @@
+{
+  "id": "steel_rotor",
+  "name": "Steel Rotor",
+  "machine": "assembler",
+  "inputs": {"steel_pipe": 10.0, "wire": 30.0},
+  "outputs": {"rotor": 5.0}
+}

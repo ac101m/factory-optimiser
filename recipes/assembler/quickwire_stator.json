@@ -1,0 +1,7 @@
+{
+  "id": "quickwire_stator",
+  "name": "Quickwire Stator",
+  "machine": "assembler",
+  "inputs": {"steel_pipe": 16.0, "quickwire": 60.0},
+  "outputs": {"stator": 8.0}
+}

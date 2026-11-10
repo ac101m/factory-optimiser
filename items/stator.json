@@ -1,0 +1,6 @@
+{
+  "id": "stator",
+  "name": "Stator",
+  "sinkable": true,
+  "sink_points": 240
+}
