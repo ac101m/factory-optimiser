@@ -1,0 +1,6 @@
+{
+  "id": "caterium_ore",
+  "name": "Caterium Ore",
+  "sinkable": true,
+  "sink_points": 7
+}

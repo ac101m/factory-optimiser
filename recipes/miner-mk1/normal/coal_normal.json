@@ -4,5 +4,5 @@
   "machine": "miner_mk1",
   "inputs": {},
   "outputs": {"coal": 60.0},
-  "max_machines": 2
+  "max_machines": 31
 }

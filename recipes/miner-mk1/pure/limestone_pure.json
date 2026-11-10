@@ -1,0 +1,8 @@
+{
+  "id": "limestone_pure",
+  "name": "Limestone (Pure)",
+  "machine": "miner_mk1",
+  "inputs": {},
+  "outputs": {"limestone": 120.0},
+  "max_machines": 29
+}

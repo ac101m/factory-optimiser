@@ -1,0 +1,8 @@
+{
+  "id": "iron_ore_normal",
+  "name": "Iron Ore (Normal)",
+  "machine": "miner_mk1",
+  "inputs": {},
+  "outputs": {"iron_ore": 60.0},
+  "max_machines": 42
+}

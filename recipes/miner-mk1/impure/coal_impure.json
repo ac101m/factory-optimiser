@@ -1,0 +1,8 @@
+{
+  "id": "coal_impure",
+  "name": "Coal (Impure)",
+  "machine": "miner_mk1",
+  "inputs": {},
+  "outputs": {"coal": 30.0},
+  "max_machines": 15
+}

@@ -1,0 +1,8 @@
+{
+  "id": "caterium_ore_pure",
+  "name": "Caterium Ore (Pure)",
+  "machine": "miner_mk1",
+  "inputs": {},
+  "outputs": {"caterium_ore": 120.0},
+  "max_machines": 8
+}

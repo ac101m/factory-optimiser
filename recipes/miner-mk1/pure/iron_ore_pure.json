@@ -4,5 +4,5 @@
   "machine": "miner_mk1",
   "inputs": {},
   "outputs": {"iron_ore": 120.0},
-  "max_machines": 2
+  "max_machines": 46
 }

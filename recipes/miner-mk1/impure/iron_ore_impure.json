@@ -1,0 +1,8 @@
+{
+  "id": "iron_ore_impure",
+  "name": "Iron Ore (Impure)",
+  "machine": "miner_mk1",
+  "inputs": {},
+  "outputs": {"iron_ore": 30.0},
+  "max_machines": 39
+}

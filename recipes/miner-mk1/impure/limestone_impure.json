@@ -4,5 +4,5 @@
   "machine": "miner_mk1",
   "inputs": {},
   "outputs": {"limestone": 30.0},
-  "max_machines": 1
+  "max_machines": 15
 }

@@ -1,0 +1,7 @@
+{
+  "id": "caterium_ingot",
+  "name": "Caterium Ingot",
+  "machine": "smelter",
+  "inputs": {"caterium_ore": 45.0},
+  "outputs": {"caterium_ingot": 15.0}
+}
