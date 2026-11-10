@@ -33,8 +33,15 @@ class Solution:
 
     @property
     def power_available(self) -> float:
-        """Deliverable capacity (MW) seen by consumers = base * m(N)."""
-        return self.power_generated * self.problem.power_multiplier
+        """Deliverable capacity (MW) seen by consumers.
+
+        = base generation * m(N) + the flat MW each augmenter generates itself
+        (N * augmenters.power_mw, which the bonus m(N) does not apply to).
+        """
+        return (
+            self.power_generated * self.problem.power_multiplier
+            + self.problem.flat_power_mw
+        )
 
     @property
     def n_augmenters(self) -> int:

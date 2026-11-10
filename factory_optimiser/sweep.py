@@ -21,6 +21,7 @@ class AugResult:
     n_augmenters: int
     sloop_budget: float
     power_multiplier: float
+    flat_power_mw: float   # N * augmenters.power_mw (bonus does not apply to it)
     solution: Solution
     solve_seconds: float
 
@@ -55,6 +56,7 @@ def sweep_augmenters(
                 n_augmenters=n,
                 sloop_budget=problem.sloop_budget,
                 power_multiplier=problem.power_multiplier,
+                flat_power_mw=problem.flat_power_mw,
                 solution=sol,
                 solve_seconds=sol.solve_seconds,
             )

@@ -88,9 +88,10 @@ def optimize_text(config: Config, best: AugResult, curve: list[AugResult]) -> st
     lines.append(f"Somersloop budget: {config.parameters.somersloop_budget:g}")
     lines.append("")
 
-    # Augmenter sweep curve (Design.md §6).
-    lines.append("Alien Power Augmenter sweep (10 sloops each, additive +10%):")
-    lines.append(f"  N | sloops left | power x |   pts/min     vs N-1")
+    # Augmenter sweep curve (Design.md §6): +10% of base generation per
+    # augmenter (additive) AND +500 MW flat each (the bonus doesn't apply to it).
+    lines.append("Alien Power Augmenter sweep (10 sloops each, +10% base, +500 MW flat):")
+    lines.append("  N | sloops left | power x |  flat MW |   pts/min     vs N-1")
     prev = None
     for res in curve:
         delta = ""
@@ -98,7 +99,7 @@ def optimize_text(config: Config, best: AugResult, curve: list[AugResult]) -> st
             delta = f"{res.points_per_min - prev:+12,.1f}"
         lines.append(
             f"  {res.n_augmenters} | {res.sloop_budget:>11.0f} | {res.power_multiplier:>7.2f} | "
-            f"{res.points_per_min:>10,.1f}  {delta}"
+            f"{res.flat_power_mw:>8,.0f} | {res.points_per_min:>10,.1f}  {delta}"
         )
         prev = res.points_per_min
     lines.append(f"Best: N={best.n_augmenters}  {best.points_per_min:,.1f} pts/min")
@@ -138,7 +139,8 @@ def optimize_text(config: Config, best: AugResult, curve: list[AugResult]) -> st
     if best.solution.problem.has_power:
         lines.append(
             f"Power: {sol.power_consumed:,.0f} / {sol.power_available:,.0f} MW consumed "
-            f"(base {sol.power_generated:,.0f} MW x {best.power_multiplier:.2f})"
+            f"(base {sol.power_generated:,.0f} MW x {best.power_multiplier:.2f} "
+            f"bonus + {best.flat_power_mw:,.0f} MW from augmenters, un-bonused)"
         )
 
     # Sink summary.
@@ -169,12 +171,15 @@ def optimize_text(config: Config, best: AugResult, curve: list[AugResult]) -> st
 
 def augmenter_curve_text(results: list[AugResult], title: str) -> str:
     lines = [f"=== {title} ==="]
-    lines.append(f"  N | power x |    pts/min    | marginal pts/augmenter vs N-1")
+    lines.append(
+        f"  N | power x |  flat MW |    pts/min    | marginal pts/augmenter vs N-1"
+    )
     prev = None
     for res in results:
         delta = "" if prev is None else f"{res.points_per_min - prev:+12,.1f}"
         lines.append(
-            f"  {res.n_augmenters} | {res.power_multiplier:>7.2f} | {res.points_per_min:>12,.1f} | {delta}"
+            f"  {res.n_augmenters} | {res.power_multiplier:>7.2f} | {res.flat_power_mw:>8,.0f} | "
+            f"{res.points_per_min:>12,.1f} | {delta}"
         )
         prev = res.points_per_min
     return "\n".join(lines)
@@ -210,6 +215,7 @@ def optimize_json(config: Config, best: AugResult, curve: list[AugResult]) -> di
         "best": {
             "n_augmenters": best.n_augmenters,
             "power_multiplier": best.power_multiplier,
+            "flat_power_mw": round(best.flat_power_mw, 2),
             "sloops_used": sol.sloops_used,
             "sloops_budget_in_model": best.sloop_budget,
             "power_consumed_mw": round(sol.power_consumed, 2),
@@ -252,6 +258,7 @@ def optimize_json(config: Config, best: AugResult, curve: list[AugResult]) -> di
                 "n_augmenters": r.n_augmenters,
                 "sloops_left": r.sloop_budget,
                 "power_multiplier": r.power_multiplier,
+                "flat_power_mw": round(r.flat_power_mw, 2),
                 "points_per_min": round(r.points_per_min, 4),
             }
             for r in curve

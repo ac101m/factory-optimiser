@@ -46,6 +46,11 @@ from pathlib import Path
 POWER_ITEM = "power"
 DEFAULT_MAX_SLOOPS = 3
 
+#: Alien Power Augmenter self-generation: each augmenter adds this many flat MW
+#: of power on top of the multiplicative bonus, and the bonus does NOT apply to
+#: it (confirmed in-game: 500 MW per augmenter).
+DEFAULT_AUGMENTER_POWER_MW = 500.0
+
 
 class ConfigError(Exception):
     """Raised when the JSON configuration is malformed or inconsistent."""
@@ -97,9 +102,17 @@ class Grade:
 
 @dataclass(frozen=True)
 class Augmenters:
+    """Alien Power Augmenter constants.
+
+    Each augmenter costs ``cost`` Somersloops, multiplies *base* (unaugmented)
+    generation by an additive ``bonus`` per augmenter, and independently adds
+    ``power_mw`` flat MW that the bonus does not affect.
+    """
+
     cost: int = 10
     bonus: float = 0.10
     max: int | None = None
+    power_mw: float = DEFAULT_AUGMENTER_POWER_MW
 
 
 @dataclass
@@ -324,6 +337,7 @@ def load_parameters(path: str | Path) -> Parameters:
         cost=int(aug_raw.get("cost", 10)),
         bonus=float(aug_raw.get("bonus", 0.10)),
         max=aug_raw.get("max"),
+        power_mw=float(aug_raw.get("power_mw", DEFAULT_AUGMENTER_POWER_MW)),
     )
 
     return Parameters(

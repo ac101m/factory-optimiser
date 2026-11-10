@@ -134,25 +134,27 @@ Generators consume fuel (an item) and produce power; machines consume power. Pow
 maximize  Σ_i p[i]·s[i]   # p[i] = AWESOME sink points per unit of item i
 ```
 
-## 6. Alien Power Augmenters — additive stacking
+## 6. Alien Power Augmenters — additive stacking + flat self-generation
 
-Mechanics (confirmed by user): each augmenter adds 10% of **base (unaugmented)** generation, **additively** (not compounding), and costs **10 Somersloops** to construct.
+Mechanics (confirmed by user): each augmenter adds 10% of **base (unaugmented)** generation, **additively** (not compounding), costs **10 Somersloops** to construct, **and generates 500 MW of power itself, to which the bonus does NOT apply** (flat per augmenter).
 Multiplier: `m(N) = 1 + 0.10·N` for N augmenters.
+Total capacity: `capacity = m(N)·B + 500·N` where B is the factory's own (variable) power generation.
 **Handling decision: outer sweep — do NOT put augmenters in the MILP directly.**  
-Why: capacity = `m(N)·B` where B (generation) is a variable → bilinear → not plain MILP. Since N is tiny (≤ floor(S_total/10), realistically ≤ ~5), solve one fully-linear MILP per candidate N:
+Why: capacity = `m(N)·B + 500·N` where B (generation) is a variable → bilinear → not plain MILP. Since N is tiny (≤ floor(S_total/10)), solve one fully-linear MILP per candidate N:
 
 ```
 for N in 0..=floor(S_total/10):
     sloop_budget_in_model = S_total − 10·N      # reserve augmenter cost
-    fix power constraint ceiling at m(N) = 1 + 0.1·N
+    fix coefficient m(N) = 1 + 0.1·N on generator output
+    credit N·500 MW as flat power capacity (the row's lower bound; constant per N)
     solve the §5 model
     record total sink points/min
 take argmax over N
 ```
 
-Each run independent → trivially parallel (`ProcessPoolExecutor` if wanted). Yields the **marginal-value curve of augmenters** ("augmenter #k is worth X pts/min and steals Y sloops that could have slooped generators or final-product machines").
+Because `N·500` is constant for a fixed N, it only shifts the power-balance row's lower bound — the MILP stays linear. Each run independent → trivially parallel (`ProcessPoolExecutor` if wanted). Yields the **marginal-value curve of augmenters** ("augmenter #k is worth X pts/min, gives 500·k free MW, and steals Y sloops that could have slooped generators or final-product machines").
 Because stacking is **additive**, marginal value per augmenter is constant → the curve is flat-then-drops where slooping production outcompetes another augmenter.
-**Nice emergent behavior (free):** unused fuel (from needing fewer/slooped generators) is itself an item with a sink term, so augmenters can convert fuel into sink points — their value can exceed the pure power math.
+**Nice emergent behaviors (free):** (1) unused fuel (from needing fewer/slooped generators) is itself an item with a sink term, so augmenters can convert fuel into sink points — their value can exceed the pure power math; (2) with N ≥ 1 an augmenter's own 500 MW can power a consumer-only factory with no generator recipes at all.
 
 ## 7. Outputs & diagnostics
 
@@ -175,6 +177,7 @@ Per solved model (per N):
 | Per-grade multipliers ρ, κ, π | 2^k? or other | **confirm** (esp. input & power when slooped) |
 | Augmenter sloop cost | 10 | confirmed |
 | Augmenter stacking | additive +10%/unit of base | confirmed |
+| Augmenter flat power | +500 MW each, bonus does NOT apply | confirmed |
 | Map extraction limits | **revised:** extractor recipes with `max_machines` = node count (see §5.3 note); optional `resources` table for an extra consumption cap | done |
 | Sink points p[i] | per item | config input |
 | Do power buildings accept sloops, same K? | ? | **confirm** |

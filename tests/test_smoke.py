@@ -101,6 +101,28 @@ def test_power_balance() -> None:
     check("MILP: power consumption within augmented capacity")
 
 
+def test_augmenter_flat_power() -> None:
+    # Each augmenter adds flat_power_mw MW that the +10% bonus does NOT apply
+    # to. N=1 should power a consumer-only factory that has NO generator at all.
+    cfg = load_example()
+    cfg.parameters.somersloop_budget = 20.0  # affords N=1 (cost 10)
+    cfg.parameters.resources = {"ore": 60.0}  # drop coal so nothing is raw-sinkable
+    cfg.recipes = [r for r in cfg.recipes if r.id != "coal_power"]  # no generator
+    cfg.parameters.augmenters = Augmenters(cost=10, bonus=0.1, power_mw=500.0)
+
+    prob = build_problem(cfg, n_augmenters=1)
+    assert prob.flat_power_mw == 500.0
+    sol = solve(prob)
+    assert sol.objective > 0.0, "flat 500 MW from one augmenter must run consumers"
+    assert sol.power_consumed <= sol.power_available + 1e-6
+    assert abs(sol.power_available - (sol.power_generated * 1.1 + 500.0)) < 1e-6
+
+    # With no augmenter the same factory is dead (no power at all).
+    sol0 = solve(build_problem(cfg, n_augmenters=0))
+    assert sol0.objective == 0.0
+    check("power: augmenter flat MW is usable without a generator and un-bonused")
+
+
 def test_augmenter_sweep_deterministic() -> None:
     cfg = load_example()
     r1 = best_augmenter(cfg)
@@ -161,7 +183,7 @@ def test_cli_launcher_and_json() -> None:
     proc = subprocess.run([py, "main.py", "optimize", "--json"], env=env, capture_output=True, text=True)
     assert proc.returncode == 0, proc.stderr
     data = json.loads(proc.stdout)
-    assert data["best"]["n_augmenters"] == 0
+    assert "n_augmenters" in data["best"] and "flat_power_mw" in data["best"]
     assert data["best"]["sloops_used"] > 0
     proc = subprocess.run([py, "main.py", "sweep", "somersloops"], env=env, capture_output=True, text=True)
     assert proc.returncode == 0
@@ -332,6 +354,7 @@ if __name__ == "__main__":
     test_milp_basic()
     test_scarcity_routing()
     test_power_balance()
+    test_augmenter_flat_power()
     test_augmenter_sweep_deterministic()
     test_dominated_recipe_unused()
     test_downconvert_includes_grade_multiplier()

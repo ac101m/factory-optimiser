@@ -8,7 +8,9 @@ Constraints
     item balance  : sum_r sum_k (rho_k*beta - kappa_k*alpha) * x = s >= 0
     resource caps : sum_r sum_k kappa_k*alpha[raw] * x <= R[raw]
     sloop budget  : sum_r sum_k k * x[r][k] <= sloop_budget
-    power balance : sum (m(N)*rho_k*beta_power - pi_k*power_draw) * x >= 0
+    power balance : sum (m(N)*rho_k*beta_power - pi_k*power_draw) * x >= -N*W
+                    (generators + augmented multiplier, offset by the W MW each
+                    augmenter generates flat; W is NOT multiplied by m(N))
     machine caps  : sum_k x[r][k] <= max_machines                    (optional per recipe)
 
 Objective
@@ -37,6 +39,7 @@ class Problem:
     n_augmenters: int
     power_multiplier: float
     sloop_budget: float
+    flat_power_mw: float        # N * augmenters.power_mw, free flat MW
 
     c: np.ndarray            # objective (minimize): -effective sink points
     integrality: np.ndarray  # 1 = integer variable
@@ -67,6 +70,7 @@ def build_problem(
         sloop_budget = params.somersloop_budget - params.augmenters.cost * n_augmenters
     if power_multiplier is None:
         power_multiplier = 1.0 + params.augmenters.bonus * n_augmenters
+    flat_power_mw = n_augmenters * params.augmenters.power_mw
 
     recipes = config.recipes
     activity_seq, uses_power = _gather_machine_columns(config)
@@ -162,7 +166,11 @@ def build_problem(
     row = {activity_col[(r, k)]: float(k) for (r, k) in activity_seq if k > 0}
     add_row(row, lb=-np.inf, ub=sloop_budget, name="sloop_budget")
 
-    # 4) Power balance (only when power appears anywhere): consumption <= m(N)*generation.
+    # 4) Power balance (only when power appears anywhere):
+    #    consumption <= m(N)*generation + N*W,
+    #    where W = augmenters.power_mw is the flat MW each augmenter produces
+    #    itself (the bonus m(N) does NOT apply to W). For a fixed N, N*W is a
+    #    constant, so it only shifts the row's lower bound.
     #    Generators: +m(N)*rho_k*output.  Consumers: -pi_k*power_draw.
     if uses_power:
         row = {}
@@ -174,7 +182,7 @@ def build_problem(
                 val = gen - draw
                 if val != 0.0:
                     row[activity_col[(r, k)]] = row.get(activity_col[(r, k)], 0.0) + val
-        add_row(row, lb=0.0, ub=np.inf, name="power")
+        add_row(row, lb=-flat_power_mw, ub=np.inf, name="power")
 
     # 5) Optional per-recipe machine caps.
     for r, recipe in recipes_by_idx:
@@ -189,6 +197,7 @@ def build_problem(
         n_augmenters=n_augmenters,
         power_multiplier=power_multiplier,
         sloop_budget=sloop_budget,
+        flat_power_mw=flat_power_mw,
         c=c,
         integrality=integrality_arr,
         bounds=Bounds(np.zeros(n_vars), np.full(n_vars, np.inf)),

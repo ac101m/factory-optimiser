@@ -148,6 +148,7 @@ def _cmd_sweep(args, config) -> int:
                         {
                             "n_augmenters": r.n_augmenters,
                             "power_multiplier": r.power_multiplier,
+                            "flat_power_mw": round(r.flat_power_mw, 2),
                             "points_per_min": round(r.points_per_min, 4),
                         }
                         for r in results

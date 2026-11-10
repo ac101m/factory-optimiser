@@ -5,8 +5,8 @@
   "augmenters": {
     "cost": 10,
     "bonus": 0.10,
-    "_note": "Each Alien Power Augmenter costs `cost` Somersloops and adds `bonus` * base (unaugmented) generation, additively (not compounding).",
-    "max": null
+    "power_mw": 500,
+    "_note": "Each Alien Power Augmenter costs `cost` Somersloops; adds `bonus` * base (unaugmented) generation, additively (not compounding); AND generates `power_mw` MW of flat power itself, to which the bonus does NOT apply (confirmed in-game)."
   },
 
   "resources": {
