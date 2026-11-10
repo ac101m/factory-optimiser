@@ -1,0 +1,8 @@
+{
+  "id": "crude_oil_normal",
+  "name": "Crude Oil (Normal)",
+  "machine": "oil_extractor",
+  "inputs": {},
+  "outputs": {"crude_oil": 120.0},
+  "max_machines": 12
+}

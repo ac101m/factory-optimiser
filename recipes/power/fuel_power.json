@@ -1,0 +1,7 @@
+{
+  "id": "fuel_power",
+  "name": "Fuel Power",
+  "machine": "fuel_generator",
+  "inputs": {"fuel": 20.0},
+  "outputs": {"power": 250.0}
+}

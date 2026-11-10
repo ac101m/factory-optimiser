@@ -1,0 +1,6 @@
+{
+  "id": "crude_oil",
+  "name": "Crude Oil",
+  "sinkable": false,
+  "sink_points": 0
+}

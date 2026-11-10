@@ -1,0 +1,6 @@
+{
+  "id": "oil_extractor",
+  "name": "Oil Extractor",
+  "power_draw": 40.0,
+  "max_sloops": 0
+}
