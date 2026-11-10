@@ -1,0 +1,8 @@
+{
+  "id": "water_extraction",
+  "name": "Water Extraction",
+  "machine": "water_extractor",
+  "inputs": {},
+  "outputs": {"water": 120.0},
+  "max_machines": -1
+}

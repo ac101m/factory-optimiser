@@ -1,0 +1,6 @@
+{
+  "id": "water_extractor",
+  "name": "Water Extractor",
+  "power_draw": 20.0,
+  "max_sloops": 0
+}

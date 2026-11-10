@@ -70,7 +70,12 @@ every `*.json`. Items are plain string ids. Example (`recipes/manufacturing/iron
   defaults and print a warning.
 * `max_machines` is optional; without it recipes are limited only by map
   resources (Design.md §4). For extractor recipes, `max_machines` is the node
-  count.
+  count. Set it to `-1` for a **deliberately unlimited** extractor — genuinely
+  infinite map resources like water have unbounded room for extractors, so
+  `-1` opts out of the `uncapped-extractor` warning that a *missing* cap
+  normally trips (a missing cap on an ore miner is almost always a data
+  error). `sweep resources` skips uncapped extractors either way, since "one
+  more node" is meaningless there.
 
 Supporting config:
 

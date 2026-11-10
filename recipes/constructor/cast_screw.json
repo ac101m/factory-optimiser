@@ -1,0 +1,7 @@
+{
+  "id": "cast_screw",
+  "name": "Cast Screw",
+  "machine": "constructor",
+  "inputs": {"iron_ingot": 12.5},
+  "outputs": {"screw": 50.0}
+}

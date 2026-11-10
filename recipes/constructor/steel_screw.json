@@ -1,0 +1,7 @@
+{
+  "id": "steel_screw",
+  "name": "Steel Screw",
+  "machine": "constructor",
+  "inputs": {"steel_beam": 5.0},
+  "outputs": {"screw": 260.0}
+}

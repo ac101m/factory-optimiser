@@ -100,6 +100,9 @@ class Recipe:
     outputs: dict[str, float]
     power_draw: float = 0.0
     max_machines: float | None = None
+    unlimited: bool = False          # derived from max_machines=-1 in JSON:
+                                     # extractor on a genuinely-infinite resource
+                                     # (e.g. water); skips the uncapped warning
 
 
 @dataclass(frozen=True)
@@ -287,8 +290,18 @@ def load_recipe(path: str | Path) -> Recipe:
         raise ConfigError(f"recipe {recipe_id!r} ({path}): no outputs")
     power_draw = float(raw.get("power_draw", 0.0))
     max_machines = raw.get("max_machines")
+    unlimited = False
     if max_machines is not None:
         max_machines = float(max_machines)
+        if max_machines == -1:
+            # Sentinel, not a real cap: "deliberately unlimited" supply, for
+            # extractors on truly-infinite map resources (water, nitrogen, ...).
+            # Normalized away here so the model and audit never see a literal
+            # -1 cap (model.py would emit ub=-1 and make every plan infeasible;
+            # consistency.py would flag it as a non-positive cap). Any NEGATIVE
+            # value OTHER than -1 stays as-is and is flagged by the audit.
+            max_machines = None
+            unlimited = True
     return Recipe(
         id=recipe_id,
         name=name,
@@ -297,6 +310,7 @@ def load_recipe(path: str | Path) -> Recipe:
         outputs=outputs,
         power_draw=power_draw,
         max_machines=max_machines,
+        unlimited=unlimited,
     )
 
 

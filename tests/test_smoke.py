@@ -825,6 +825,55 @@ def test_consistency_check_and_cli_gate() -> None:
     check("consistency: check_config flags errors; CLI 'check' gate exits 0 on clean data")
 
 
+def test_negative_max_machines_means_unlimited() -> None:
+    import tempfile
+
+    from factory_optimiser.consistency import check_config
+    from factory_optimiser.io_config import load_recipe
+
+    # max_machines = -1 is the "deliberately unlimited" sentinel (water): the
+    # loader normalizes it away, so the model never sees a literal -1 cap.
+    with tempfile.TemporaryDirectory() as tmp:
+        p = Path(tmp) / "pump.json"
+        p.write_text(json.dumps({
+            "id": "pump", "name": "Pump", "machine": "constructor",
+            "inputs": {}, "outputs": {"water": 120.0}, "max_machines": -1,
+        }))
+        r = load_recipe(p)
+        assert r.max_machines is None, "-1 must normalize to no cap"
+        assert r.unlimited is True, "-1 must mark the recipe unlimited"
+    cfg = load_example()
+    cfg.items["water"] = Item("water", "Water", sinkable=False)
+    cfg.recipes.append(r)
+    codes = {i.code for i in check_config(cfg)}
+    assert "uncapped-extractor" not in codes, "-1 extractor must not warn"
+    assert "nonpositive-cap" not in codes, "-1 must not trip the cap error"
+
+    # Any other negative cap is a genuine error and stays flagged.
+    with tempfile.TemporaryDirectory() as tmp:
+        p = Path(tmp) / "broken.json"
+        p.write_text(json.dumps({
+            "id": "broken", "name": "Broken", "machine": "constructor",
+            "inputs": {}, "outputs": {"ore": 120.0}, "max_machines": -2,
+        }))
+        r2 = load_recipe(p)
+        assert r2.max_machines == -2.0, "only -1 is the sentinel"
+    cfg2 = load_example()
+    cfg2.recipes.append(r2)
+    codes = {i.code for i in check_config(cfg2) if i.severity == "error"}
+    assert "nonpositive-cap" in codes, "-2 must be flagged as a broken cap"
+
+    # And an extractor with no cap at all still warns (likely a forgotten node).
+    cfg3 = load_example()
+    cfg3.recipes.append(
+        Recipe(id="leaky", name="Leaky", machine="constructor",
+               inputs={}, outputs={"ore": 120.0})
+    )
+    codes = {i.code for i in check_config(cfg3) if i.severity == "warning"}
+    assert "uncapped-extractor" in codes, "ordinary uncapped extractor still warns"
+    check("consistency: max_machines=-1 = unlimited; other negatives still flagged")
+
+
 if __name__ == "__main__":
     test_milp_basic()
     test_scarcity_routing()
@@ -854,5 +903,6 @@ if __name__ == "__main__":
     test_machine_specs_load_from_files()
     test_items_load_from_files()
     test_consistency_check_and_cli_gate()
+    test_negative_max_machines_means_unlimited()
     test_cli_launcher_and_json()
     print(f"\nAll {_CHECKS} smoke checks passed.")

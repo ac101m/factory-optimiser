@@ -223,9 +223,12 @@ def check_config(config: Config, include_info: bool = False) -> list[Issue]:
         )
 
     # Extractor recipes (no inputs) without a node cap -> unbounded supply,
-    # almost certainly a missing max_machines.
+    # almost certainly a missing max_machines. An extractor on a truly-infinite
+    # map resource (water) may set max_machines = -1 to declare itself
+    # deliberately unlimited; the loader normalizes that into Recipe.unlimited,
+    # so it doesn't trip this warning.
     for r in config.recipes:
-        if not r.inputs and r.max_machines is None:
+        if not r.inputs and r.max_machines is None and not r.unlimited:
             issues.append(
                 Issue(
                     "warning",
