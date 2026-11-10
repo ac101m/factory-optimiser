@@ -874,6 +874,37 @@ def test_negative_max_machines_means_unlimited() -> None:
     check("consistency: max_machines=-1 = unlimited; other negatives still flagged")
 
 
+def test_non_sinkable_items_must_be_consumed() -> None:
+    """Non-sinkable produced items have no free disposal: production must equal
+    consumption. A recipe that pays in a sinkable byproduct is dead weight when
+    its non-sinkable co-product has no consumer; a consumer unlocks it."""
+    cfg = load_example()
+    cfg.items["fuel"] = Item("fuel", "Fuel", sinkable=False)
+    cfg.machines["refinery"] = MachineSpec(id="refinery", power_draw=30.0, max_sloops=2)
+
+    base = solve(build_problem(cfg, n_augmenters=0))
+    base_obj = base.objective  # ore -> bar -> art chain, no fuel anywhere
+
+    # Profitable 'byproduct' recipe that also makes fuel (non-sinkable), no consumer.
+    cfg.recipes.append(
+        Recipe(id="fuel_maker", name="Fuel Maker", machine="refinery",
+               inputs={"ore": 5.0}, outputs={"fuel": 40.0, "bar": 10.0})
+    )
+    sol_dump = solve(build_problem(cfg, n_augmenters=0))
+    assert abs(sol_dump.objective - base_obj) < 1e-6, (
+        f"cannot dump fuel: expected {base_obj} pts, got {sol_dump.objective}")
+
+    # Give fuel a consumer (fuel -> power). The free bar is now earnable.
+    cfg.recipes.append(
+        Recipe(id="fuel_burn", name="Fuel Burn", machine="generator",
+               inputs={"fuel": 20.0}, outputs={"power": 250.0})
+    )
+    sol_burn = solve(build_problem(cfg, n_augmenters=0))
+    assert sol_burn.objective > base_obj + 1.0, (
+        "a fuel consumer should unlock the fuel-maker's bar byproduct")
+    check("model: non-sinkable items must be consumed (no free disposal)")
+
+
 if __name__ == "__main__":
     test_milp_basic()
     test_scarcity_routing()
@@ -904,5 +935,6 @@ if __name__ == "__main__":
     test_items_load_from_files()
     test_consistency_check_and_cli_gate()
     test_negative_max_machines_means_unlimited()
+    test_non_sinkable_items_must_be_consumed()
     test_cli_launcher_and_json()
     print(f"\nAll {_CHECKS} smoke checks passed.")

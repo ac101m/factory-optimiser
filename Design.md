@@ -76,12 +76,20 @@ multipliers depend on each machine's own slot count `T`.
 **Item material balance:**
 
 ```
-Σ_r Σ_k ( ρ(k_r,T_r)·β[r][i] − κ·α[r][i] )·x[r][k] = s[i] ≥ 0   ∀ items i
+Σ_r Σ_k ( ρ(k_r,T_r)·β[r][i] − κ·α[r][i] )·x[r][k] = s[i] ≥ 0   ∀ sinkable items i
+Σ_r Σ_k ( ρ(k_r,T_r)·β[r][i] − κ·α[r][i] )·x[r][k] = 0            ∀ non-sinkable items i
 ```
 
 with `κ = 1` (confirmed: slooping does not increase input consumption). So a
 slooped machine converts the same feed into strictly more product — Somersloops
 are a scarce multiplier on material efficiency, not just machine throughput.
+
+Sinkable items send any surplus into the AWESOME sink (`s[i] ≥ 0`, the sink
+flow earns points). Non-sinkable items (fluids like water/crude oil/fuel, with
+`sinkable: false`) have **no free disposal**: production must exactly match
+consumption. Surplus would back up the pipes and stall the factory in-game, so
+the model forbids it — e.g. fuel can only be made at the rate fuel generators
+burn it.
 
 This one family does three jobs at once:
 

@@ -123,9 +123,12 @@ model code.
   continuous = fractional underclocking, which is legal in-game) at clock `c`
   (one column per configured clock tier; `c = 1` at base).
 * One material-balance equation per produced item:
-  `Σ (ρ_k·β − κ_k·α)·x = s[i] ≥ 0` — overflow flows into the sink, and scarce
-  items are routed to the consumer with the highest points-per-item (starvation
-  of weak recipes is the *optimal* behavior, not a bug).
+  `Σ (ρ_k·β − κ_k·α)·x = s[i] ≥ 0` — sinkable surplus flows into the sink, and
+  scarce items are routed to the consumer with the highest points-per-item
+  (starvation of weak recipes is the *optimal* behavior, not a bug). Items
+  marked `sinkable: false` (non-sinkable fluids: water, crude oil, fuel) are
+  held to an **exact** balance instead — production must equal consumption, so
+  nothing can pile up or be freely disposed of.
 * Raw materials are produced by extractor recipes whose `max_machines` is the
   node count — that cap *is* the map resource limit (plus power: miners draw MW
   like any machine).

@@ -23,6 +23,8 @@ when power binds the power row rejects the high clocks automatically.
 
 Constraints
     item balance  : sum_r sum_k sum_c (c*rho_k*beta - c*kappa_k*alpha) * x = s >= 0
+                    sinkable surplus flows into the sink; non-sinkable items get an
+                    exact balance (net = 0): no free disposal, must be consumed.
     resource caps : sum ... c*kappa_k*alpha[raw] * x <= R[raw]
     sloop budget  : sum ... k * x <= sloop_budget        (clock doesn't change it)
     power balance : sum (m(N)*c*rho_k*beta_power - c^1.321928*pi_k*power_draw) * x >= -N*W
@@ -175,8 +177,10 @@ def build_problem(
             row[sink_col[item]] = row.get(sink_col[item], 0.0) - 1.0
             add_row(row, lb=0.0, ub=0.0, name=f"balance:{item}")
         else:
-            # Can't sink; surplus may be wasted (net production >= 0).
-            add_row(row, lb=0.0, ub=np.inf, name=f"balance:{item}(waste)" )
+            # Can't sink and can't pile up: production must exactly match
+            # consumption (no free disposal). In-game, over-producing a
+            # non-sinkable fluid backs up the pipes and stalls the factory.
+            add_row(row, lb=0.0, ub=0.0, name=f"balance:{item}(exact)")
 
     # 2) Map resource limits. Sinking raw item i consumes t[i] of its cap.
     for item, cap in params.resources.items():
