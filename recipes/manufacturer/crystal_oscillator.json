@@ -1,0 +1,7 @@
+{
+  "id": "crystal_oscillator",
+  "name": "Crystal Oscillator",
+  "machine": "manufacturer",
+  "inputs": {"quartz_crystal": 18.0, "cable": 14.0, "reinforced_iron_plate": 2.5},
+  "outputs": {"crystal_oscillator": 1.0}
+}

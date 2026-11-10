@@ -1,0 +1,6 @@
+{
+  "id": "ai_limiter",
+  "name": "AI Limiter",
+  "sinkable": true,
+  "sink_points": 920
+}

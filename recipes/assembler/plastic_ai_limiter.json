@@ -1,0 +1,7 @@
+{
+  "id": "plastic_ai_limiter",
+  "name": "Plastic AI Limiter",
+  "machine": "assembler",
+  "inputs": {"quickwire": 120.0, "plastic": 28.0},
+  "outputs": {"ai_limiter": 8.0}
+}

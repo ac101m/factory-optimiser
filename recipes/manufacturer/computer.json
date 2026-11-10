@@ -1,0 +1,7 @@
+{
+  "id": "computer",
+  "name": "Computer",
+  "machine": "manufacturer",
+  "inputs": {"circuit_board": 10.0, "cable": 20.0, "plastic": 40.0},
+  "outputs": {"computer": 2.5}
+}

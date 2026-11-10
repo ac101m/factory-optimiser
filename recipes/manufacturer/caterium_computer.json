@@ -1,0 +1,7 @@
+{
+  "id": "caterium_computer",
+  "name": "Caterium Computer",
+  "machine": "manufacturer",
+  "inputs": {"circuit_board": 15.0, "quickwire": 52.5, "rubber": 22.5},
+  "outputs": {"computer": 3.75}
+}

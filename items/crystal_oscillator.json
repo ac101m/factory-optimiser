@@ -1,0 +1,6 @@
+{
+  "id": "crystal_oscillator",
+  "name": "Crystal Oscillator",
+  "sinkable": true,
+  "sink_points": 3072
+}

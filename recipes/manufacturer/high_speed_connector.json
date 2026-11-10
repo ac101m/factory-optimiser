@@ -1,0 +1,7 @@
+{
+  "id": "high_speed_connector",
+  "name": "High-Speed Connector",
+  "machine": "manufacturer",
+  "inputs": {"quickwire": 210.0, "cable": 37.5, "circuit_board": 3.75},
+  "outputs": {"high_speed_connector": 3.75}
+}

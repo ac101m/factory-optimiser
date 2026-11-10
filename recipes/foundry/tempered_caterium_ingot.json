@@ -1,0 +1,7 @@
+{
+  "id": "tempered_caterium_ingot",
+  "name": "Tempered Caterium Ingot",
+  "machine": "foundry",
+  "inputs": {"caterium_ore": 45.0, "petroleum_coke": 15.0},
+  "outputs": {"caterium_ingot": 22.5}
+}

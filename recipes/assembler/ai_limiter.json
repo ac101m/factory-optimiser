@@ -1,0 +1,7 @@
+{
+  "id": "ai_limiter",
+  "name": "AI Limiter",
+  "machine": "assembler",
+  "inputs": {"copper_sheet": 25.0, "quickwire": 100.0},
+  "outputs": {"ai_limiter": 5.0}
+}
