@@ -1,0 +1,6 @@
+{
+  "id": "petroleum_coke",
+  "name": "Petroleum Coke",
+  "sinkable": true,
+  "sink_points": 20
+}

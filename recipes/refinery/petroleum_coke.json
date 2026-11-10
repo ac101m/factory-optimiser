@@ -1,0 +1,7 @@
+{
+  "id": "petroleum_coke",
+  "name": "Petroleum Coke",
+  "machine": "refinery",
+  "inputs": {"heavy_oil_residue": 40.0},
+  "outputs": {"petroleum_coke": 120.0}
+}

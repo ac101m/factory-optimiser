@@ -1,0 +1,7 @@
+{
+  "id": "petroleum_coke_power",
+  "name": "Petroleum Coke Power",
+  "machine": "coal_generator",
+  "inputs": {"petroleum_coke": 25.0, "water": 45.0},
+  "outputs": {"power": 75.0}
+}

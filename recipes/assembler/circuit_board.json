@@ -1,0 +1,7 @@
+{
+  "id": "circuit_board",
+  "name": "Circuit Board",
+  "machine": "assembler",
+  "inputs": {"copper_sheet": 15.0, "plastic": 30.0},
+  "outputs": {"circuit_board": 7.5}
+}

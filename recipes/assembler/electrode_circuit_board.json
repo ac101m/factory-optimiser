@@ -1,0 +1,7 @@
+{
+  "id": "electrode_circuit_board",
+  "name": "Electrode Circuit Board",
+  "machine": "assembler",
+  "inputs": {"rubber": 20.0, "petroleum_coke": 40.0},
+  "outputs": {"circuit_board": 5.0}
+}
