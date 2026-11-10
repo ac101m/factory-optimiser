@@ -1,6 +1,11 @@
 {
-  "_comment": "Game/system parameters. Somersloop multipliers are the CONFIRMED in-game formula (see _sloops below and Design.md §8). Augmenter/geothermal and item sink_points may still be placeholder." ,
+  "_comment": "Game/system parameters. Somersloop multipliers are the CONFIRMED in-game formula (see _sloops below and Design.md §8). Overclocking uses discrete clock tiers (the overclock key below); machines opt in per spec via machines/*.json 'overclockable'. Augmenter/geothermal and item sink_points may still be placeholder." ,
   "somersloop_budget": 106,
+
+  "overclock": {
+    "tiers": [0.5, 0.75, 1.0, 1.25, 1.5, 2.0, 2.5],
+    "_note": "Discrete clock values available to overclockable machines, as multiples of 100% clock. Below 1.0 = underclocking (power-efficient: draw scales by c^1.321928, which is sub-linear below 100%); above = overclocking up to the 250% game cap. The MILP gets one column per tier for each slooped grade and for the sole grade of 0-slot machines (miners); the continuous un-slooped grade of slot machines gets only the <=1.0 (underclock) subset. 1.0 is always included; tiers may need tuning once real sink points/recipes land."
+  },
 
   "augmenters": {
     "cost": 10,

@@ -46,6 +46,16 @@ from pathlib import Path
 POWER_ITEM = "power"
 DEFAULT_MAX_SLOOPS = 3
 
+#: Overclocking power exponent (confirmed in-game): a machine's power draw
+#: multiplies by (clock_speed/100)^1.321928 when overclocked. Stacks
+#: multiplicatively with the Somersloop pi multiplier. The game overclock cap
+#: is 250%.
+CLOCK_POWER_EXP = 1.321928
+
+#: Highest overclock the game allows (250%); parameters beyond this are
+#: out-of-game and flagged by the consistency check.
+GAME_MAX_CLOCK = 2.5
+
 #: Alien Power Augmenter self-generation: each augmenter adds this many flat MW
 #: of power on top of the multiplicative bonus, and the bonus does NOT apply to
 #: it (confirmed in-game: 500 MW per augmenter).
@@ -64,11 +74,12 @@ class MachineSpec:
     name: str = ""
     power_draw: float = 0.0
     max_sloops: int = DEFAULT_MAX_SLOOPS
+    overclockable: bool = True
 
 
 #: Fallback applied to machine types referenced by recipes but without a spec
 #: file (a warning is emitted by the loader). All machines "just work" even if
-#: you never write a spec file: 0 MW, up to 3 sloops.
+#: you never write a spec file: 0 MW, up to 3 sloops, overclockable.
 DEFAULT_MACHINE = MachineSpec(id="", name="(default)", power_draw=0.0, max_sloops=DEFAULT_MAX_SLOOPS)
 
 
@@ -124,6 +135,10 @@ class Parameters:
     resources: dict[str, float]
     somersloop_budget: float
     augmenters: Augmenters
+    #: Overclock clock-value tiers (as multiples of 100% clock). Only the
+    #: values listed are available as choices; sorted, deduplicated, always
+    #: containing 1.0 (the base clock). Default [1.0] = no overclocking.
+    overclock_tiers: list[float] = field(default_factory=lambda: [1.0])
 
 
 def sloop_multipliers(k: int, total_slots: int) -> Grade:
@@ -171,6 +186,10 @@ class Config:
         :func:`sloop_multipliers`.
         """
         return self.machines.get(machine, DEFAULT_MACHINE).max_sloops
+
+    def is_overclockable(self, machine: str) -> bool:
+        """Whether a machine type may be overclocked (flag per machine spec)."""
+        return self.machines.get(machine, DEFAULT_MACHINE).overclockable
 
     def power_draw_for(self, recipe: Recipe) -> float:
         """Base power draw (MW) for a recipe: its override, else its machine type."""
@@ -296,6 +315,7 @@ def load_machine(path: str | Path) -> MachineSpec:
         name=raw.get("name", machine_id),
         power_draw=float(raw.get("power_draw", 0.0)),
         max_sloops=int(raw.get("max_sloops", DEFAULT_MAX_SLOOPS)),
+        overclockable=bool(raw.get("overclockable", True)),
     )
 
 
@@ -351,10 +371,18 @@ def load_parameters(path: str | Path) -> Parameters:
         power_mw=float(aug_raw.get("power_mw", DEFAULT_AUGMENTER_POWER_MW)),
     )
 
+    # Overclock tier list: parse `overclock.tiers` (or tolerate a bare list),
+    # force 1.0 in (the base clock is always available), sort ascending.
+    overclock_raw = raw.get("overclock", {})
+    if isinstance(overclock_raw, dict):
+        overclock_raw = overclock_raw.get("tiers", [1.0])
+    tiers = sorted({float(t) for t in overclock_raw} | {1.0})
+
     return Parameters(
         resources=resources,
         somersloop_budget=float(raw.get("somersloop_budget", 0.0)),
         augmenters=augmenters,
+        overclock_tiers=tiers,
     )
 
 

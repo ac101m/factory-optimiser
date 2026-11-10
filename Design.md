@@ -139,6 +139,57 @@ Generators consume fuel (an item) and produce power; machines consume power. Pow
 maximize  Σ_i p[i]·s[i]   # p[i] = AWESOME sink points per unit of item i
 ```
 
+### 5.5 Clocking — discrete tiers (implemented)
+
+Clocking multiplies a machine's throughput by `c = clock/100` at
+`power × c^1.321928` — the confirmed in-game power curve, stacked
+multiplicatively on the sloop π multiplier. Because the exponent is sub-linear
+below 100%, **underclocking is power-efficient** (0.5× output for ~0.4× draw);
+above 100% overclocking is power-hungry (2.5× output for ~3.4× draw, up to the
+**250% game cap**). Inputs scale by `c` in both directions. Each tier value is
+a config choice (`overclock.tiers` in `config/parameters.json`, shipped as
+`[0.5, 0.75, 1.0, 1.25, 1.5, 2.0, 2.5]`; `1.0` is always included). Machines
+opt in per spec via `overclockable` in `machines/*.json` (default true;
+geothermal is fixed at 100% — it is not overclockable in-game).
+
+**Discrete tiers, not a continuous clock variable:** each available clock value
+is one column, so the model stays an exact linear MILP — no machines×clock
+bilinearity. A machine at clock `c` contributes
+
+```
+output   c · ρ(k) · β
+input    c · κ(k) · α
+power    c^1.321928 · π(k) · power_draw
+sloops   k                        (clock doesn't change sloop usage)
+machine cap  1                    (clock doesn't change machine count)
+```
+
+Clock tiers attach to:
+*   integer slooped grades `k ≥ 1` of any overclockable machine — the
+    **sloop-efficiency lever** (one scarce sloop at 250% far outproduces
+    spreading sloops, at ~25% more power per output);
+*   the sole grade `k = 0` of **0-slot** overclockable machines (miners,
+    extractors) — where overclocking pays most in-game, breaking node caps;
+*   the continuous `k = 0` grade of slot machines — the **underclock subset**
+    (`c ≤ 1.0`) only: a c>1 continuous column is dominated by the
+    power-efficient c=1 one, so overclocking there is omitted (fewer columns,
+    identical optimum).
+
+Because nothing prices *building count*, wherever power has slack the optimum
+is a **flat face in machines/clock** — "60 Screw constructs at 50%" is exactly
+as optimal as "30 at 100%" (identical output, more buildings, less draw). The
+`optimize` command resolves this lexicographically toward the **fewest
+machines** (see §10): the reported plan is the smallest build that still hits
+the optimum, which collapses the pointless underclocking away while *keeping*
+genuine power-bound underclocking (there the high-clock plan is infeasible).
+
+Backward compatibility: with `overclock.tiers` absent (or `[1.0]`) the model
+is byte-identical to the pre-overclock formulation. The tier treatment was
+validated at full-game scale (~300 recipes / ~180 items): nested supersets of
+clock grids are monotone (a MILP max over nested feasible sets cannot
+decrease), and solves certify optimality in single-digit seconds even for very
+fine grids.
+
 ## 6. Alien Power Augmenters — additive stacking + flat self-generation
 
 Mechanics (confirmed by user): each augmenter adds 10% of **base (unaugmented)** generation, **additively** (not compounding), costs **10 Somersloops** to construct, **and generates 500 MW of power itself, to which the bonus does NOT apply** (flat per augmenter).
@@ -165,7 +216,7 @@ Because stacking is **additive**, marginal value per augmenter is constant → t
 
 Per solved model (per N):
 
-*   **Per recipe:** machine count, sloop grade (0..K), clock % (activity is fractional → machines = ceil(activity), clock% = activity/machines).
+*   **Per recipe:** machine count, sloop grade (0..K), clock % (`machines = ceil(activity)`, `clock% = 100·c·activity/machines` — up to 250% when overclocked, under 100% for the continuous base grade).
     
 *   **Per item:** sink flows (+ full point breakdown).
     
@@ -180,6 +231,10 @@ Per solved model (per N):
 | --- | --- | --- |
 | Per-machine Somersloop slots T | per machine spec (`max_sloops` in `machines/*.json`) | slots per building: **confirm** (data currently 0/1/2) |
 | Sloop multipliers ρ, κ, π | ρ = 1+k/T, κ = 1, π = (1+k/T)² | confirmed |
+| Overclock clock tiers | `overclock.tiers` in `config/parameters.json` (default `[1.0]` = off) | config; ships `[0.5,0.75,1.0,1.25,1.5,2.0,2.5]` (under- and overclock) |
+| Overclock power factor | `c^1.321928`, stacked on sloop π | confirmed |
+| Overclock cap | 250% (`GAME_MAX_CLOCK`); tiers above flagged as a warning | confirmed |
+| Overclockable machines | per-machine `overclockable` flag (`machines/*.json`, default true) | implemented; geothermal = false |
 | Augmenter sloop cost | 10 | confirmed |
 | Augmenter stacking | additive +10%/unit of base | confirmed |
 | Augmenter flat power | +500 MW each, bonus does NOT apply | confirmed |
@@ -225,5 +280,7 @@ Design is parameter-driven so these fill in without touching model code.
 *   Work in float; clamp values ~1e-9 to zero.
     
 *   **Degeneracy:** two recipes tying on points-per-item may yield an arbitrary mix. Doesn't change objective. For deterministic solutions, perturb weights by ~1e-6 or accept the arbitrary (but optimal-value) mix.
+    
+*   **Machine count is unpriced, so the optimum is often a whole *flat face*,** not one plan — "60 Screw constructs at 50%" and "30 at 100%" deliver identical output/points whenever power has slack, and in-game only differ by build effort (which the objective ignores). The `optimize` command therefore runs a **lexicographic two-phase tiebreak** (`solve.solve(..., minimize_machines=...)`): phase 1 maximizes sink points; phase 2 pins the point total at the phase-1 optimum (one extra row, `Σ p[i]·s[i] ≥ V* − tol`) and *minimizes total machine-equivalents* `Σ x` (machines = ⌈x⌉, so minimizing Σ x minimizes buildings). Exactly two MILP solves (~seconds each). Only the *reported plan* changes — the objective stays at V*. Because the power row is still enforced, this keeps underclocking precisely where it pays (a power-bound optimum cannot re-clock to 100%: infeasible) and collapses it everywhere else (Screw back to 30 @ 100%). Bonus: it also throttles idle generator capacity down to actual demand. Two second-order details: (1) `Σ x` is a proxy for the reported `Σ⌈x⌉`, so a sub-machine clock sliver (e.g. 0.02 machines @ 100% beside 19.96 @ 50%) that shaves equivalents can *report* as an extra whole machine — a post-pass folds such slivers into the grade's lowest clock column (`_consolidate_clock_slivers`; output and points unchanged, draw only falls); (2) the model has **no power-shard resource**, so the tiebreak treats overclocking as free — where overclock columns exist (slooped grades, miners, 0-slot generators like coal) and power permits, "fewest machines" will happily overclock to cut buildings; that matches the game's "spend shards, build fewer" trade but without pricing the shards.
     
 *   **Fallback:** if the MILP ever grinds (should not at this scale), relax integrality to LP and round activities up to integer machines.

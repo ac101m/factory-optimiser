@@ -65,9 +65,9 @@ every `*.json`. Items are plain string ids. Example (`recipes/manufacturing/iron
   vs `iron_ore_impure` (30/min, ×1 node). Use `sweep resources` to see the
   marginal value of one more node of each type.
 * `machine` refers to a building type whose spec lives in `machines/*.json`
-  (one file per building: `id`, `name`, `power_draw`, `max_sloops` — same
-  pattern as recipes). Unknown machines fall back to defaults and print a
-  warning.
+  (one file per building: `id`, `name`, `power_draw`, `max_sloops`,
+  `overclockable` — same pattern as recipes). Unknown machines fall back to
+  defaults and print a warning.
 * `max_machines` is optional; without it recipes are limited only by map
   resources (Design.md §4). For extractor recipes, `max_machines` is the node
   count.
@@ -83,12 +83,23 @@ Supporting config:
   (e.g. `machines/constructor.json`). Subdirectories are fine; loading is a
   recursive glob.
 * `config/parameters.json` — Somersloop budget, Alien Power Augmenter cost &
-  bonus (each augmenter also adds a flat `power_mw`, un-bonused). An optional
+  bonus (each augmenter also adds a flat `power_mw`, un-bonused), and the
+  clock tiers (`overclock.tiers`, e.g. `[0.5, 0.75, 1.0, 1.25, 1.5, 2.0, 2.5]`
+  — values below 1.0 are underclocking, which is power-efficient). An optional
   `resources` table can still bound total *consumption* of an item, but the
-  preferred way to limit supply is extractor recipes. Sloop multipliers are the
-  confirmed in-game formula and not configured here: a machine with k of its T
-  slots filled gets `ρ = 1+k/T` output, `κ = 1` input (unchanged), `π = (1+k/T)²`
-  power; `T` is the machine's `max_sloops`.
+  preferred way to limit supply is extractor recipes. Sloop multipliers are
+  the confirmed in-game formula and not configured here: a machine with k of
+  its T slots filled gets `ρ = 1+k/T` output, `κ = 1` input (unchanged),
+  `π = (1+k/T)²` power; `T` is the machine's `max_sloops`.
+
+Clocking: overclockable machines (flag per `machines/*.json`, default true)
+may run at any of the configured clock tiers. A machine at clock `c` produces
+`c×` output for `c×` input and draws `c^1.321928×π` power, costing `k` sloops
+— so 250%-clocked slooped machines are the big per-sloop lever, overclocked
+miners break node caps, and underclocking saves power on a power-tight grid
+(the exponent is sub-linear below 100%). The clock choice is discrete (one
+MILP column per tier), keeping the model an exact MILP (Design.md §5.5).
+Geothermal generators are not overclockable in-game and are marked so.
 
 The current recipes/items/parameters are **small placeholder examples** with
 plausible-but-unconfirmed numbers; drop in real data later without touching the
@@ -96,9 +107,10 @@ model code.
 
 ## Model summary (see Design.md for the formal statement)
 
-* Variables `x[r][k]`: machines running recipe `r` with exactly `k` Somersloops
-  (`k ≥ 1` integer — you can't have half a slooped machine; `k = 0`
-  continuous = fractional underclocking, which is legal in-game).
+* Variables `x[r][k][c]`: machines running recipe `r` with exactly `k`
+  Somersloops (`k ≥ 1` integer — you can't have half a slooped machine; `k = 0`
+  continuous = fractional underclocking, which is legal in-game) at clock `c`
+  (one column per configured clock tier; `c = 1` at base).
 * One material-balance equation per produced item:
   `Σ (ρ_k·β − κ_k·α)·x = s[i] ≥ 0` — overflow flows into the sink, and scarce
   items are routed to the consumer with the highest points-per-item (starvation
@@ -109,7 +121,10 @@ model code.
 * A global Somersloop budget `Σ k·x ≤ S`.
 * Power is an item: generators produce it, machines consume it, and
   `consumption ≤ m(N)·generation` where `m(N) = 1 + 0.10·N`.
-* Objective: `max Σ p[i]·s[i]`.
+* Objective: `max Σ p[i]·s[i]` — with a lexicographic **fewest-buildings
+  tiebreak**: among point-optimal plans the tool reports the one with the fewest
+  machines (Design.md §10). "60 Screw constructs at 50%" collapses back to "30
+  at 100%" when power has slack; genuine power-bound underclocking is kept.
 
 Alien Power Augmenters stack additively (`+10%` of base generation each, 10
 Somersloops each) which is bilinear in the MILP, so the tool does an **outer
@@ -120,8 +135,10 @@ subcommands print.
 
 ## Out of scope (decided)
 
-Spatial layout, belt routing, machine placement, electrical-grid separation,
-and overclocking beyond 100% (in-game power is nonlinear there). See Design.md.
+Spatial layout, belt routing, machine placement, and electrical-grid
+separation. (Overclocking *is* in scope — discrete clock tiers, Design.md
+§5.5 — because the tier formulation keeps the MILP linear; a continuous
+overclock variable would reintroduce a machine×clock bilinear term.)
 
 ## Development
 

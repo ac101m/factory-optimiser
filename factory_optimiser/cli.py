@@ -17,6 +17,7 @@ from __future__ import annotations
 import json
 import sys
 import warnings
+from dataclasses import replace
 
 # docopt 0.6.2 contains invalid escape sequences in its own source; under
 # Python 3.12+ this emits SyntaxWarnings on every import. Silence only those.
@@ -33,7 +34,7 @@ from .report import (
     optimize_json,
     optimize_text,
 )
-from .solve import SolveError
+from .solve import SolveError, solve
 from .sweep import (
     AugResult,
     sweep_augmenters,
@@ -120,6 +121,14 @@ def _cmd_optimize(args, config) -> int:
     max_n = _max_augmenters_arg(args)
     curve = sweep_augmenters(config, max_n)
     best = _pick_best(curve)
+    # Machine-count tiebreak (Design.md §10): the phase-1 objective prices
+    # output but nothing prices building count, so a plan with "more machines
+    # at a lower clock" (e.g. 60 Screw constructs at 50% vs 30 at 100%, same
+    # output, power slack) is equally optimal. Re-solve the best N's problem
+    # lexicographically — same points/min, FEWEST machines — so the reported
+    # plan is the smallest build that still hits the optimum (and still
+    # underclocks wherever power genuinely binds). Points/min are unchanged.
+    best = replace(best, solution=solve(best.solution.problem, minimize_machines=best.points_per_min))
     if args["--json"]:
         _dump_json(optimize_json(config, best, curve))
     else:

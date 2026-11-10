@@ -22,7 +22,13 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from .io_config import Config, DEFAULT_MACHINE, DEFAULT_MAX_SLOOPS, POWER_ITEM
+from .io_config import (
+    Config,
+    DEFAULT_MACHINE,
+    DEFAULT_MAX_SLOOPS,
+    GAME_MAX_CLOCK,
+    POWER_ITEM,
+)
 
 SEVERITY_RANK = {"error": 0, "warning": 1, "info": 2}
 
@@ -101,6 +107,27 @@ def check_config(config: Config, include_info: bool = False) -> list[Issue]:
                     "never run",
                 )
             )
+
+    # Overclock tier list: values must be positive; beyond the game's 250% cap
+    # is legal config but out-of-game behavior (warning).
+    for tier in params.overclock_tiers:
+        if tier <= 0:
+            issues.append(
+                Issue(
+                    "error",
+                    "overclock-nonpositive",
+                    f"overclock tier {tier:g} must be > 0 (clock/100, e.g. 1.5 = 150%)",
+                )
+            )
+    if any(tier > GAME_MAX_CLOCK for tier in params.overclock_tiers):
+        issues.append(
+            Issue(
+                "warning",
+                "overclock-above-cap",
+                f"overclock tiers exceed the game's {GAME_MAX_CLOCK*100:.0f}% cap "
+                f"(max tier {max(params.overclock_tiers):g})",
+            )
+        )
 
     for mid, spec in sorted(config.machines.items()):
         if spec.max_sloops < 0:

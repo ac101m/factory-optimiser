@@ -1,17 +1,31 @@
 """Build the MILP described in Design.md §5.
 
 Variables
-    x[r][k] : machines running recipe r with exactly k Somersloops (k = 0..K_r)
-    s[i]    : sink flow of item i (items/min sent to the AWESOME sink)
+    x[r][k][c] : machines running recipe r with exactly k Somersloops (k = 0..K_r)
+                 at clock c (c in the overclock tier list; see below)
+    s[i]       : sink flow of item i (items/min sent to the AWESOME sink)
+
+Overclocking (Design.md §8): a machine at clock c (c = clock/100) has
+    output  c * rho(k) * beta
+    input   c * kappa(k) * alpha
+    power   c^1.321928 * pi(k) * draw       (game power curve, x sloop pi)
+Clock choice enters as discrete *tiers* — one column per available clock value
+— so the model stays an exact MILP (no machines x clock bilinearity). Which
+machines are clockable and which clock values exist are config:
+`overclockable` in machines/*.json + the `overclock.tiers` parameter. Clock
+tiers are attached to (a) integer slooped grades (k >= 1) of any overclockable
+machine — the sloop-efficiency lever — and (b) the sole grade (k=0) of 0-slot
+overclockable machines (extractors, e.g. miners). The continuous k=0 grade of
+a slot machine is *not* clocked: a c>1 continuous column is dominated by the
+more power-efficient c=1 one, so it is omitted (fewer columns, same optimum).
 
 Constraints
-    item balance  : sum_r sum_k (rho_k*beta - kappa_k*alpha) * x = s >= 0
-    resource caps : sum_r sum_k kappa_k*alpha[raw] * x <= R[raw]
-    sloop budget  : sum_r sum_k k * x[r][k] <= sloop_budget
-    power balance : sum (m(N)*rho_k*beta_power - pi_k*power_draw) * x >= -N*W
-                    (generators + augmented multiplier, offset by the W MW each
-                    augmenter generates flat; W is NOT multiplied by m(N))
-    machine caps  : sum_k x[r][k] <= max_machines                    (optional per recipe)
+    item balance  : sum_r sum_k sum_c (c*rho_k*beta - c*kappa_k*alpha) * x = s >= 0
+    resource caps : sum ... c*kappa_k*alpha[raw] * x <= R[raw]
+    sloop budget  : sum ... k * x <= sloop_budget        (clock doesn't change it)
+    power balance : sum (m(N)*c*rho_k*beta_power - c^1.321928*pi_k*power_draw) * x >= -N*W
+                    (N*W = flat MW each augmenter generates; bonus doesn't apply)
+    machine caps  : sum_k sum_c x[r][k][c] <= max_machines  (clock doesn't change it)
 
 Objective
     maximize sum_i p[i] * s[i]   (implemented as minimize of the negation,
@@ -25,7 +39,13 @@ from dataclasses import dataclass
 import numpy as np
 from scipy.optimize import Bounds, LinearConstraint
 
-from .io_config import Config, Grade, POWER_ITEM, sloop_multipliers
+from .io_config import (
+    Config,
+    CLOCK_POWER_EXP,
+    Grade,
+    POWER_ITEM,
+    sloop_multipliers,
+)
 
 #: Below this, an activity is treated as "not used" when reading back.
 EPS = 1e-9
@@ -47,7 +67,9 @@ class Problem:
     constraints: list[LinearConstraint]
 
     n_activity: int          # first n_activity columns are machine activities
-    activity_col: dict[tuple[int, int], int]  # (recipe_idx, grade) -> column
+    #: (recipe_idx, grade, clock) -> column. Grades are k Somersloops; clock
+    #: is the machine clock as a multiple of 100% (1.0 = base, 2.5 = 250%).
+    activity_col: dict[tuple[int, int, float], int]
     sink_col: dict[str, int]                  # produced item -> column (sinkable only)
     raw_sink_col: dict[str, int]              # raw sinkable item -> column (sink via cap)
     has_power: bool          # whether the power-balance constraint is active
@@ -76,13 +98,13 @@ def build_problem(
     activity_seq, uses_power = _gather_machine_columns(config)
 
     # -- variables -----------------------------------------------------------
-    activity_col: dict[tuple[int, int], int] = {}
+    activity_col: dict[tuple[int, int, float], int] = {}
     sink_col: dict[str, int] = {}
     objective: list[float] = []
     integrality: list[int] = []
 
-    for (r, k) in activity_seq:
-        activity_col[(r, k)] = len(integrality)
+    for (r, k, clk) in activity_seq:
+        activity_col[(r, k, clk)] = len(integrality)
         objective.append(0.0)  # activities contribute to points only via sinks
         integrality.append(1 if k >= 1 else 0)  # Design.md §5.3 integrality
     for idx, item in enumerate(_sinkable_produced(config)):
@@ -139,12 +161,13 @@ def build_problem(
     # 1) Item material balance (one row per produced item, power excluded).
     for item in sorted(produced):
         row: dict[int, float] = {}
-        for r, recipe in recipes_by_idx:
-            for k in _grades(config, r):
-                grade = mult(r, k)
-                net = grade.rho * recipe.outputs.get(item, 0.0) - grade.kappa * recipe.inputs.get(item, 0.0)
-                if net != 0.0:
-                    row[activity_col[(r, k)]] = row.get(activity_col[(r, k)], 0.0) + net
+        for (r, k, clk) in activity_seq:
+            grade = mult(r, k)
+            rho_beta = grade.rho * recipes[r].outputs.get(item, 0.0)
+            kappa_alpha = grade.kappa * recipes[r].inputs.get(item, 0.0)
+            net = clk * (rho_beta - kappa_alpha)
+            if net != 0.0:
+                row[activity_col[(r, k, clk)]] = row.get(activity_col[(r, k, clk)], 0.0) + net
         if config.is_sinkable(item):
             # sum(net) - s[i] = 0, s[i] >= 0  (surplus flows into the sink)
             row[sink_col[item]] = row.get(sink_col[item], 0.0) - 1.0
@@ -156,18 +179,17 @@ def build_problem(
     # 2) Map resource limits. Sinking raw item i consumes t[i] of its cap.
     for item, cap in params.resources.items():
         row = {}
-        for r, recipe in recipes_by_idx:
-            for k in _grades(config, r):
-                grade = mult(r, k)
-                rate = grade.kappa * recipe.inputs.get(item, 0.0)
-                if rate != 0.0:
-                    row[activity_col[(r, k)]] = row.get(activity_col[(r, k)], 0.0) + rate
+        for (r, k, clk) in activity_seq:
+            grade = mult(r, k)
+            rate = clk * grade.kappa * recipes[r].inputs.get(item, 0.0)
+            if rate != 0.0:
+                row[activity_col[(r, k, clk)]] = row.get(activity_col[(r, k, clk)], 0.0) + rate
         if item in raw_sink_col:
             row[raw_sink_col[item]] = row.get(raw_sink_col[item], 0.0) + 1.0
         add_row(row, lb=-np.inf, ub=cap, name=f"resource:{item}")
 
-    # 3) Global Somersloop budget.
-    row = {activity_col[(r, k)]: float(k) for (r, k) in activity_seq if k > 0}
+    # 3) Global Somersloop budget (clock doesn't change sloop usage).
+    row = {activity_col[(r, k, clk)]: float(k) for (r, k, clk) in activity_seq if k > 0}
     add_row(row, lb=-np.inf, ub=sloop_budget, name="sloop_budget")
 
     # 4) Power balance (only when power appears anywhere):
@@ -175,23 +197,22 @@ def build_problem(
     #    where W = augmenters.power_mw is the flat MW each augmenter produces
     #    itself (the bonus m(N) does NOT apply to W). For a fixed N, N*W is a
     #    constant, so it only shifts the row's lower bound.
-    #    Generators: +m(N)*rho(k)*output.  Consumers: -pi(k)*power_draw.
+    #    Generators: +m(N)*c*rho(k)*output.  Consumers: -c^1.321928*pi(k)*power_draw.
     if uses_power:
         row = {}
-        for r, recipe in recipes_by_idx:
-            for k in _grades(config, r):
-                grade = mult(r, k)
-                gen = power_multiplier * grade.rho * recipe.outputs.get(POWER_ITEM, 0.0)
-                draw = grade.pi * config.power_draw_for(recipe)
-                val = gen - draw
-                if val != 0.0:
-                    row[activity_col[(r, k)]] = row.get(activity_col[(r, k)], 0.0) + val
+        for (r, k, clk) in activity_seq:
+            grade = mult(r, k)
+            gen = power_multiplier * (clk * grade.rho) * recipes[r].outputs.get(POWER_ITEM, 0.0)
+            draw = (clk ** CLOCK_POWER_EXP) * grade.pi * config.power_draw_for(recipes[r])
+            val = gen - draw
+            if val != 0.0:
+                row[activity_col[(r, k, clk)]] = row.get(activity_col[(r, k, clk)], 0.0) + val
         add_row(row, lb=-flat_power_mw, ub=np.inf, name="power")
 
-    # 5) Optional per-recipe machine caps.
+    # 5) Optional per-recipe machine caps (clock doesn't change machine count).
     for r, recipe in recipes_by_idx:
         if recipe.max_machines is not None:
-            row = {activity_col[(r, k)]: 1.0 for k in _grades(config, r)}
+            row = {activity_col[(rc, k, clk)]: 1.0 for (rc, k, clk) in activity_seq if rc == r}
             add_row(row, lb=-np.inf, ub=recipe.max_machines, name=f"cap:{recipe.id}")
 
     constraints = [LinearConstraint(np.stack(rows), rows_lb, rows_ub)] if rows else []
@@ -228,9 +249,33 @@ def _grades(config: Config, r: int) -> list[int]:
     return list(range(config.max_sloops_for(recipe.machine) + 1))
 
 
+def _clocks_for(config: Config, machine: str, k: int) -> list[float]:
+    """Clock values available to grade k of a machine type.
+
+    The configured tier list may span both below-100% (underclocking — a
+    convex power curve makes underclocked machines more power-efficient per
+    unit) and above-100% (overclocking). Tiers attach to:
+
+    * integer slooped grades (k >= 1) of any overclockable machine — full list;
+    * the sole grade (k=0) of 0-slot overclockable machines (extractors,
+      e.g. miners — the biggest in-game overclock win) — full list;
+    * the continuous k=0 grade of slot machines — the *underclock* subset only
+      (c <= 1.0): any c>1 continuous column is dominated by the power-efficient
+      c=1 one, so overclock there is omitted (fewer columns, same optimum).
+
+    Non-overclockable machines are fixed at base clock (c=1.0) for every grade.
+    """
+    if not config.is_overclockable(machine):
+        return [1.0]
+    tiers = list(config.parameters.overclock_tiers)
+    if k == 0 and config.max_sloops_for(machine) > 0:
+        return [c for c in tiers if c <= 1.0]
+    return tiers
+
+
 def _gather_machine_columns(config: Config):
-    """Return ([(r, k), ...] in column order, uses_power bool)."""
-    cols: list[tuple[int, int]] = []
+    """Return ([(r, k, c), ...] in column order, uses_power bool)."""
+    cols: list[tuple[int, int, float]] = []
     uses_power = False
     for r, recipe in enumerate(config.recipes):
         # Resolved draw (recipe override or machine-type default) PLUS any
@@ -240,5 +285,6 @@ def _gather_machine_columns(config: Config):
         if config.power_draw_for(recipe) or recipe.outputs.get(POWER_ITEM, 0.0):
             uses_power = True
         for k in _grades(config, r):
-            cols.append((r, k))
+            for clk in _clocks_for(config, recipe.machine, k):
+                cols.append((r, k, clk))
     return cols, uses_power

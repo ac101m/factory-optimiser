@@ -45,7 +45,7 @@ def load_example() -> Config:
             "ore": Item("ore", "Ore", sinkable=False),
             "bar": Item("bar", "Bar", sinkable=True, points=10.0),
             "art": Item("Art", "Art", sinkable=True, points=55.0),
-            "coal": Item("coal", "Coal", sinkable=True, points=6.0),
+            "coal": Item("coal", "Coal", sinkable=True, points=3.0),
         },
         recipes=[
             Recipe(id="bar", name="Bar", machine="constructor", inputs={"ore": 30.0}, outputs={"bar": 30.0}),
@@ -224,7 +224,7 @@ def test_dominated_recipe_unused() -> None:
     cfg.items["bar"] = Item("bar", "Bar", sinkable=True, points=50.0)
     cfg.parameters.resources = {"ore": 60.0}
     sol = solve(build_problem(cfg, n_augmenters=0))
-    used = {cfg.recipes[r].id: v for (r, k), v in sol.activities.items() if v > 1e-9}
+    used = {cfg.recipes[r].id: v for (r, k, c), v in sol.activities.items() if v > 1e-9}
     assert abs(used.get("bar_a", 0.0) - 2.0) < 1e-6   # all 60 ore routed to Bar A
     assert "bar_b" not in used
     check("MILP: dominated recipe producing the same item is left unused")
@@ -276,6 +276,358 @@ def test_extractor_recipe_bounds_supply() -> None:
     sol2 = solve(build_problem(cfg, n_augmenters=0))
     assert sol2.objective == 0.0, "miner power draw must be enforced"
     check("MILP: extractor recipes cap supply via max_machines and draw power")
+
+
+def test_overclock_slooped_machine() -> None:
+    # A slooped machine on a capped recipe can be overclocked: with a clock
+    # tier c=2.0, one k=1 machine (T=1: rho=2) puts out c*rho*beta = 40/min,
+    # i.e. 4x the base machine for the same one sloop.
+    cfg = load_example()
+    cfg.parameters.somersloop_budget = 10.0
+    cfg.parameters.overclock_tiers = [1.0, 2.0]
+    cfg.recipes.clear()
+    cfg.machines["constructor"] = MachineSpec(power_draw=0.0, max_sloops=1, overclockable=True)
+    cfg.recipes.append(
+        Recipe(id="bar", name="Bar", machine="constructor",
+               inputs={"ore": 10.0}, outputs={"bar": 10.0}, max_machines=1.0)
+    )
+    cfg.items["bar"] = Item("bar", "Bar", sinkable=True, points=100.0)
+    cfg.parameters.resources = {"ore": 100.0}
+    sol = solve(build_problem(cfg, n_augmenters=0))
+    plan = downconvert(cfg, sol)
+    slooped = [m for m in plan if m.sloops_per_machine == 1]
+    assert slooped, "the capped recipe must sloop (budget > 0, cap = 1)"
+    m = max(slooped, key=lambda m: m.activity)
+    assert abs(m.clock_pct - 200.0) < 1e-6, "slooped machine should be overclocked to 200%"
+    assert abs(m.outputs["bar"] - 40.0) < 1e-6  # 2.0 clock * 2.0 rho * 10 base
+    check("overclock: a slooped machine on a capped recipe is overclocked (c*rho*beta)")
+
+
+def test_overclock_power_factor() -> None:
+    # Power draw of an overclocked consumer uses c^1.321928 (game curve),
+    # stacked on the sloop pi factor. With a 250% tier and no sloops:
+    # draw = 4 MW * 2.5^1.321928.
+    cfg = load_example()
+    cfg.parameters.somersloop_budget = 0.0
+    cfg.parameters.overclock_tiers = [1.0, 2.5]
+    cfg.recipes.clear()
+    cfg.machines["constructor"] = MachineSpec(power_draw=4.0, max_sloops=0, overclockable=True)
+    cfg.recipes.append(
+        Recipe(id="bar", name="Bar", machine="constructor",
+               inputs={"ore": 10.0}, outputs={"bar": 10.0}, max_machines=1.0)
+    )
+    cfg.recipes.append(
+        Recipe(id="coal_power", name="Coal Power", machine="generator",
+               inputs={"coal": 15.0}, outputs={"power": 75.0})
+    )
+    cfg.items["bar"] = Item("bar", "Bar", sinkable=True, points=100.0)
+    cfg.parameters.resources = {"ore": 100.0, "coal": 15.0}
+    sol = solve(build_problem(cfg, n_augmenters=0))
+    plan = downconvert(cfg, sol)
+    bar = [m for m in plan if m.recipe_id == "bar"]
+    assert bar and abs(bar[0].clock_pct - 250.0) < 1e-6
+    expected = 4.0 * (2.5 ** 1.321928)
+    assert abs(sol.power_consumed - expected) < 1e-6, "overclock power must be c^1.321928 * draw"
+    assert sol.power_consumed <= sol.power_available + 1e-6
+    check("overclock: power draw = c^1.321928 * base draw (confirmed game curve)")
+
+
+def test_overclock_extractor_breaks_cap() -> None:
+    # The game's biggest overclock win: miners (0-slot machines) at 250% break
+    # the node cap -- 2 nodes * 60/min * 2.5 = 300 ore/min.
+    cfg = load_example()
+    cfg.parameters.overclock_tiers = [1.0, 2.5]
+    cfg.parameters.resources = {}
+    cfg.parameters.somersloop_budget = 0.0
+    cfg.recipes.clear()
+    cfg.machines["miner"] = MachineSpec(power_draw=0.0, max_sloops=0)  # overclockable default True
+    cfg.machines["constructor"] = MachineSpec(power_draw=0.0, max_sloops=0)
+    cfg.recipes.append(
+        Recipe(id="miner", name="Miner", machine="miner",
+               inputs={}, outputs={"ore": 60.0}, max_machines=2.0)
+    )
+    cfg.recipes.append(
+        Recipe(id="smelter", name="Smelter", machine="constructor",
+               inputs={"ore": 30.0}, outputs={"bar": 30.0})
+    )
+    cfg.items["ore"] = Item("ore", "Ore", sinkable=False)
+    cfg.items["bar"] = Item("bar", "Bar", sinkable=True, points=10.0)
+    sol = solve(build_problem(cfg, n_augmenters=0))
+    assert abs(sol.sinks["bar"] - 300.0) < 1e-6, "overclocked miners must exceed the node cap"
+    check("overclock: 0-slot extractor overclocking breaks node caps (real-game win)")
+
+
+def test_non_overclockable_machine_fixed() -> None:
+    # A machine marked overclockable=false can never be clocked above 100%,
+    # no matter the tier list: capped extractor output stays 2 nodes * 60.
+    cfg = load_example()
+    cfg.parameters.overclock_tiers = [1.0, 2.5]
+    cfg.parameters.resources = {}
+    cfg.parameters.somersloop_budget = 0.0
+    cfg.recipes.clear()
+    cfg.machines["miner"] = MachineSpec(power_draw=0.0, max_sloops=0, overclockable=False)
+    cfg.machines["constructor"] = MachineSpec(power_draw=0.0, max_sloops=0)
+    cfg.recipes.append(
+        Recipe(id="miner", name="Miner", machine="miner",
+               inputs={}, outputs={"ore": 60.0}, max_machines=2.0)
+    )
+    cfg.recipes.append(
+        Recipe(id="smelter", name="Smelter", machine="constructor",
+               inputs={"ore": 30.0}, outputs={"bar": 30.0})
+    )
+    cfg.items["ore"] = Item("ore", "Ore", sinkable=False)
+    cfg.items["bar"] = Item("bar", "Bar", sinkable=True, points=10.0)
+    prob = build_problem(cfg, n_augmenters=0)
+    miner_clocks = {c for (r, k, c) in prob.activity_col if r == 0}
+    assert miner_clocks == {1.0}, "non-overclockable machine must have only the base clock"
+    sol = solve(prob)
+    assert abs(sol.sinks["bar"] - 120.0) < 1e-6, "non-overclockable extractor supply stays capped"
+    check("overclock: overclockable=false fixes a machine at 100% (supply stays capped)")
+
+
+def test_overclock_config_defaults_and_loader() -> None:
+    import tempfile
+
+    from factory_optimiser.io_config import load_machine, load_parameters
+
+    # Parameters: no `overclock` key -> no overclocking ([1.0]); with tiers,
+    # 1.0 is forced in, sorted and deduplicated.
+    with tempfile.TemporaryDirectory() as tmp:
+        p = Path(tmp) / "parameters.json"
+        p.write_text(json.dumps({
+            "somersloop_budget": 10.0,
+            "augmenters": {"cost": 10},
+            "overclock": {"tiers": [2.5, 1.0, 2.0, 1.0]},
+        }))
+        params = load_parameters(p)
+        assert params.overclock_tiers == [1.0, 2.0, 2.5]
+    from factory_optimiser.io_config import Parameters, Augmenters
+    params0 = Parameters(resources={}, somersloop_budget=0.0, augmenters=Augmenters())
+    assert params0.overclock_tiers == [1.0], "default tier list = no overclocking"
+
+    # Machine spec: overclockable defaults true; parses false from the file.
+    with tempfile.TemporaryDirectory() as tmp:
+        (Path(tmp) / "g.json").write_text('{"id": "geo_gen", "overclockable": false}')
+        spec = load_machine(Path(tmp) / "g.json")
+        assert spec.overclockable is False
+    from factory_optimiser.io_config import MachineSpec
+    assert MachineSpec(id="x").overclockable is True
+    check("overclock: config defaults + loader (tiers normalized; overclockable flag)")
+
+
+def test_overclock_consistency_checks() -> None:
+    from factory_optimiser.consistency import check_config
+
+    cfg = load_example()
+    cfg.parameters.overclock_tiers = [1.0, -0.5]
+    codes = {i.code for i in check_config(cfg) if i.severity == "error"}
+    assert "overclock-nonpositive" in codes
+
+    cfg.parameters.overclock_tiers = [1.0, 3.0]
+    codes = {i.code for i in check_config(cfg) if i.severity == "warning"}
+    assert "overclock-above-cap" in codes
+    check("consistency: bad overclock tiers flagged (non-positive error, above-cap warn)")
+
+
+def test_underclock_power_efficiency() -> None:
+    # Convex power means underclocking is power-efficient: at 50% clock a
+    # machine makes 0.5x output for only 0.5^1.321928 ~= 0.40x draw. Inside a
+    # hard power cap this beats the power-linear fractional model. 10 machines
+    # at 20 MW would want 200 MW; only 75 MW (one coal gen) is available.
+    cfg = load_example()
+    cfg.parameters.somersloop_budget = 0.0
+    cfg.parameters.overclock_tiers = [0.5, 1.0]
+    cfg.recipes.clear()
+    cfg.machines["constructor"] = MachineSpec(power_draw=20.0, max_sloops=0, overclockable=True)
+    cfg.recipes.append(
+        Recipe(id="bar", name="Bar", machine="constructor",
+               inputs={"ore": 10.0}, outputs={"bar": 10.0})
+    )
+    cfg.recipes.append(
+        Recipe(id="coal_power", name="Coal Power", machine="generator",
+               inputs={"coal": 15.0}, outputs={"power": 75.0})
+    )
+    cfg.items["bar"] = Item("bar", "Bar", sinkable=True, points=10.0)
+    cfg.parameters.resources = {"ore": 100.0, "coal": 15.0}
+    sol = solve(build_problem(cfg, n_augmenters=0))
+    # Power budget 75 MW. c=1 alone caps at 75/20 = 3.75 machines -> 37.5 bar.
+    # Underclocking to 50% (8.04 MW/full machine) reaches ~9.3 machines -> ~46.7 bar.
+    assert sol.sinks["bar"] > 40.0, "50% underclock must beat the power-linear optimum (~46.7 vs 37.5)"
+    assert sol.power_consumed <= sol.power_available + 1e-6
+    assert abs(sol.power_consumed / 75.0) > 0.9, "should be hugging the power cap"
+    check("underclock: 50% tier saves power via c^1.321928 inside a hard power cap")
+
+
+def test_underclock_tier_attachment() -> None:
+    # k=0 continuous of a slot machine gets only the <=1.0 (underclock) tiers;
+    # the integer slooped grade k=1 gets the full tier list.
+    cfg = load_example()
+    cfg.parameters.overclock_tiers = [0.5, 0.75, 1.0, 2.0]
+    cfg.recipes.clear()
+    cfg.machines["constructor"] = MachineSpec(power_draw=0.0, max_sloops=1, overclockable=True)
+    cfg.recipes.append(
+        Recipe(id="bar", name="Bar", machine="constructor",
+               inputs={"ore": 10.0}, outputs={"bar": 10.0})
+    )
+    cfg.items["bar"] = Item("bar", "Bar", sinkable=True, points=10.0)
+    cfg.parameters.resources = {"ore": 10.0}
+    prob = build_problem(cfg, n_augmenters=0)
+    by_grade = {
+        k: sorted({c for (r, k2, c) in prob.activity_col if k2 == k})
+        for k in (0, 1)
+    }
+    assert by_grade[0] == [0.5, 0.75, 1.0], "continuous k=0 gets only underclock tiers"
+    assert by_grade[1] == [0.5, 0.75, 1.0, 2.0], "integer slooped grade gets the full list"
+    check("underclock: continuous k=0 gets <=1.0 tiers, slooped k>=1 gets all")
+
+
+def test_minimize_machines_tiebreak() -> None:
+    # Nothing in the phase-1 objective prices building count, so with power
+    # slack "20 bar machines at 50%" ties "10 at 100%" (100 ore -> 100 bar/min
+    # either way, same 1000 pts). The machine-count tiebreak must collapse the
+    # flat face onto the fewest-buildings plan at the SAME points: 10 @ 100%.
+    # Coal is a *non-sinkable* fuel here so it holds no value of its own (a
+    # sinkable fuel would rightly trade machines to sink it — see the reduced
+    # case this test's assertions guard against).
+    cfg = load_example()
+    cfg.parameters.somersloop_budget = 0.0
+    cfg.parameters.overclock_tiers = [0.5, 1.0]
+    cfg.recipes.clear()
+    cfg.machines["constructor"] = MachineSpec(power_draw=4.0, max_sloops=0, overclockable=True)
+    cfg.recipes.append(
+        Recipe(id="bar", name="Bar", machine="constructor",
+               inputs={"ore": 10.0}, outputs={"bar": 10.0})
+    )
+    cfg.items["bar"] = Item("bar", "Bar", sinkable=True, points=10.0)
+    cfg.items["coal"] = Item("coal", "Coal", sinkable=False)  # pure fuel, no sink value
+    cfg.recipes.append(
+        Recipe(id="coal_power", name="Coal Power", machine="generator",
+               inputs={"coal": 15.0}, outputs={"power": 75.0})
+    )
+    cfg.parameters.resources = {"ore": 100.0, "coal": 15.0}
+
+    prob = build_problem(cfg, n_augmenters=0)
+    phase1 = solve(prob)
+    # Power must NOT be what caps bar: the ore supply (100/min) binds first.
+    assert phase1.sinks["bar"] == 100.0, "ore cap should bind; power has slack"
+    tied = solve(prob, minimize_machines=phase1.objective)
+    assert abs(tied.objective - phase1.objective) < 1e-6, "tiebreak keeps the same points/min"
+
+    def total_machines(sol) -> float:
+        return sum(v for (r, k, c), v in sol.activities.items() if v > 0.0)
+
+    assert total_machines(tied) <= total_machines(phase1) + 1e-9
+    # Theoretical minimum for the *bar* recipe: 100 ore @ 10 ore/machine = 10
+    # machine-equivalents, all clocked at the highest available c (1.0).
+    # (Generators add their own ~0.5 machine-equivalents' worth of power, so we
+    # count bar alone here.)
+    def for_recipe(sol, c=None) -> float:
+        total = 0.0
+        for (r, k, clk), v in sol.activities.items():
+            if sol.problem.config.recipes[r].id != "bar" or v <= 0.0:
+                continue
+            if c is None or clk == c:
+                total += v
+        return total
+
+    assert abs(for_recipe(tied) - 10.0) < 1e-3, (
+        f"fewest-machines bar plan should be 10 @100%, got {for_recipe(tied)}"
+    )
+    assert abs(for_recipe(tied, c=1.0) - 10.0) < 1e-3, (
+        "bulk with power slack must be clocked at 100%, not 50%"
+    )
+    check("tiebreak: fewest machines at equal points (10@100% beats 20@50%) under power slack")
+
+
+def test_tiebreak_keeps_underclock_when_power_binds() -> None:
+    # Under a HARD power cap the fewest-machine tiebreak must NOT undo the
+    # underclock: re-clocking to 100% is infeasible there, so the solver has to
+    # stay on 50% to fit output in the power budget (that is exactly when
+    # underclock pays). Same setup as test_underclock_power_efficiency.
+    cfg = load_example()
+    cfg.parameters.somersloop_budget = 0.0
+    cfg.parameters.overclock_tiers = [0.5, 1.0]
+    cfg.recipes.clear()
+    cfg.machines["constructor"] = MachineSpec(power_draw=20.0, max_sloops=0, overclockable=True)
+    cfg.recipes.append(
+        Recipe(id="bar", name="Bar", machine="constructor",
+               inputs={"ore": 10.0}, outputs={"bar": 10.0})
+    )
+    cfg.recipes.append(
+        Recipe(id="coal_power", name="Coal Power", machine="generator",
+               inputs={"coal": 15.0}, outputs={"power": 75.0})
+    )
+    cfg.items["bar"] = Item("bar", "Bar", sinkable=True, points=10.0)
+    cfg.items["coal"] = Item("coal", "Coal", sinkable=False)  # pure fuel, no sink value
+    cfg.parameters.resources = {"ore": 100.0, "coal": 15.0}
+
+    prob = build_problem(cfg, n_augmenters=0)
+    phase1 = solve(prob)
+    assert phase1.sinks["bar"] > 40.0, "underclock beats the power-linear optimum (~46.7 vs 37.5)"
+    tied = solve(prob, minimize_machines=phase1.objective)
+    assert abs(tied.objective - phase1.objective) < 1e-6, "same points/min"
+    assert tied.sinks["bar"] > 40.0, "tiebreak must not un-underclock a power-bound optimum"
+    assert tied.power_consumed <= tied.power_available + 1e-6
+    check("tiebreak: power-bound optimum stays underclocked (fewest machines can't re-clock)")
+
+
+def test_tiebreak_does_not_trade_points_for_machines() -> None:
+    # Coal is sinkable in-game (3 pts). Over-producing power wastes coal that
+    # could be sunk, so the point-maximising plan underclocks the bar line and
+    # *sinks the leftover fuel* — earning real points. The fewest-machine
+    # tiebreak must NOT compress that away: lexicographic means points always
+    # win over building count (compressing to 10@100% would forfeit ~25-30
+    # pts/min of coal-sink value).
+    cfg = load_example()
+    cfg.parameters.somersloop_budget = 0.0
+    cfg.parameters.overclock_tiers = [0.5, 1.0]
+    cfg.recipes.clear()
+    cfg.machines["constructor"] = MachineSpec(power_draw=4.0, max_sloops=0, overclockable=True)
+    cfg.recipes.append(
+        Recipe(id="bar", name="Bar", machine="constructor",
+               inputs={"ore": 10.0}, outputs={"bar": 10.0})
+    )
+    cfg.items["bar"] = Item("bar", "Bar", sinkable=True, points=10.0)
+    # keep the fixture's sinkable coal @ 3 pts -> raw-sink column exists
+    cfg.recipes.append(
+        Recipe(id="coal_power", name="Coal Power", machine="generator",
+               inputs={"coal": 15.0}, outputs={"power": 75.0})
+    )
+    cfg.parameters.resources = {"ore": 100.0, "coal": 15.0}
+
+    prob = build_problem(cfg, n_augmenters=0)
+    phase1 = solve(prob)
+    assert phase1.raw_sinks.get("coal", 0.0) > 5.0, (
+        "optimum should sink surplus coal, not burn it all for power"
+    )
+    tied = solve(prob, minimize_machines=phase1.objective)
+    assert abs(tied.objective - phase1.objective) < 1e-6, "same points/min"
+
+    def bar_at(sol, c=None) -> float:
+        total = 0.0
+        for (r, k, clk), v in sol.activities.items():
+            if sol.problem.config.recipes[r].id != "bar" or v <= 0.0:
+                continue
+            if c is None or clk == c:
+                total += v
+        return total
+
+    # 10 @ 100% would burn far more coal (no sink value) -> ~1021 pts < 1025.8.
+    # The tiebreak must keep the underclocked / fuel-sinking plan instead (bar
+    # stays well above 10 machine-equivalents and not all at c=1.0).
+    assert bar_at(tied) > 15.0, f"tiebreak must not compress away coal-sink value ({bar_at(tied)})"
+    assert bar_at(tied, c=1.0) < bar_at(tied) - 1.0, "bar must stay partly underclocked"
+    # And the phase-2 solution must not leave a phantom clock sliver (0.02 @
+    # 100% beside 19.96 @ 50% would report as ceil=1 extra machine): the
+    # consolidation pass folds it into the dominant 50% column -> one clean row.
+    bar_cols = sorted({
+        c for (r, k, c), v in tied.activities.items()
+        if v > 0.0 and tied.problem.config.recipes[r].id == "bar"
+    })
+    assert bar_cols == [0.5], f"bar must consolidate onto one clock, got {bar_cols}"
+    assert abs(bar_at(tied) - 20.0) < 1e-3, f"bar should fold to exactly 20 @ 50%, got {bar_at(tied)}"
+    check("tiebreak: points beat machines — sinkable fuel blocks over-aggressive compression"
+          " (and clock slivers are consolidated away)")
 
 
 def test_machine_specs_load_from_files() -> None:
@@ -380,6 +732,17 @@ if __name__ == "__main__":
     test_machine_cap_enforced()
     test_power_draw_inherited_from_machine_type()
     test_extractor_recipe_bounds_supply()
+    test_overclock_slooped_machine()
+    test_overclock_power_factor()
+    test_overclock_extractor_breaks_cap()
+    test_non_overclockable_machine_fixed()
+    test_overclock_config_defaults_and_loader()
+    test_overclock_consistency_checks()
+    test_underclock_power_efficiency()
+    test_underclock_tier_attachment()
+    test_minimize_machines_tiebreak()
+    test_tiebreak_keeps_underclock_when_power_binds()
+    test_tiebreak_does_not_trade_points_for_machines()
     test_machine_specs_load_from_files()
     test_items_load_from_files()
     test_consistency_check_and_cli_gate()

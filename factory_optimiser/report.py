@@ -1,12 +1,14 @@
 """Down-conversion and reporting (Design.md §7).
 
-Down-conversion: an activity x[r][k] is converted to a build plan as
+Down-conversion: an activity x[r][k][c] (machines of recipe r, grade k, at
+clock c) is converted to a build plan as
     machines = ceil(activity)
-    clock%   = activity / machines * 100
+    clock%   = 100 * c * activity / machines
 For slooped grades (k >= 1) the activity is integer by construction, so this
-simply reports whole machines at 100% clock. Continuous k=0 activities become
-underclocked whole machines (legal in-game). Overclocking beyond 100% is out of
-scope (nonlinear in-game power curve; Design.md §1).
+reports whole machines at the chosen clock tier (100 * c %). Continuous k=0
+activities become fractional/underclocked machines (legal in-game); with c=1
+this reduces to the original clock = activity/machines * 100. Overclocked
+columns appear at their tier clock (up to the game's 250%).
 """
 
 from __future__ import annotations
@@ -28,27 +30,27 @@ class PlanMachine:
     machine: str
     sloops_per_machine: int
     machines: float        # to build (ceiled; may exceed 1 for underclock)
-    clock_pct: float       # 0..~100
-    activity: float        # raw solver value (machine-equivalents)
+    clock_pct: float       # 0..~250
+    activity: float        # raw solver value (machine-equivalents at clock c)
     outputs: dict[str, float]  # total throughput items/min
     inputs: dict[str, float]
 
 
 def downconvert(config: Config, solution: Solution) -> list[PlanMachine]:
     plan: list[PlanMachine] = []
-    for (r, k), activity in sorted(solution.activities.items()):
+    for (r, k, c), activity in sorted(solution.activities.items()):
         if activity <= _EPS:
             continue
         recipe = config.recipes[r]
         machines = math.ceil(activity - 1e-9)
-        clock = activity / machines * 100.0
+        clock = 100.0 * c * activity / machines
         grade = sloop_multipliers(k, config.max_sloops_for(recipe.machine))
         outputs = {
-            i: grade.rho * v * activity
+            i: c * grade.rho * v * activity
             for i, v in recipe.outputs.items()
-            if i != POWER_ITEM and grade.rho * v * activity > _EPS
+            if i != POWER_ITEM and c * grade.rho * v * activity > _EPS
         }
-        inputs = {i: grade.kappa * v * activity for i, v in recipe.inputs.items()}
+        inputs = {i: c * grade.kappa * v * activity for i, v in recipe.inputs.items()}
         plan.append(
             PlanMachine(
                 recipe_id=recipe.id,
