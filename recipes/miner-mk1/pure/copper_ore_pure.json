@@ -1,6 +1,6 @@
 {
   "id": "copper_ore_pure",
-  "name": "Copper Ore (Pure Node)",
+  "name": "Copper Ore (Pure)",
   "machine": "miner",
   "inputs": {},
   "outputs": {"copper_ore": 120.0},

@@ -82,10 +82,13 @@ Supporting config:
 * `machines/*.json` — one building per file: `{id, name, power_draw, max_sloops}`
   (e.g. `machines/constructor.json`). Subdirectories are fine; loading is a
   recursive glob.
-* `config/parameters.json` — Somersloop budget, per-grade multipliers (ρ output
-  / κ input / π power per Somersloop count), Alien Power Augmenter cost &
-  bonus. An optional `resources` table can still bound total *consumption* of
-  an item, but the preferred way to limit supply is extractor recipes.
+* `config/parameters.json` — Somersloop budget, Alien Power Augmenter cost &
+  bonus (each augmenter also adds a flat `power_mw`, un-bonused). An optional
+  `resources` table can still bound total *consumption* of an item, but the
+  preferred way to limit supply is extractor recipes. Sloop multipliers are the
+  confirmed in-game formula and not configured here: a machine with k of its T
+  slots filled gets `ρ = 1+k/T` output, `κ = 1` input (unchanged), `π = (1+k/T)²`
+  power; `T` is the machine's `max_sloops`.
 
 The current recipes/items/parameters are **small placeholder examples** with
 plausible-but-unconfirmed numbers; drop in real data later without touching the

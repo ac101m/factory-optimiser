@@ -1,0 +1,8 @@
+{
+  "id": "geothermal_power_normal",
+  "name": "Geothermal Power (Normal)",
+  "machine": "geothermal_generator",
+  "inputs": {},
+  "outputs": {"power": 200.0},
+  "max_machines": 13
+}

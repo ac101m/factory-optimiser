@@ -1,6 +1,6 @@
 {
   "id": "limestone_impure",
-  "name": "Limestone (Impure Node)",
+  "name": "Limestone (Impure)",
   "machine": "miner",
   "inputs": {},
   "outputs": {"limestone": 30.0},

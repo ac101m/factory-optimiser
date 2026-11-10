@@ -1,6 +1,6 @@
 {
   "id": "limestone_normal",
-  "name": "Limestone (Normal Node)",
+  "name": "Limestone (Normal)",
   "machine": "miner",
   "inputs": {},
   "outputs": {"limestone": 60.0},

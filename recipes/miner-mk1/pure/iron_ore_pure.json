@@ -1,6 +1,6 @@
 {
   "id": "iron_ore_pure",
-  "name": "Iron Ore (Pure Node)",
+  "name": "Iron Ore (Pure)",
   "machine": "miner",
   "inputs": {},
   "outputs": {"iron_ore": 120.0},

@@ -1,5 +1,5 @@
 {
-  "_comment": "Game/system parameters. sloop_grades and power values are PLACEHOLDER example values pending in-game confirmation (see Design.md §8).",
+  "_comment": "Game/system parameters. Somersloop multipliers are the CONFIRMED in-game formula (see _sloops below and Design.md §8). Augmenter/geothermal and item sink_points may still be placeholder." ,
   "somersloop_budget": 106,
 
   "augmenters": {
@@ -14,11 +14,7 @@
     "_example_cap_on_a_raw_item": {"water": 300.0}
   },
 
-  "sloop_grades": {
-    "_note": "Per-grade multipliers on a machine running with k Somersloops: rho = output, kappa = input consumption, pi = power draw. DEFAULT IS A PLACEHOLDER — CONFIRM per Design.md §8. Chosen so sloops are strictly valuable: rho=kappa=2^k (output and input both double, conserving material balance) but pi=1 (slooped machines draw the same power). NOTE: if pi were also 2^k, a slooped machine is exactly equivalent to 2^k extra buildings and Somersloops would only matter via per-recipe machine caps.",
-    "0": {"rho": 1.0, "kappa": 1.0, "pi": 1.0},
-    "1": {"rho": 2.0, "kappa": 2.0, "pi": 1.0},
-    "2": {"rho": 4.0, "kappa": 4.0, "pi": 1.0},
-    "3": {"rho": 8.0, "kappa": 8.0, "pi": 1.0}
+  "_sloops": {
+    "_note": "CONFIRMED in-game formula, hardcoded in factory_optimiser/io_config.sloop_multipliers: a machine with k of its T total Somersloop slots (T = the machine's max_sloops, see machines/*.json) gets rho = 1 + k/T on output, kappa = 1 on inputs (inputs do NOT increase), and pi = (1 + k/T)^2 on power draw. Full slots -> 2x output; e.g. 1 of 2 slots -> 1.5x output, same input, 2.25x power. Nothing is configured here."
   }
 }

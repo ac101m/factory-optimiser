@@ -25,7 +25,7 @@ from dataclasses import dataclass
 import numpy as np
 from scipy.optimize import Bounds, LinearConstraint
 
-from .io_config import Config, POWER_ITEM
+from .io_config import Config, Grade, POWER_ITEM, sloop_multipliers
 
 #: Below this, an activity is treated as "not used" when reading back.
 EPS = 1e-9
@@ -132,12 +132,16 @@ def build_problem(
     recipes_by_idx = list(enumerate(recipes))
     produced = set(config.produced_items)
 
+    def mult(r: int, k: int) -> Grade:
+        """Sloop multipliers for recipe r at grade k (depends on the machine's slots)."""
+        return sloop_multipliers(k, config.max_sloops_for(recipes[r].machine))
+
     # 1) Item material balance (one row per produced item, power excluded).
     for item in sorted(produced):
         row: dict[int, float] = {}
         for r, recipe in recipes_by_idx:
             for k in _grades(config, r):
-                grade = params.sloop_grades[k]
+                grade = mult(r, k)
                 net = grade.rho * recipe.outputs.get(item, 0.0) - grade.kappa * recipe.inputs.get(item, 0.0)
                 if net != 0.0:
                     row[activity_col[(r, k)]] = row.get(activity_col[(r, k)], 0.0) + net
@@ -154,7 +158,7 @@ def build_problem(
         row = {}
         for r, recipe in recipes_by_idx:
             for k in _grades(config, r):
-                grade = params.sloop_grades[k]
+                grade = mult(r, k)
                 rate = grade.kappa * recipe.inputs.get(item, 0.0)
                 if rate != 0.0:
                     row[activity_col[(r, k)]] = row.get(activity_col[(r, k)], 0.0) + rate
@@ -171,12 +175,12 @@ def build_problem(
     #    where W = augmenters.power_mw is the flat MW each augmenter produces
     #    itself (the bonus m(N) does NOT apply to W). For a fixed N, N*W is a
     #    constant, so it only shifts the row's lower bound.
-    #    Generators: +m(N)*rho_k*output.  Consumers: -pi_k*power_draw.
+    #    Generators: +m(N)*rho(k)*output.  Consumers: -pi(k)*power_draw.
     if uses_power:
         row = {}
         for r, recipe in recipes_by_idx:
             for k in _grades(config, r):
-                grade = params.sloop_grades[k]
+                grade = mult(r, k)
                 gen = power_multiplier * grade.rho * recipe.outputs.get(POWER_ITEM, 0.0)
                 draw = grade.pi * config.power_draw_for(recipe)
                 val = gen - draw

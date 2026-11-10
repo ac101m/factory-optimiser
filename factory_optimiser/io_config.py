@@ -93,7 +93,11 @@ class Recipe:
 
 @dataclass(frozen=True)
 class Grade:
-    """Per-sloop-grade multipliers: output (rho), input (kappa), power (pi)."""
+    """Multipliers for a slooped machine: output (rho), input (kappa), power (pi).
+
+    Produced by :func:`sloop_multipliers` from the confirmed in-game formula
+    (rho = 1+k/T, kappa = 1, pi = (1+k/T)^2 for k of T slots filled).
+    """
 
     rho: float
     kappa: float
@@ -118,9 +122,25 @@ class Augmenters:
 @dataclass
 class Parameters:
     resources: dict[str, float]
-    sloop_grades: dict[int, Grade]
     somersloop_budget: float
     augmenters: Augmenters
+
+
+def sloop_multipliers(k: int, total_slots: int) -> Grade:
+    """Confirmed Somersloop grade multipliers (Design.md §5.2, §8).
+
+    With ``k`` of ``total_slots`` slots filled on a machine:
+
+        rho   (output) = 1 + k/total_slots   — linear, doubles at full slots
+        kappa (input)  = 1                   — inputs do NOT increase
+        pi    (power)  = (1 + k/total_slots)^2
+
+    Example: a 2-slot machine with 1 slot filled -> 1.5x output, same input,
+    (1.5)^2 = 2.25x power. ``total_slots`` <= 0 => no slooping possible and
+    every multiplier is 1 (matches machines with zero sloop slots).
+    """
+    frac = (k / total_slots) if total_slots > 0 else 0.0
+    return Grade(rho=1.0 + frac, kappa=1.0, pi=(1.0 + frac) ** 2)
 
 
 @dataclass
@@ -144,11 +164,13 @@ class Config:
     # -- building / machine helpers -------------------------------------------
 
     def max_sloops_for(self, machine: str) -> int:
-        """Highest sloop grade available on a machine type, clamped by the grade table."""
-        spec = self.machines.get(machine, DEFAULT_MACHINE)
-        cap = spec.max_sloops
-        highest = max(self.parameters.sloop_grades) if self.parameters.sloop_grades else 0
-        return min(cap, highest)
+        """Total Somersloop slots (T) of a machine type.
+
+        This is both the cap on how many sloops the machine accepts (k in
+        0..T) and the denominator of the confirmed sloop multipliers — see
+        :func:`sloop_multipliers`.
+        """
+        return self.machines.get(machine, DEFAULT_MACHINE).max_sloops
 
     def power_draw_for(self, recipe: Recipe) -> float:
         """Base power draw (MW) for a recipe: its override, else its machine type."""
@@ -321,17 +343,6 @@ def load_parameters(path: str | Path) -> Parameters:
         if not str(k).startswith("_")
     }
 
-    grades_raw = raw.get("sloop_grades", {})
-    if "0" not in grades_raw:
-        raise ConfigError(f"parameters file {path}: sloop_grades must include grade 0")
-    sloop_grades: dict[int, Grade] = {}
-    for k, spec in grades_raw.items():
-        if str(k).startswith("_"):
-            continue
-        sloop_grades[int(k)] = Grade(
-            rho=float(spec["rho"]), kappa=float(spec["kappa"]), pi=float(spec["pi"])
-        )
-
     aug_raw = raw.get("augmenters", {})
     augmenters = Augmenters(
         cost=int(aug_raw.get("cost", 10)),
@@ -342,7 +353,6 @@ def load_parameters(path: str | Path) -> Parameters:
 
     return Parameters(
         resources=resources,
-        sloop_grades=sloop_grades,
         somersloop_budget=float(raw.get("somersloop_budget", 0.0)),
         augmenters=augmenters,
     )

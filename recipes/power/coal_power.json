@@ -1,6 +1,6 @@
 {
   "id": "coal_power",
-  "name": "Coal Generator",
+  "name": "Coal Power",
   "machine": "coal_generator",
   "inputs": {"coal": 15.0},
   "outputs": {"power": 75.0}

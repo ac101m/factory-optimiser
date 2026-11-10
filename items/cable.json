@@ -2,5 +2,5 @@
   "id": "cable",
   "name": "Cable",
   "sinkable": true,
-  "sink_points": 12
+  "sink_points": 24
 }

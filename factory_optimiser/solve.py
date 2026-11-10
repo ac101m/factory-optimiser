@@ -7,7 +7,7 @@ from dataclasses import dataclass, field
 import numpy as np
 from scipy.optimize import milp
 
-from .io_config import POWER_ITEM
+from .io_config import POWER_ITEM, sloop_multipliers
 from .model import EPS, Problem
 
 
@@ -112,7 +112,7 @@ def solve(problem: Problem, *, time_limit: float = 30.0) -> Solution:
         if val <= 0.0:
             continue
         recipe = config.recipes[r]
-        grade = config.parameters.sloop_grades[k]
+        grade = sloop_multipliers(k, config.max_sloops_for(recipe.machine))
         power_generated += grade.rho * recipe.outputs.get(POWER_ITEM, 0.0) * val
         power_consumed += grade.pi * power_draw_cache[r] * val
 

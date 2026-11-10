@@ -57,26 +57,31 @@ Rationale (preserve this — an agent might otherwise "reintroduce" a GA):
 *   **Power is modeled as just another item.**
     
 
-### 5.2 Per-sloop-grade constants (parameter table — plug in real values)
+### 5.2 Per-sloop multipliers (CONFIRMED formula, per machine)
 
-For each grade k on a machine/generator:
+A machine has `T` total Somersloop slots (its `max_sloops`, per `machines/*.json`).
+With `k` of those slots filled (k = 0..T):
 
-*   `ρ_k` — output multiplier
-    
-*   `κ_k` — input multiplier
-    
-*   `π_k` — power draw multiplier
-    
+*   `ρ(k,T) = 1 + k/T` — output multiplier (linear; doubles at full slots)
+*   `κ(k,T) = 1` — input multiplier (**inputs do not increase with sloops**)
+*   `π(k,T) = (1 + k/T)^2` — power draw multiplier (quadratic)
 
-Do NOT hardcode these; keep them in a config/parameter table (see §8).
+Example (confirmed): a 2-slot machine with 1 slot filled → `1.5×` output, same
+input, `2.25×` power; full slots → `2×` output. Implemented in
+`io_config.sloop_multipliers`; there is no global per-grade table because the
+multipliers depend on each machine's own slot count `T`.
 
 ### 5.3 Constraints (one per item)
 
 **Item material balance:**
 
 ```
-Σ_r Σ_k ( ρ_k·β[r][i] − κ_k·α[r][i] )·x[r][k] = s[i] ≥ 0   ∀ items i
+Σ_r Σ_k ( ρ(k_r,T_r)·β[r][i] − κ·α[r][i] )·x[r][k] = s[i] ≥ 0   ∀ items i
 ```
+
+with `κ = 1` (confirmed: slooping does not increase input consumption). So a
+slooped machine converts the same feed into strictly more product — Somersloops
+are a scarce multiplier on material efficiency, not just machine throughput.
 
 This one family does three jobs at once:
 
@@ -173,8 +178,8 @@ Per solved model (per N):
 
 | Parameter | Value | Status |
 | --- | --- | --- |
-| Max sloops per machine/generator K | 3? | **confirm** |
-| Per-grade multipliers ρ, κ, π | 2^k? or other | **confirm** (esp. input & power when slooped) |
+| Per-machine Somersloop slots T | per machine spec (`max_sloops` in `machines/*.json`) | slots per building: **confirm** (data currently 0/1/2) |
+| Sloop multipliers ρ, κ, π | ρ = 1+k/T, κ = 1, π = (1+k/T)² | confirmed |
 | Augmenter sloop cost | 10 | confirmed |
 | Augmenter stacking | additive +10%/unit of base | confirmed |
 | Augmenter flat power | +500 MW each, bonus does NOT apply | confirmed |

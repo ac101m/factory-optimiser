@@ -50,7 +50,6 @@ def check_config(config: Config, include_info: bool = False) -> list[Issue]:
     known_machines = set(config.machines)
     used_machines = {r.machine for r in config.recipes}
     capped = set(params.resources)
-    highest_grade = max(params.sloop_grades) if params.sloop_grades else 0
 
     # -- errors ---------------------------------------------------------------
 
@@ -134,18 +133,6 @@ def check_config(config: Config, include_info: bool = False) -> list[Issue]:
                 "consumes it",
             )
         )
-
-    for mid, spec in sorted(config.machines.items()):
-        if 0 <= spec.max_sloops > highest_grade:
-            issues.append(
-                Issue(
-                    "warning",
-                    "sloop-cap-clamped",
-                    f"machine {mid!r} max_sloops={spec.max_sloops} exceeds the "
-                    f"highest grade in sloop_grades ({highest_grade}); effectively "
-                    f"capped at {highest_grade}",
-                )
-            )
 
     # Consumed but nothing produces it and no resource cap -> starved forever.
     for item_id in sorted(consumed - produced - capped):

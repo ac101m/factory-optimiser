@@ -1,6 +1,6 @@
 {
   "id": "coal_normal",
-  "name": "Coal (Normal Node)",
+  "name": "Coal (Normal)",
   "machine": "miner",
   "inputs": {},
   "outputs": {"coal": 60.0},

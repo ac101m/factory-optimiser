@@ -21,7 +21,6 @@ from factory_optimiser.io_config import (
     ConfigError,
     Item,
     Parameters,
-    Grade,
     Recipe,
     MachineSpec,
     Augmenters,
@@ -59,7 +58,6 @@ def load_example() -> Config:
         },
         parameters=Parameters(
             resources={"ore": 60.0, "coal": 30.0},
-            sloop_grades={0: Grade(1, 1, 1), 1: Grade(2, 2, 1), 2: Grade(4, 4, 1), 3: Grade(8, 8, 1)},
             somersloop_budget=4.0,
             augmenters=Augmenters(cost=10, bonus=0.1),
         ),
@@ -140,8 +138,8 @@ def test_downconvert_includes_grade_multiplier() -> None:
     cfg.parameters.somersloop_budget = 10.0
     cfg.recipes.clear()
     cfg.machines["constructor"] = MachineSpec(power_draw=0.0, max_sloops=3)  # power not under test
-    # max_machines=1 forces the use of sloops to get past the cap: a k=3
-    # machine makes 8x the base output, so 80/min from 80 ore.
+    # max_machines=1 forces sloops past the cap. The machine has T=3 slots, so a
+    # k=3 machine gets rho = 1 + 3/3 = 2x output from the SAME 10 ore input.
     cfg.recipes.append(
         Recipe(id="bar", name="Bar", machine="constructor",
                inputs={"ore": 10.0}, outputs={"bar": 10.0}, max_machines=1.0)
@@ -153,9 +151,29 @@ def test_downconvert_includes_grade_multiplier() -> None:
     slooped = [m for m in plan if m.sloops_per_machine == 3]
     assert slooped, "with 10 sloops and a machine cap a k=3 bar machine should be used"
     m = slooped[0]
-    # one k=3 machine: 8x the base 10/min base output = 80/min
-    assert abs(m.outputs["bar"] - 80.0) < 1e-6
-    check("downconvert: output throughput scaled by grade rho")
+    # one k=3 machine: 2x the base 10/min output = 20/min, still 10 ore in
+    assert abs(m.outputs["bar"] - 20.0) < 1e-6
+    assert abs(m.inputs["ore"] - 10.0) < 1e-6, "slooping must not increase input"
+    check("downconvert: output scaled by confirmed rho=1+k/T, input unchanged")
+
+
+def test_sloop_multipliers_confirmed_formula() -> None:
+    from factory_optimiser.io_config import sloop_multipliers
+
+    # A 2-slot machine with 1 slot filled: 1.5x output, same input, (1.5)^2 power.
+    g = sloop_multipliers(k=1, total_slots=2)
+    assert abs(g.rho - 1.5) < 1e-9
+    assert abs(g.kappa - 1.0) < 1e-9                      # inputs unchanged
+    assert abs(g.pi - 2.25) < 1e-9
+    # Full slots -> exactly 2x output and 4x power.
+    gfull = sloop_multipliers(k=3, total_slots=3)
+    assert abs(gfull.rho - 2.0) < 1e-9
+    assert abs(gfull.pi - 4.0) < 1e-9
+    # Base and unsloopable machines stay at 1x.
+    g0 = sloop_multipliers(k=0, total_slots=2)
+    assert abs(g0.rho - 1.0) < 1e-9 and abs(g0.kappa - 1.0) < 1e-9 and abs(g0.pi - 1.0) < 1e-9
+    assert sloop_multipliers(k=0, total_slots=0).rho == 1.0  # no slots -> base
+    check("sloops: confirmed formula rho=1+k/T, kappa=1, pi=(1+k/T)^2")
 
 
 def test_machine_cap_enforced() -> None:
@@ -358,6 +376,7 @@ if __name__ == "__main__":
     test_augmenter_sweep_deterministic()
     test_dominated_recipe_unused()
     test_downconvert_includes_grade_multiplier()
+    test_sloop_multipliers_confirmed_formula()
     test_machine_cap_enforced()
     test_power_draw_inherited_from_machine_type()
     test_extractor_recipe_bounds_supply()

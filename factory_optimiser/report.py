@@ -14,7 +14,7 @@ from __future__ import annotations
 import math
 from dataclasses import dataclass
 
-from .io_config import Config, POWER_ITEM
+from .io_config import Config, POWER_ITEM, sloop_multipliers
 from .solve import Solution
 from .sweep import AugResult
 
@@ -42,7 +42,7 @@ def downconvert(config: Config, solution: Solution) -> list[PlanMachine]:
         recipe = config.recipes[r]
         machines = math.ceil(activity - 1e-9)
         clock = activity / machines * 100.0
-        grade = config.parameters.sloop_grades[k]
+        grade = sloop_multipliers(k, config.max_sloops_for(recipe.machine))
         outputs = {
             i: grade.rho * v * activity
             for i, v in recipe.outputs.items()

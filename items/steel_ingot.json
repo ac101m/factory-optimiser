@@ -2,5 +2,5 @@
   "id": "steel_ingot",
   "name": "Steel Ingot",
   "sinkable": true,
-  "sink_points": 15
+  "sink_points": 8
 }
