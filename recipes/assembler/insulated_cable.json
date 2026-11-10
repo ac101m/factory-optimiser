@@ -1,0 +1,7 @@
+{
+  "id": "insulated_cable",
+  "name": "Insulated Cable",
+  "machine": "assembler",
+  "inputs": {"wire": 45.0, "rubber": 30.0},
+  "outputs": {"cable": 100.0}
+}

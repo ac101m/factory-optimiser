@@ -1,0 +1,7 @@
+{
+  "id": "residual_rubber",
+  "name": "Residual Rubber",
+  "machine": "refinery",
+  "inputs": {"polymer_resin": 40.0, "water": 40.0},
+  "outputs": {"rubber": 20.0}
+}

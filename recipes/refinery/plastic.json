@@ -1,0 +1,7 @@
+{
+  "id": "plastic",
+  "name": "Plastic",
+  "machine": "refinery",
+  "inputs": {"crude_oil": 30.0},
+  "outputs": {"plastic": 20.0, "heavy_oil_residue": 10.0}
+}

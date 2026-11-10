@@ -1,0 +1,7 @@
+{
+  "id": "quickwire",
+  "name": "Quickwire",
+  "machine": "constructor",
+  "inputs": {"caterium_ingot": 12.0},
+  "outputs": {"quickwire": 60.0}
+}

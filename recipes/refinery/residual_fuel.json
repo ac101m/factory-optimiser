@@ -1,0 +1,7 @@
+{
+  "id": "residual_fuel",
+  "name": "Residual Fuel",
+  "machine": "refinery",
+  "inputs": {"heavy_oil_residue": 60.0},
+  "outputs": {"fuel": 40.0}
+}

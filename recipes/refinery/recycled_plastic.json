@@ -1,0 +1,7 @@
+{
+  "id": "recycled_plastic",
+  "name": "Recycled Plastic",
+  "machine": "refinery",
+  "inputs": {"rubber": 30.0, "fuel": 30.0},
+  "outputs": {"plastic": 60.0}
+}

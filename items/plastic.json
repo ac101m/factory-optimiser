@@ -1,0 +1,6 @@
+{
+  "id": "plastic",
+  "name": "Plastic",
+  "sinkable": true,
+  "sink_points": 75
+}

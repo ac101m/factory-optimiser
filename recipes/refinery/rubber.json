@@ -1,0 +1,7 @@
+{
+  "id": "rubber",
+  "name": "Rubber",
+  "machine": "refinery",
+  "inputs": {"crude_oil": 30.0},
+  "outputs": {"rubber": 20.0, "heavy_oil_residue": 20.0}
+}
