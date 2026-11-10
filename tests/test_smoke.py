@@ -509,9 +509,11 @@ def test_underclock_power_efficiency() -> None:
     check("underclock: 50% tier saves power via c^1.321928 inside a hard power cap")
 
 
-def test_underclock_tier_attachment() -> None:
-    # k=0 continuous of a slot machine gets only the <=1.0 (underclock) tiers;
-    # the integer slooped grade k=1 gets the full tier list.
+def test_overclock_tier_attachment_all_grades() -> None:
+    # Every grade of an overclockable machine gets the FULL tier list — k=0
+    # continuous included, so un-slooped bulk can overclock too (the
+    # fewest-machines tiebreak uses that when power has slack). Underclocking
+    # is still available (tiers < 1.0). Non-overclockable machines stay at 1.0.
     cfg = load_example()
     cfg.parameters.overclock_tiers = [0.5, 0.75, 1.0, 2.0]
     cfg.recipes.clear()
@@ -527,9 +529,61 @@ def test_underclock_tier_attachment() -> None:
         k: sorted({c for (r, k2, c) in prob.activity_col if k2 == k})
         for k in (0, 1)
     }
-    assert by_grade[0] == [0.5, 0.75, 1.0], "continuous k=0 gets only underclock tiers"
-    assert by_grade[1] == [0.5, 0.75, 1.0, 2.0], "integer slooped grade gets the full list"
-    check("underclock: continuous k=0 gets <=1.0 tiers, slooped k>=1 gets all")
+    full = [0.5, 0.75, 1.0, 2.0]
+    assert by_grade[0] == full, "k=0 continuous gets the full list too (overclock allowed)"
+    assert by_grade[1] == full, "integer slooped grade gets the full list"
+    # Non-overclockable machine: fixed at base clock on every grade.
+    cfg.machines["constructor"] = MachineSpec(power_draw=0.0, max_sloops=1, overclockable=False)
+    prob2 = build_problem(cfg, n_augmenters=0)
+    assert {c for (r, k, c) in prob2.activity_col} == {1.0}
+    check("overclock: all grades of overclockable machines get the full tier list; fixed stay at 1.0")
+
+
+def test_overclock_unslooped_cuts_machines() -> None:
+    # Overclocking is now allowed on the un-slooped (k=0, continuous) grade of
+    # SLOT machines (previously capped at c<=1.0). With power slack the
+    # fewest-machines tiebreak uses it: 100 ore -> 100 bar needs 20 machines at
+    # 50%, 10 at 100%, but only 4 at 250% — same output/points, a quarter of
+    # the buildings (power shards are craftable in current Satisfactory, so
+    # their cost is not modeled; the power row alone prices the high clock).
+    cfg = load_example()
+    cfg.parameters.somersloop_budget = 0.0
+    cfg.parameters.overclock_tiers = [0.5, 0.75, 1.0, 2.5]
+    cfg.recipes.clear()
+    cfg.machines["constructor"] = MachineSpec(power_draw=4.0, max_sloops=1, overclockable=True)
+    cfg.recipes.append(
+        Recipe(id="bar", name="Bar", machine="constructor",
+               inputs={"ore": 10.0}, outputs={"bar": 10.0})
+    )
+    cfg.items["bar"] = Item("bar", "Bar", sinkable=True, points=10.0)
+    cfg.items["coal"] = Item("coal", "Coal", sinkable=False)  # pure fuel, no sink value
+    cfg.recipes.append(
+        Recipe(id="coal_power", name="Coal Power", machine="generator",
+               inputs={"coal": 15.0}, outputs={"power": 75.0})
+    )
+    cfg.parameters.resources = {"ore": 100.0, "coal": 15.0}
+
+    prob = build_problem(cfg, n_augmenters=0)
+    phase1 = solve(prob)
+    assert phase1.sinks["bar"] == 100.0, "ore cap binds; power has slack"
+    tied = solve(prob, minimize_machines=phase1.objective)
+    assert abs(tied.objective - phase1.objective) < 1e-6
+
+    def bar_at(sol, c=None) -> float:
+        total = 0.0
+        for (r, k, clk), v in sol.activities.items():
+            if sol.problem.config.recipes[r].id != "bar" or v <= 0.0:
+                continue
+            if c is None or clk == c:
+                total += v
+        return total
+
+    # Fewest machines for 100 bar = 4 machine-equivalents, all at the 2.5 tier
+    # (draw: 4 x 2.5^1.321928 x 4 = ~54 MW, comfortably inside 75 MW).
+    assert abs(bar_at(tied) - 4.0) < 1e-3, f"fewest-machines bar plan should be 4 @250%, got {bar_at(tied)}"
+    assert abs(bar_at(tied, c=2.5) - 4.0) < 1e-3, "bulk must clock up to the 250% tier to cut machines"
+    assert tied.power_consumed <= tied.power_available + 1e-6
+    check("overclock: un-slooped bulk overclocks to 250% to minimize machines when power has slack")
 
 
 def test_minimize_machines_tiebreak() -> None:
@@ -792,7 +846,8 @@ if __name__ == "__main__":
     test_overclock_config_defaults_and_loader()
     test_overclock_consistency_checks()
     test_underclock_power_efficiency()
-    test_underclock_tier_attachment()
+    test_overclock_tier_attachment_all_grades()
+    test_overclock_unslooped_cuts_machines()
     test_minimize_machines_tiebreak()
     test_tiebreak_keeps_underclock_when_power_binds()
     test_tiebreak_does_not_trade_points_for_machines()

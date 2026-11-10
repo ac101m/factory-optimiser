@@ -13,11 +13,13 @@ Clock choice enters as discrete *tiers* — one column per available clock value
 — so the model stays an exact MILP (no machines x clock bilinearity). Which
 machines are clockable and which clock values exist are config:
 `overclockable` in machines/*.json + the `overclock.tiers` parameter. Clock
-tiers are attached to (a) integer slooped grades (k >= 1) of any overclockable
-machine — the sloop-efficiency lever — and (b) the sole grade (k=0) of 0-slot
-overclockable machines (extractors, e.g. miners). The continuous k=0 grade of
-a slot machine is *not* clocked: a c>1 continuous column is dominated by the
-more power-efficient c=1 one, so it is omitted (fewer columns, same optimum).
+tiers attach to every grade of an overclockable machine: integer slooped
+grades (k >= 1) — the sloop-efficiency lever; the sole grade of 0-slot machines
+(extractors, e.g. miners) — the node-cap-breaker; and the continuous k=0 grade
+of slot machines. Overclocking that continuous grade never raises the phase-1
+point optimum (same output at more power), but the fewest-machines tiebreak
+(Design.md §10) uses it to shrink building counts wherever power has slack;
+when power binds the power row rejects the high clocks automatically.
 
 Constraints
     item balance  : sum_r sum_k sum_c (c*rho_k*beta - c*kappa_k*alpha) * x = s >= 0
@@ -257,25 +259,21 @@ def _grades(config: Config, r: int) -> list[int]:
 def _clocks_for(config: Config, machine: str, k: int) -> list[float]:
     """Clock values available to grade k of a machine type.
 
-    The configured tier list may span both below-100% (underclocking — a
-    convex power curve makes underclocked machines more power-efficient per
-    unit) and above-100% (overclocking). Tiers attach to:
-
-    * integer slooped grades (k >= 1) of any overclockable machine — full list;
-    * the sole grade (k=0) of 0-slot overclockable machines (extractors,
-      e.g. miners — the biggest in-game overclock win) — full list;
-    * the continuous k=0 grade of slot machines — the *underclock* subset only
-      (c <= 1.0): any c>1 continuous column is dominated by the power-efficient
-      c=1 one, so overclock there is omitted (fewer columns, same optimum).
-
-    Non-overclockable machines are fixed at base clock (c=1.0) for every grade.
+    Overclockable machines may run at ANY configured tier on every grade. The
+    tier list spans below-100% (underclocking — a convex power curve makes
+    underclocked machines more power-efficient per unit) and above-100%
+    (overclocking up to the 250% game cap). Overclocking an un-slooped machine
+    does not raise the point optimum (same output at more power), but the
+    fewest-machines tiebreak (Design.md §10) uses it to cut building counts
+    wherever power has slack. Power shards are craftable in current
+    Satisfactory, so their cost is not modeled: overclocking is free and the
+    power row alone decides whether the high clocks are worth their draw.
+    Non-overclockable machines (e.g. geothermal) are fixed at base clock for
+    every grade.
     """
     if not config.is_overclockable(machine):
         return [1.0]
-    tiers = list(config.parameters.overclock_tiers)
-    if k == 0 and config.max_sloops_for(machine) > 0:
-        return [c for c in tiers if c <= 1.0]
-    return tiers
+    return list(config.parameters.overclock_tiers)
 
 
 def _gather_machine_columns(config: Config):

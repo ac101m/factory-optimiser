@@ -95,13 +95,17 @@ Supporting config:
   `π = (1+k/T)²` power; `T` is the machine's `max_sloops`.
 
 Clocking: overclockable machines (flag per `machines/*.json`, default true)
-may run at any of the configured clock tiers. A machine at clock `c` produces
-`c×` output for `c×` input and draws `c^1.321928×π` power, costing `k` sloops
-— so 250%-clocked slooped machines are the big per-sloop lever, overclocked
-miners break node caps, and underclocking saves power on a power-tight grid
-(the exponent is sub-linear below 100%). The clock choice is discrete (one
-MILP column per tier), keeping the model an exact MILP (Design.md §5.5).
-Geothermal generators are not overclockable in-game and are marked so.
+may run at any of the configured clock tiers, on every grade — slooped and
+un-slooped alike. A machine at clock `c` produces `c×` output for `c×` input
+and draws `c^1.321928×π` power, costing `k` sloops — so 250%-clocked slooped
+machines are the big per-sloop lever, overclocked miners break node caps,
+overclocking un-slooped machines cuts building counts (the fewest-machines
+tiebreak uses it wherever power has slack; power shards are craftable in
+current Satisfactory, so their cost isn't modeled), and underclocking saves
+power on a power-tight grid (the exponent is sub-linear below 100%). The clock
+choice is discrete (one MILP column per tier), keeping the model an exact MILP
+(Design.md §5.5). Geothermal generators are not overclockable in-game and are
+marked so.
 
 The current recipes/items/parameters are **small placeholder examples** with
 plausible-but-unconfirmed numbers; drop in real data later without touching the
