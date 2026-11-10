@@ -1,0 +1,7 @@
+{
+  "id": "silica",
+  "name": "Silica",
+  "machine": "constructor",
+  "inputs": {"raw_quartz": 22.5},
+  "outputs": {"silica": 37.5}
+}

@@ -1,0 +1,7 @@
+{
+  "id": "quartz_crystal",
+  "name": "Quartz Crystal",
+  "machine": "constructor",
+  "inputs": {"raw_quartz": 37.5},
+  "outputs": {"quartz_crystal": 22.5}
+}

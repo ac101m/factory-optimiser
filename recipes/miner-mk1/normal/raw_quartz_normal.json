@@ -1,0 +1,8 @@
+{
+  "id": "quartz_normal",
+  "name": "Quartz (Normal)",
+  "machine": "miner_mk1",
+  "inputs": {},
+  "outputs": {"raw_quartz": 60.0},
+  "max_machines": 7
+}
