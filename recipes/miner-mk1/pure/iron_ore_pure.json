@@ -1,7 +1,7 @@
 {
   "id": "iron_ore_pure",
   "name": "Iron Ore (Pure)",
-  "machine": "miner",
+  "machine": "miner_mk1",
   "inputs": {},
   "outputs": {"iron_ore": 120.0},
   "max_machines": 2

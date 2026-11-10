@@ -1,7 +1,7 @@
 {
   "id": "copper_ore_impure",
   "name": "Copper Ore (Impure)",
-  "machine": "miner",
+  "machine": "miner_mk1",
   "inputs": {},
   "outputs": {"copper_ore": 30.0},
   "max_machines": 1

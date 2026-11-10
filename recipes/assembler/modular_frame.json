@@ -2,6 +2,6 @@
   "id": "modular_frame",
   "name": "Modular Frame",
   "machine": "assembler",
-  "inputs": {"reinforced_iron_plate": 12.0, "iron_rod": 50.0},
+  "inputs": {"reinforced_iron_plate": 3.0, "iron_rod": 12.0},
   "outputs": {"modular_frame": 2.0}
 }

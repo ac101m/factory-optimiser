@@ -1,7 +1,7 @@
 {
   "id": "coal_normal",
   "name": "Coal (Normal)",
-  "machine": "miner",
+  "machine": "miner_mk1",
   "inputs": {},
   "outputs": {"coal": 60.0},
   "max_machines": 2

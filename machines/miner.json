@@ -1,6 +1,6 @@
 {
-  "id": "miner",
-  "name": "Miner",
+  "id": "miner_mk1",
+  "name": "Miner mk1",
   "power_draw": 5.0,
   "max_sloops": 0
 }

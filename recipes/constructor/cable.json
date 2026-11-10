@@ -2,6 +2,6 @@
   "id": "cable",
   "name": "Cable",
   "machine": "constructor",
-  "inputs": {"wire": 30.0},
-  "outputs": {"cable": 20.0}
+  "inputs": {"wire": 60.0},
+  "outputs": {"cable": 30.0}
 }

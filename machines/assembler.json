@@ -1,6 +1,6 @@
 {
   "id": "assembler",
   "name": "Assembler",
-  "power_draw": 12.0,
+  "power_draw": 15.0,
   "max_sloops": 2
 }
