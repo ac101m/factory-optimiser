@@ -1,0 +1,6 @@
+{
+  "id": "copper_ingot",
+  "name": "Copper Ingot",
+  "sinkable": true,
+  "sink_points": 8
+}

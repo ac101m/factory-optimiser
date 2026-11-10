@@ -1,0 +1,6 @@
+{
+  "id": "iron_ingot",
+  "name": "Iron Ingot",
+  "sinkable": true,
+  "sink_points": 8
+}

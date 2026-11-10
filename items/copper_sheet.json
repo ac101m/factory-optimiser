@@ -1,0 +1,6 @@
+{
+  "id": "copper_sheet",
+  "name": "Copper Sheet",
+  "sinkable": true,
+  "sink_points": 16
+}

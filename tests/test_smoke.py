@@ -16,7 +16,16 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-from factory_optimiser.io_config import Config, Item, Parameters, Grade, Recipe, MachineSpec, Augmenters  # noqa: E402
+from factory_optimiser.io_config import (
+    Config,
+    ConfigError,
+    Item,
+    Parameters,
+    Grade,
+    Recipe,
+    MachineSpec,
+    Augmenters,
+)  # noqa: E402
 from factory_optimiser.model import build_problem  # noqa: E402
 from factory_optimiser.solve import solve  # noqa: E402
 from factory_optimiser.sweep import best_augmenter, sweep_augmenters, sweep_somersloops  # noqa: E402
@@ -250,6 +259,41 @@ def test_machine_specs_load_from_files() -> None:
     check("load_machines: specs load recursively, fields + defaults correct")
 
 
+def test_items_load_from_files() -> None:
+    import tempfile
+
+    from factory_optimiser.io_config import load_items
+
+    # Recursive + sorted, one item per file, defaults applied, and files whose
+    # name starts with "_" are ignored (handy for templates/notes).
+    with tempfile.TemporaryDirectory() as tmp:
+        (Path(tmp) / "iron_ore.json").write_text(
+            '{"id": "iron_ore", "name": "Iron Ore", "sinkable": false, "sink_points": 0}'
+        )
+        (Path(tmp) / "sub").mkdir()
+        (Path(tmp) / "sub" / "bar.json").write_text('{"id": "bar"}')
+        (Path(tmp) / "_template.json").write_text(
+            '{"id": "should_be_ignored", "name": "Tpl", "sinkable": false}'
+        )
+        items = load_items(tmp)
+        assert set(items) == {"iron_ore", "bar"}, "underscore-prefixed file must be ignored"
+        assert items["iron_ore"].name == "Iron Ore"
+        assert items["iron_ore"].sinkable is False
+        assert items["bar"].sinkable is True   # defaults
+        assert items["bar"].points == 0.0      # defaults
+
+    # Duplicate item id across files is a hard error.
+    with tempfile.TemporaryDirectory() as tmp:
+        (Path(tmp) / "a.json").write_text('{"id": "dup"}')
+        (Path(tmp) / "b.json").write_text('{"id": "dup"}')
+        try:
+            load_items(tmp)
+            raise AssertionError("duplicate item id should raise ConfigError")
+        except ConfigError:
+            pass
+    check("load_items: one file per item, recursive, defaults, '_'-files ignored, dup id errors")
+
+
 def test_consistency_check_and_cli_gate() -> None:
     # The audit must be silent on a consistent config...
     from factory_optimiser.consistency import check_config
@@ -295,6 +339,7 @@ if __name__ == "__main__":
     test_power_draw_inherited_from_machine_type()
     test_extractor_recipe_bounds_supply()
     test_machine_specs_load_from_files()
+    test_items_load_from_files()
     test_consistency_check_and_cli_gate()
     test_cli_launcher_and_json()
     print(f"\nAll {_CHECKS} smoke checks passed.")

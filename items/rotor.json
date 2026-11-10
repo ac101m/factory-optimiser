@@ -1,0 +1,6 @@
+{
+  "id": "rotor",
+  "name": "Rotor",
+  "sinkable": true,
+  "sink_points": 160
+}

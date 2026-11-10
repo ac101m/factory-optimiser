@@ -1,6 +1,6 @@
 {
   "_comment": "Game/system parameters. sloop_grades and power values are PLACEHOLDER example values pending in-game confirmation (see Design.md §8).",
-  "somersloop_budget": 10,
+  "somersloop_budget": 106,
 
   "augmenters": {
     "cost": 10,

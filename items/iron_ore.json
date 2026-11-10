@@ -1,0 +1,6 @@
+{
+  "id": "iron_ore",
+  "name": "Iron Ore",
+  "sinkable": false,
+  "sink_points": 0
+}

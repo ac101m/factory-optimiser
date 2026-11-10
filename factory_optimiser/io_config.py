@@ -25,8 +25,10 @@ Generalised data format ("the JSON way to express a recipe"):
   modeled: supply is capped by extractor machine counts, and extractors draw
   power via their machine type like any other building. Split node purities
   into separate recipes (e.g. ``iron_ore_pure`` vs ``iron_ore_impure``).
-* Items are plain ids with optional metadata in a separate items file
-  (sink points, sinkable flag). See config/items.json.
+* Items are plain ids with optional metadata — one file per item under
+  items/ (id, name, sinkable, sink_points), the same pattern as machines.
+  Filenames starting with ``_`` (e.g. ``_template.json``) are ignored so
+  reference/template files can sit alongside the data.
 * Game parameters (sloop-grade tables, augmenters, optional per-item resource
   caps, power defaults per machine, somersloop budget) live in
   config/parameters.json. The optional ``resources`` table bounds total
@@ -116,6 +118,7 @@ class Config:
     machines: dict[str, MachineSpec] = field(default_factory=dict)
     recipes_dir: Path = Path("recipes")
     machines_dir: Path = Path("machines")
+    items_dir: Path = Path("items")
 
     def item_name(self, item_id: str, fallback: str | None = None) -> str:
         item = self.items.get(item_id)
@@ -166,18 +169,48 @@ class Config:
 # ---------------------------------------------------------------------------
 
 
-def load_items(path: str | Path) -> dict[str, Item]:
-    raw = _read_json(path, "items")
+def load_item(path: str | Path) -> Item:
+    """One item metadata JSON file, e.g. ``items/iron_ore.json``::
+
+        {
+          "id": "iron_ore",
+          "name": "Iron Ore",
+          "sinkable": false,      # may the AWESOME sink accept it? (default true)
+          "sink_points": 10.0     # points per unit (default 0)
+        }
+
+    The ``id`` is what a recipe's ``inputs``/``outputs`` refer to.
+    """
+    raw = _read_json(path, "item")
+    item_id = raw.get("id")
+    if not item_id:
+        raise ConfigError(f"item file {path}: missing 'id'")
+    return Item(
+        id=item_id,
+        name=raw.get("name", item_id),
+        sinkable=bool(raw.get("sinkable", True)),
+        points=float(raw.get("sink_points", 0.0)),
+    )
+
+
+def load_items(directory: str | Path) -> dict[str, Item]:
+    """Load every item JSON under ``directory`` (recursive, sorted).
+
+    Files whose name starts with ``_`` are ignored (metadata / templates).
+    """
+    dir_path = Path(directory)
+    if not dir_path.is_dir():
+        raise ConfigError(f"items directory not found: {dir_path}")
     items: dict[str, Item] = {}
-    for item_id, spec in raw.items():
-        if item_id.startswith("_"):
-            continue  # allow comments / metadata keys
-        if not isinstance(spec, dict):
-            raise ConfigError(f"items file {path}: entry {item_id!r} must be an object")
-        name = spec.get("name", item_id)
-        sinkable = bool(spec.get("sinkable", True))
-        points = float(spec.get("sink_points", 0.0))
-        items[item_id] = Item(id=item_id, name=name, sinkable=sinkable, points=points)
+    for path in sorted(dir_path.rglob("*.json")):
+        if path.name.startswith("_"):
+            continue
+        item = load_item(path)
+        if item.id in items:
+            raise ConfigError(f"duplicate item id {item.id!r} in {path}")
+        items[item.id] = item
+    if not items:
+        raise ConfigError(f"no item JSON files found in {dir_path}")
     return items
 
 
@@ -304,12 +337,12 @@ def load_parameters(path: str | Path) -> Parameters:
 def load_config(
     recipes_dir: str | Path = "recipes",
     machines_dir: str | Path = "machines",
-    items_path: str | Path = "config/items.json",
+    items_dir: str | Path = "items",
     parameters_path: str | Path = "config/parameters.json",
 ) -> Config:
     recipes = load_recipes(recipes_dir)
     machines = load_machines(machines_dir)
-    items = load_items(items_path)
+    items = load_items(items_dir)
     parameters = load_parameters(parameters_path)
     config = Config(
         items=items,
@@ -318,6 +351,7 @@ def load_config(
         machines=machines,
         recipes_dir=Path(recipes_dir),
         machines_dir=Path(machines_dir),
+        items_dir=Path(items_dir),
     )
     return config
 

@@ -62,7 +62,7 @@ Commands:
 Options:
   -r DIR, --recipes DIR     Directory of recipe JSON files        [default: recipes]
   -m DIR, --machines DIR    Directory of machine-spec JSON files  [default: machines]
-  -t FILE, --items FILE     Items config JSON                    [default: config/items.json]
+  -t DIR, --items DIR       Directory of item JSON files          [default: items]
   -p FILE, --parameters FILE
                             Parameters JSON                      [default: config/parameters.json]
   --max-augmenters N        Cap augmenter count (default: floor(Somersloop budget / cost))

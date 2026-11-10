@@ -28,8 +28,9 @@ venv and deps:
 .venv/bin/factory-optimiser --help
 ```
 
-Run from the project root (the `recipes/`, `config/` data paths are resolved
-relative to the working directory; override with `-r/-t/-p`).
+Run from the project root (the `recipes/`, `machines/`, `items/`, `config/`
+data paths are resolved relative to the working directory; override with
+`-r/-m/-t/-p`).
 
 ## How recipes are expressed (JSON)
 
@@ -73,9 +74,11 @@ every `*.json`. Items are plain string ids. Example (`recipes/manufacturing/iron
 
 Supporting config:
 
-* `config/items.json` — item id → `{name, sinkable, sink_points}`. Items
-  referenced by recipes but absent here get defaults (sinkable, 0 points) with
-  a warning.
+* `items/*.json` — one item per file: `{id, name, sinkable, sink_points}`
+  (same pattern as machines; subdirectories are fine, and files whose name
+  starts with `_` — e.g. `_template.json` — are ignored). Items referenced by
+  recipes but absent here get defaults (sinkable, 0 points) and are flagged by
+  `factory-optimiser check`.
 * `machines/*.json` — one building per file: `{id, name, power_draw, max_sloops}`
   (e.g. `machines/constructor.json`). Subdirectories are fine; loading is a
   recursive glob.

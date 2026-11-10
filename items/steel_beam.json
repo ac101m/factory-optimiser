@@ -1,0 +1,6 @@
+{
+  "id": "steel_beam",
+  "name": "Steel Beam",
+  "sinkable": true,
+  "sink_points": 60
+}

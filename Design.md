@@ -187,6 +187,13 @@ Design is parameter-driven so these fill in without touching model code.
 > `machine` field refers to one of those ids; unknown ids fall back to 0 MW /
 > max sloops with a loader warning.
 
+> **Note (revised):** item metadata (`sinkable` flag, AWESOME `sink_points`)
+> likewise lives in `items/*.json` — one file per item (id, name, sinkable,
+> sink_points), loaded like machines/recipes (recursive glob, sorted,
+> duplicate-id hard error). Files whose name starts with `_` are ignored so a
+> `_template.json` can sit next to the data. `-t/--items` points at this
+> directory.
+
 ## 9. Python implementation outline
 
 *   **Config module:** items, recipes, sloop-grade tables, sink points, map resource caps, augmenter constants (JSON or const dicts).

@@ -1,0 +1,6 @@
+{
+  "id": "reinforced_iron_plate",
+  "name": "Reinforced Iron Plate",
+  "sinkable": true,
+  "sink_points": 130
+}

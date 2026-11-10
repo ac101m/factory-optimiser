@@ -1,0 +1,6 @@
+{
+  "id": "cable",
+  "name": "Cable",
+  "sinkable": true,
+  "sink_points": 12
+}
