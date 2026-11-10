@@ -198,12 +198,17 @@ def build_problem(
     #    itself (the bonus m(N) does NOT apply to W). For a fixed N, N*W is a
     #    constant, so it only shifts the row's lower bound.
     #    Generators: +m(N)*c*rho(k)*output.  Consumers: -c^1.321928*pi(k)*power_draw.
+    #    A configurable generation "overproduction" (Parameters.power_overproduction)
+    #    multiplies the consumer draw so the grid must deliver (1+f)*load — the
+    #    plan keeps that much overproduced capacity as reserve instead of
+    #    running at exactly 100%.
     if uses_power:
         row = {}
+        overprod = 1.0 + config.parameters.power_overproduction
         for (r, k, clk) in activity_seq:
             grade = mult(r, k)
             gen = power_multiplier * (clk * grade.rho) * recipes[r].outputs.get(POWER_ITEM, 0.0)
-            draw = (clk ** CLOCK_POWER_EXP) * grade.pi * config.power_draw_for(recipes[r])
+            draw = overprod * (clk ** CLOCK_POWER_EXP) * grade.pi * config.power_draw_for(recipes[r])
             val = gen - draw
             if val != 0.0:
                 row[activity_col[(r, k, clk)]] = row.get(activity_col[(r, k, clk)], 0.0) + val

@@ -83,8 +83,10 @@ Supporting config:
   (e.g. `machines/constructor.json`). Subdirectories are fine; loading is a
   recursive glob.
 * `config/parameters.json` — Somersloop budget, Alien Power Augmenter cost &
-  bonus (each augmenter also adds a flat `power_mw`, un-bonused), and the
-  clock tiers (`overclock.tiers`, e.g. `[0.5, 0.75, 1.0, 1.25, 1.5, 2.0, 2.5]`
+  bonus (each augmenter also adds a flat `power_mw`, un-bonused), the
+  power-generation overproduction (`power.overproduction`, default `0.01` = 1%
+  reserve: the grid must deliver `(1+overproduction)×` the load, so the plan
+  never sits at exactly 100% of generation), and the clock tiers (`overclock.tiers`, e.g. `[0.5, 0.75, 1.0, 1.25, 1.5, 2.0, 2.5]`
   — values below 1.0 are underclocking, which is power-efficient). An optional
   `resources` table can still bound total *consumption* of an item, but the
   preferred way to limit supply is extractor recipes. Sloop multipliers are
@@ -120,7 +122,10 @@ model code.
   like any machine).
 * A global Somersloop budget `Σ k·x ≤ S`.
 * Power is an item: generators produce it, machines consume it, and
-  `consumption ≤ m(N)·generation` where `m(N) = 1 + 0.10·N`.
+  `consumption ≤ (m(N)·generation + N·W)/(1 + s)` where `m(N) = 1 + 0.10·N`
+  and `s` is the configurable **generation overproduction** (`power.overproduction`,
+  default 0.01): the grid must deliver `(1+s)×` the load, so the plan keeps
+  `s` of capacity as headroom instead of running at exactly 100%.
 * Objective: `max Σ p[i]·s[i]` — with a lexicographic **fewest-buildings
   tiebreak**: among point-optimal plans the tool reports the one with the fewest
   machines (Design.md §10). "60 Screw constructs at 50%" collapses back to "30

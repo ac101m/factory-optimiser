@@ -14,6 +14,11 @@
     "_note": "Each Alien Power Augmenter costs `cost` Somersloops; adds `bonus` * base (unaugmented) generation, additively (not compounding); AND generates `power_mw` MW of flat power itself, to which the bonus does NOT apply (confirmed in-game)."
   },
 
+  "power": {
+    "overproduction": 0.01,
+    "_note": "Generation overproduction (reserve) as a fraction of the load (default 0.01 = 1%). The grid must deliver (1 + overproduction) * consumption, so the optimizer never plans to run generation at exactly 100% of what consumers draw; the report keeps this much capacity as headroom. Generators were otherwise throttled to exactly match demand."
+  },
+
   "resources": {
     "_note": "OPTIONAL extra per-item cap on total recipe consumption. Map extraction is modeled as MINER/MACHINE recipes (see recipes/*, machine type 'miner'): the per-node limit is that recipe's max_machines. Leave this table empty when miners are modeled as recipes (as here) so supply is not double-limited.",
     "_example_cap_on_a_raw_item": {"water": 300.0}

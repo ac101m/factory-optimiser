@@ -124,6 +124,7 @@ This one family does three jobs at once:
 ```
 
 Generators consume fuel (an item) and produce power; machines consume power. Power has no point value, so the solver generates only what's needed (mirrors in-game generator throttling for free). Power plants are recipes and may have sloop grades (π_k captures their behavior).
+**Generation overproduction (reserve):** the balance is `consumption ≤ (m(N)·generation + N·W)/(1 + s)` where `s = parameters.power_overproduction` (default `0.01` = 1%). I.e. the grid must deliver `(1 + s)×` the load, so the optimizer can never plan to run generation at exactly 100% of what consumers draw — the report keeps `s` of capacity as headroom (this is why the machine-count tiebreak throttles generators to `(1+s)·load`, not `load`). Configurable; a real grid needs margin for clock rounding, belt/pipe limits and throttle lag.
 **Integrality:**
 
 *   Grades with k ≥ 1 = distinct physical sloop count per machine → make `x[r][k≥1]` integer.
@@ -238,6 +239,7 @@ Per solved model (per N):
 | Augmenter sloop cost | 10 | confirmed |
 | Augmenter stacking | additive +10%/unit of base | confirmed |
 | Augmenter flat power | +500 MW each, bonus does NOT apply | confirmed |
+| Power-generation overproduction (reserve) | `power.overproduction` in `config/parameters.json` (default 0.01 = 1%) | config |
 | Map extraction limits | **revised:** extractor recipes with `max_machines` = node count (see §5.3 note); optional `resources` table for an extra consumption cap | done |
 | Sink points p[i] | per item | config input |
 | Do power buildings accept sloops, same K? | ? | **confirm** |

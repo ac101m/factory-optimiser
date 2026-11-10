@@ -99,6 +99,57 @@ def test_power_balance() -> None:
     check("MILP: power consumption within augmented capacity")
 
 
+def test_power_overproduction_reserve() -> None:
+    # The grid must deliver (1 + overproduction) * load, so the optimum never
+    # plans to run generation at exactly 100% of consumption: deliverable
+    # capacity must exceed consumption by at least the overproduction fraction.
+    # Default is 0.01 (1%).
+    cfg = load_example()
+    cfg.parameters.somersloop_budget = 0.0
+    cfg.parameters.power_overproduction = 0.10  # 10% reserve for a crisp assertion
+    sol = solve(build_problem(cfg, n_augmenters=0))
+    assert sol.power_available >= (1.0 + 0.10) * sol.power_consumed - 1e-6, (
+        f"overproduction violated: available {sol.power_available:.2f} vs "
+        f"{(1.10) * sol.power_consumed:.2f} required"
+    )
+    # The tiebreak throttles generators down to exactly (1+overprod)*load
+    # (fewest machines), so with overproduction=0 the headroom collapses to ~0
+    # and with overproduction>0 the report shows that margin instead.
+    cfg.parameters.power_overproduction = 0.0
+    sol0 = solve(build_problem(cfg, n_augmenters=0))
+    assert sol0.power_available - sol0.power_consumed < 1e-3, (
+        "with no overproduction the generator throttles to match demand exactly"
+    )
+    check("power: overproduction forces (1+f)*load reserve; 0 = exact throttle")
+
+
+def test_power_overproduction_config_and_checks() -> None:
+    import tempfile
+    from pathlib import Path
+    from factory_optimiser.io_config import load_parameters, Parameters
+    from factory_optimiser.consistency import check_config
+
+    with tempfile.TemporaryDirectory() as tmp:
+        p = Path(tmp) / "params.json"
+        p.write_text('{"power": {"overproduction": 0.05}}')
+        assert load_parameters(str(p)).power_overproduction == 0.05
+        p.write_text("{}")
+        assert load_parameters(str(p)).power_overproduction == 0.01, "default is 1%"
+    # A fresh Parameters with no kwargs defaults to 0.01 too.
+    assert Parameters(resources={}, somersloop_budget=0.0,
+                      augmenters=Augmenters(cost=10, bonus=0.1)).power_overproduction == 0.01
+
+    # Consistency: negative overproduction is an error; >= 100% is a warning.
+    cfg = load_example()
+    cfg.parameters.power_overproduction = -0.1
+    bad = check_config(cfg)
+    assert any(i.severity == "error" and i.code == "power-overproduction-negative" for i in bad)
+    cfg.parameters.power_overproduction = 1.5
+    warn = check_config(cfg)
+    assert any(i.severity == "warning" and i.code == "power-overproduction-large" for i in warn)
+    check("power: overproduction config parses (default 0.01) and consistency flags negative/large")
+
+
 def test_augmenter_flat_power() -> None:
     # Each augmenter adds flat_power_mw MW that the +10% bonus does NOT apply
     # to. N=1 should power a consumer-only factory that has NO generator at all.
@@ -724,6 +775,8 @@ if __name__ == "__main__":
     test_milp_basic()
     test_scarcity_routing()
     test_power_balance()
+    test_power_overproduction_reserve()
+    test_power_overproduction_config_and_checks()
     test_augmenter_flat_power()
     test_augmenter_sweep_deterministic()
     test_dominated_recipe_unused()

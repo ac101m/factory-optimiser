@@ -139,6 +139,12 @@ class Parameters:
     #: values listed are available as choices; sorted, deduplicated, always
     #: containing 1.0 (the base clock). Default [1.0] = no overclocking.
     overclock_tiers: list[float] = field(default_factory=lambda: [1.0])
+    #: Required power-generation overproduction (reserve): the grid must
+    #: deliver ``(1 + power_overproduction) * consumption``, i.e. the plan
+    #: always keeps a ``power_overproduction`` margin of capacity in hand over
+    #: the load it draws (a real grid cannot run at exactly 100% of its
+    #: generation). Default 0.01 = 1% headroom.
+    power_overproduction: float = 0.01
 
 
 def sloop_multipliers(k: int, total_slots: int) -> Grade:
@@ -378,11 +384,18 @@ def load_parameters(path: str | Path) -> Parameters:
         overclock_raw = overclock_raw.get("tiers", [1.0])
     tiers = sorted({float(t) for t in overclock_raw} | {1.0})
 
+    # Power-generation overproduction: `power.overproduction` (fraction of load
+    # over-produced / kept as reserve).
+    power_raw = raw.get("power", {})
+    if not isinstance(power_raw, dict):
+        power_raw = {}
+
     return Parameters(
         resources=resources,
         somersloop_budget=float(raw.get("somersloop_budget", 0.0)),
         augmenters=augmenters,
         overclock_tiers=tiers,
+        power_overproduction=float(power_raw.get("overproduction", 0.01)),
     )
 
 

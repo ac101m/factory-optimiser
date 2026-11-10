@@ -129,6 +129,31 @@ def check_config(config: Config, include_info: bool = False) -> list[Issue]:
             )
         )
 
+    # Power-generation overproduction (reserve): negative is nonsense (it
+    # would boost usable capacity); keeping >= 100% of load as overproduction
+    # is legal but absurd.
+    overproduction = params.power_overproduction
+    if overproduction < 0.0:
+        issues.append(
+            Issue(
+                "error",
+                "power-overproduction-negative",
+                f"power.overproduction={overproduction:g} must be >= 0 "
+                "(fraction of load over-produced / kept as reserve, e.g. 0.01 "
+                "= 1%)",
+            )
+        )
+    elif overproduction >= 1.0:
+        issues.append(
+            Issue(
+                "warning",
+                "power-overproduction-large",
+                f"power.overproduction={overproduction:g} >= 1 means the grid "
+                "must over-produce >= 100% of load as reserve (likely a config "
+                "mistake)",
+            )
+        )
+
     for mid, spec in sorted(config.machines.items()):
         if spec.max_sloops < 0:
             issues.append(
