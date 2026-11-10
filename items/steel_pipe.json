@@ -1,0 +1,6 @@
+{
+  "id": "steel_pipe",
+  "name": "Steel Pipe",
+  "sinkable": true,
+  "sink_points": 24
+}

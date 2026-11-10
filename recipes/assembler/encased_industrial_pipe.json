@@ -1,0 +1,7 @@
+{
+  "id": "encased_industrial_pipe",
+  "name": "Encased Industrial Pipe",
+  "machine": "assembler",
+  "inputs": {"steel_pipe": 24.0, "concrete": 20.0},
+  "outputs": {"encased_industrial_beam": 4.0}
+}

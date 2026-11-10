@@ -1,0 +1,7 @@
+{
+  "id": "encased_industrial_beam",
+  "name": "Encased Industrial Beam",
+  "machine": "assembler",
+  "inputs": {"steel_beam": 18.0, "concrete": 36.0},
+  "outputs": {"encased_industrial_beam": 6.0}
+}

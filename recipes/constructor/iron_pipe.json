@@ -1,0 +1,7 @@
+{
+  "id": "iron_pipe",
+  "name": "Iron Pipe",
+  "machine": "constructor",
+  "inputs": {"iron_ingot": 100.0},
+  "outputs": {"steel_pipe": 25.0}
+}
