@@ -1,0 +1,8 @@
+{
+  "id": "bauxite_impure",
+  "name": "Bauxite (Impure)",
+  "machine": "miner_mk1",
+  "inputs": {},
+  "outputs": {"bauxite": 30.0},
+  "max_machines": 5
+}

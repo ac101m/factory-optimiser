@@ -1,0 +1,7 @@
+{
+  "id": "aluminum_scrap",
+  "name": "Aluminum Scrap",
+  "machine": "refinery",
+  "inputs": {"alumina_solution": 240.0, "coal": 120.0},
+  "outputs": {"aluminum_scrap": 360.0, "water": 120.0}
+}

@@ -1,0 +1,7 @@
+{
+  "id": "pure_aluminum_ingot",
+  "name": "Alternate: Pure Aluminum Ingot",
+  "machine": "smelter",
+  "inputs": {"aluminum_scrap": 60.0},
+  "outputs": {"aluminum_ingot": 30.0}
+}

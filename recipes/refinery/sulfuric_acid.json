@@ -1,0 +1,7 @@
+{
+  "id": "sulfuric_acid",
+  "name": "Sulfuric Acid",
+  "machine": "refinery",
+  "inputs": {"sulfur": 50.0, "water": 50.0},
+  "outputs": {"sulfuric_acid": 50.0}
+}

@@ -1,0 +1,8 @@
+{
+  "id": "bauxite_normal",
+  "name": "Bauxite (Normal)",
+  "machine": "miner_mk1",
+  "inputs": {},
+  "outputs": {"bauxite": 60.0},
+  "max_machines": 6
+}

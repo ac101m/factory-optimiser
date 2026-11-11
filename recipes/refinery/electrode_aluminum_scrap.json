@@ -1,0 +1,7 @@
+{
+  "id": "electrode_aluminum_scrap",
+  "name": "Alternate: Electrode Aluminum Scrap",
+  "machine": "refinery",
+  "inputs": {"alumina_solution": 180.0, "petroleum_coke": 60.0},
+  "outputs": {"aluminum_scrap": 300.0, "water": 105.0}
+}

@@ -1,0 +1,7 @@
+{
+  "id": "sloppy_alumina",
+  "name": "Alternate: Sloppy Alumina",
+  "machine": "refinery",
+  "inputs": {"bauxite": 200.0, "water": 200.0},
+  "outputs": {"alumina_solution": 240.0}
+}

@@ -1,0 +1,7 @@
+{
+  "id": "alumina_solution",
+  "name": "Alumina Solution",
+  "machine": "refinery",
+  "inputs": {"bauxite": 120.0, "water": 180.0},
+  "outputs": {"alumina_solution": 120.0, "silica": 50.0}
+}

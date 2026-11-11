@@ -1,0 +1,7 @@
+{
+  "id": "aluminum_ingot",
+  "name": "Aluminum Ingot",
+  "machine": "foundry",
+  "inputs": {"aluminum_scrap": 90.0, "silica": 75.0},
+  "outputs": {"aluminum_ingot": 60.0}
+}

@@ -1,0 +1,7 @@
+{
+  "id": "instant_scrap",
+  "name": "Alternate: Instant Scrap",
+  "machine": "blender",
+  "inputs": {"bauxite": 150.0, "coal": 100.0, "sulfuric_acid": 50.0, "water": 60.0},
+  "outputs": {"aluminum_scrap": 300.0, "water": 50.0}
+}
