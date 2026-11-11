@@ -2,5 +2,5 @@
   "id": "water",
   "name": "Water",
   "sinkable": false,
-  "points": 0
+  "sink_points": 0
 }
