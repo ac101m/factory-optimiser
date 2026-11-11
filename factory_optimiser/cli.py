@@ -16,12 +16,15 @@ from __future__ import annotations
 
 import json
 import sys
-import warnings
 from dataclasses import replace
+from pathlib import Path
 
-# docopt 0.6.2 contains invalid escape sequences in its own source; under
-# Python 3.12+ this emits SyntaxWarnings on every import. Silence only those.
-warnings.filterwarnings("ignore", category=SyntaxWarning, module=r"docopt")
+# Allow running as a plain script: `python factory_optimiser/cli.py check`.
+# When executed directly the module has no parent package, so the relative
+# imports below would fail without this bootstrap.
+if __package__ in (None, ""):
+    __package__ = "factory_optimiser"
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from docopt import DocoptExit, docopt  # noqa: E402
 
