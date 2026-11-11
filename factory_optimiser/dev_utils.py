@@ -553,6 +553,19 @@ def _resolve_query(candidates: list[tuple[str, str]], query: str, what: str) -> 
     raise _ambiguous(query, what, subs)
 
 
+def _recipes_for_item(docs: list[dict], item_class: str) -> list[str]:
+    """Public display names of every FGRecipe in the docs producing ``item_class``."""
+    found: set[str] = set()
+    for g in docs:
+        if _nc_tail(g["NativeClass"]) != "FGRecipe":
+            continue
+        for r in g["Classes"]:
+            products = _amounts(r.get("mProduct", ""))
+            if any(cls == item_class for cls, _ in products):
+                found.add(r.get("mDisplayName", r["ClassName"]))
+    return sorted(found, key=str.lower)
+
+
 def _emit(data: dict, notes: list[str]) -> int:
     for n in notes:
         print(f"# {n}", file=sys.stderr)
@@ -796,6 +809,7 @@ Usage:
   dev_utils item <name> [<id>] [options]
   dev_utils machine <name> [<id>] [options]
   dev_utils recipe <name> [<id>] [options]
+  dev_utils recipes-for <item> [options]
   dev_utils diff [options]
   dev_utils --version
   dev_utils --help
@@ -806,6 +820,8 @@ Commands:
                  unless its max_sloops is recorded in MACHINE_MANIFEST — the
                  game docs do not export sloop capacity.
   recipe <name>  Lift a recipe from the docs (per-min rates, repo JSON).
+  recipes-for <item>
+                 List the recipes whose product includes the item.
   diff           Diff every manifest entry against the repo JSON files.
 
 Arguments:
@@ -815,6 +831,7 @@ Arguments:
            ClassName (Recipe_/Desc_/Build_ *_C) is also accepted.
   <id>     Our internal id; defaults to the manifest id, else a slug of the
            display name.
+  <item>   Item name to look up; same matching rules as <name>.
 
 Options:
   --game-dir DIR   Path to a Satisfactory install (CommunityResources/Docs is
@@ -868,6 +885,22 @@ def _cmd_recipe(args, docs) -> int:
     return _emit(data, notes)
 
 
+@_with_docs
+def _cmd_recipes_for(args, docs) -> int:
+    try:
+        item_class, item_name = _resolve_query(_item_candidates(docs), args["<item>"], "item")
+    except KeyError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 2
+    recipes = _recipes_for_item(docs, item_class)
+    if not recipes:
+        print(f"(no recipes in the docs produce {item_name!r})")
+        return 0
+    for name in recipes:
+        print(name)
+    return 0
+
+
 def _cmd_diff(args) -> int:
     try:
         report = build_report(args["--game-dir"], ".")
@@ -890,6 +923,8 @@ def main(argv: list[str] | None = None) -> int:
         return _cmd_machine(args)
     if args["recipe"]:
         return _cmd_recipe(args)
+    if args["recipes-for"]:
+        return _cmd_recipes_for(args)
     if args["diff"]:
         return _cmd_diff(args)
     return 2  # unreachable: docopt requires one of the usage forms
