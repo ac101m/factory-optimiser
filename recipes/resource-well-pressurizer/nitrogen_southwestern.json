@@ -1,0 +1,8 @@
+{
+  "id": "nitrogen_southwestern",
+  "name": "Southwestern Nitrogen Gas Well",
+  "machine": "resource_well_pressurizer",
+  "inputs": {},
+  "outputs": {"nitrogen_gas": 840.0},
+  "max_machines": 1
+}

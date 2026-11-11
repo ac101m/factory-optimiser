@@ -1,0 +1,7 @@
+{
+  "id": "nitric_acid",
+  "name": "Nitric Acid",
+  "machine": "blender",
+  "inputs": {"nitrogen_gas": 120.0, "water": 30.0, "iron_plate": 10.0},
+  "outputs": {"nitric_acid": 30.0}
+}

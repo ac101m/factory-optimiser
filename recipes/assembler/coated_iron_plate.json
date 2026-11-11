@@ -1,0 +1,7 @@
+{
+  "id": "coated_iron_plate",
+  "name": "Coated Iron Plate",
+  "machine": "assembler",
+  "inputs": {"iron_ingot": 37.5, "plastic": 7.5},
+  "outputs": {"iron_plate": 75.0}
+}

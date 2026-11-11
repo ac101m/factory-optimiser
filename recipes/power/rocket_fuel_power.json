@@ -1,0 +1,7 @@
+{
+  "id": "rocket_fuel_power",
+  "name": "Rocket Fuel Power",
+  "machine": "fuel_generator",
+  "inputs": {"rocket_fuel": 4.16666667},
+  "outputs": {"power": 250.0}
+}

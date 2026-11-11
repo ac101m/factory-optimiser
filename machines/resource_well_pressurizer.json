@@ -1,0 +1,6 @@
+{
+  "id": "resource_well_pressurizer",
+  "name": "Resource Well Pressurizer",
+  "power_draw": 150.0,
+  "max_sloops": 0
+}

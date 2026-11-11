@@ -1,0 +1,7 @@
+{
+  "id": "distilled_silica",
+  "name": "Distilled Silica",
+  "machine": "blender",
+  "inputs": {"dissolved_silica": 120.0, "limestone": 50.0, "water": 100.0},
+  "outputs": {"silica": 270.0, "water": 80.0}
+}

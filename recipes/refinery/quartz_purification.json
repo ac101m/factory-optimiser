@@ -1,0 +1,7 @@
+{
+  "id": "quartz_purification",
+  "name": "Quartz Purification",
+  "machine": "refinery",
+  "inputs": {"raw_quartz": 120.0, "nitric_acid": 10.0},
+  "outputs": {"quartz_crystal": 75.0, "dissolved_silica": 60.0}
+}

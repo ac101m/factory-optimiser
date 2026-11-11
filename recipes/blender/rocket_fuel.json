@@ -1,0 +1,7 @@
+{
+  "id": "rocket_fuel",
+  "name": "Rocket Fuel",
+  "machine": "blender",
+  "inputs": {"turbofuel": 60.0, "nitric_acid": 10.0},
+  "outputs": {"rocket_fuel": 100.0, "compacted_coal": 10.0}
+}
