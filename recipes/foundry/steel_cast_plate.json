@@ -1,6 +1,6 @@
 {
   "id": "steel_cast_plate",
-  "name": "Steel Cast Plate",
+  "name": "Alternate: Steel Cast Plate",
   "machine": "foundry",
   "inputs": {"iron_ingot": 15.0, "steel_ingot": 15.0},
   "outputs": {"iron_plate": 45.0}

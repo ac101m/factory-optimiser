@@ -1,6 +1,6 @@
 {
   "id": "diluted_fuel",
-  "name": "Diluted Fuel",
+  "name": "Alternate: Diluted Fuel",
   "machine": "refinery",
   "inputs": {"heavy_oil_residue": 50.0, "water": 100.0},
   "outputs": {"fuel": 100.0}

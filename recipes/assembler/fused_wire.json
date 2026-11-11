@@ -1,6 +1,6 @@
 {
   "id": "fused_wire",
-  "name": "Fused Wire",
+  "name": "Alternate: Fused Wire",
   "machine": "assembler",
   "inputs": {"copper_ingot": 12.0, "caterium_ingot": 3.0},
   "outputs": {"wire": 90.0}

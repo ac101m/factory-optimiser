@@ -1,6 +1,6 @@
 {
   "id": "compacted_coal",
-  "name": "Compacted Coal",
+  "name": "Alternate: Compacted Coal",
   "machine": "assembler",
   "inputs": {"coal": 25.0, "sulfur": 25.0},
   "outputs": {"compacted_coal": 25.0}

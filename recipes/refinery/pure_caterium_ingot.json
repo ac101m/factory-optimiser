@@ -1,6 +1,6 @@
 {
   "id": "pure_caterium_ingot",
-  "name": "Pure Caterium Ingot",
+  "name": "Alternate: Pure Caterium Ingot",
   "machine": "refinery",
   "inputs": {"caterium_ore": 24.0, "water": 24.0},
   "outputs": {"caterium_ingot": 12.0}

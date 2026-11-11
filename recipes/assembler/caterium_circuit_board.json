@@ -1,6 +1,6 @@
 {
   "id": "caterium_circuit_board",
-  "name": "Caterium Circuit Board",
+  "name": "Alternate: Caterium Circuit Board",
   "machine": "assembler",
   "inputs": {"plastic": 12.5, "quickwire": 37.5},
   "outputs": {"circuit_board": 8.75}

@@ -1,6 +1,6 @@
 {
   "id": "fused_quickwire",
-  "name": "Fused Quickwire",
+  "name": "Alternate: Fused Quickwire",
   "machine": "assembler",
   "inputs": {"caterium_ingot": 7.5, "copper_ingot": 37.5},
   "outputs": {"quickwire": 90.0}

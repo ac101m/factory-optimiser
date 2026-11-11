@@ -1,6 +1,6 @@
 {
   "id": "molded_steel_pipe",
-  "name": "Molded Steel Pipe",
+  "name": "Alternate: Molded Steel Pipe",
   "machine": "foundry",
   "inputs": {"steel_ingot": 50.0, "concrete": 30.0},
   "outputs": {"steel_pipe": 50.0}

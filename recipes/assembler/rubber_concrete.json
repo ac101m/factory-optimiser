@@ -1,6 +1,6 @@
 {
   "id": "rubber_concrete",
-  "name": "Rubber Concrete",
+  "name": "Alternate: Rubber Concrete",
   "machine": "assembler",
   "inputs": {"limestone": 100.0, "rubber": 20.0},
   "outputs": {"concrete": 90.0}

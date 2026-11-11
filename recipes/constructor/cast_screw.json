@@ -1,7 +1,7 @@
 {
   "id": "cast_screw",
-  "name": "Cast Screw",
+  "name": "Alternate: Cast Screws",
   "machine": "constructor",
   "inputs": {"iron_ingot": 12.5},
-  "outputs": {"screw": 50.0}
+  "outputs": {"screws": 50.0}
 }

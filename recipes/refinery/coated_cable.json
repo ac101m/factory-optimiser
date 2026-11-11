@@ -1,6 +1,6 @@
 {
   "id": "coated_cable",
-  "name": "Coated Cable",
+  "name": "Alternate: Coated Cable",
   "machine": "refinery",
   "inputs": {"wire": 37.5, "heavy_oil_residue": 15.0},
   "outputs": {"cable": 67.5}

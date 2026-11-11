@@ -1,6 +1,6 @@
 {
   "id": "nitro_rocket_fuel",
-  "name": "Nitro Rocket Fuel",
+  "name": "Alternate: Nitro Rocket Fuel",
   "machine": "blender",
   "inputs": {"fuel": 100.0, "nitrogen_gas": 75.0, "sulfur": 100.0, "coal": 50.0},
   "outputs": {"rocket_fuel": 150.0, "compacted_coal": 25.0}

@@ -1,6 +1,6 @@
 {
   "id": "crystal_computer",
-  "name": "Crystal Computer",
+  "name": "Alternate: Crystal Computer",
   "machine": "assembler",
   "inputs": {"circuit_board": 5.0, "crystal_oscillator": 1.66666667},
   "outputs": {"computer": 3.33333333}

@@ -1,6 +1,6 @@
 {
   "id": "silicon_circuit_board",
-  "name": "Silicon Circuit Board",
+  "name": "Alternate: Silicon Circuit Board",
   "machine": "assembler",
   "inputs": {"copper_sheet": 27.5, "silica": 27.5},
   "outputs": {"circuit_board": 12.5}

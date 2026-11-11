@@ -1,6 +1,6 @@
 {
-  "id": "screw",
-  "name": "Screw",
+  "id": "screws",
+  "name": "Screws",
   "sinkable": true,
   "sink_points": 2
 }

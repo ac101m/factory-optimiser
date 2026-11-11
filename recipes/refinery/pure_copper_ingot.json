@@ -1,6 +1,6 @@
 {
   "id": "pure_copper_ingot",
-  "name": "Pure Copper Ingot",
+  "name": "Alternate: Pure Copper Ingot",
   "machine": "refinery",
   "inputs": {"copper_ore": 15.0, "water": 10.0},
   "outputs": {"copper_ingot": 37.5}

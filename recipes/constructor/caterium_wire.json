@@ -1,6 +1,6 @@
 {
   "id": "caterium_wire",
-  "name": "Caterium Wire",
+  "name": "Alternate: Caterium Wire",
   "machine": "constructor",
   "inputs": {"caterium_ingot": 15.0},
   "outputs": {"wire": 120.0}

@@ -1,6 +1,6 @@
 {
   "id": "polymer_resin",
-  "name": "Polymer Resin",
+  "name": "Alternate: Polymer Resin",
   "machine": "refinery",
   "inputs": {"crude_oil": 60.0},
   "outputs": {"polymer_resin": 130.0, "heavy_oil_residue": 20.0}

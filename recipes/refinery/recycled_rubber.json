@@ -1,6 +1,6 @@
 {
   "id": "recycled_rubber",
-  "name": "Recycled Rubber",
+  "name": "Alternate: Recycled Rubber",
   "machine": "refinery",
   "inputs": {"plastic": 30.0, "fuel": 30.0},
   "outputs": {"rubber": 60.0}

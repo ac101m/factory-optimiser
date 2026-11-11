@@ -1,6 +1,6 @@
 {
   "id": "pure_quartz_crystal",
-  "name": "Pure Quartz Crystal",
+  "name": "Alternate: Pure Quartz Crystal",
   "machine": "refinery",
   "inputs": {"raw_quartz": 67.5, "water": 37.5},
   "outputs": {"quartz_crystal": 52.5}

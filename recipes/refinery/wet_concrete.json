@@ -1,6 +1,6 @@
 {
   "id": "wet_concrete",
-  "name": "Wet Concrete",
+  "name": "Alternate: Wet Concrete",
   "machine": "refinery",
   "inputs": {"limestone": 120.0, "water": 100.0},
   "outputs": {"concrete": 80.0}

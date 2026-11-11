@@ -1,6 +1,6 @@
 {
   "id": "fuel_generator",
-  "name": "Fuel Generator",
+  "name": "Fuel-Powered Generator",
   "power_draw": 0.0,
   "max_sloops": 0
 }

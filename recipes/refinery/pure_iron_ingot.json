@@ -1,6 +1,6 @@
 {
   "id": "pure_iron_ingot",
-  "name": "Pure Iron Ingot",
+  "name": "Alternate: Pure Iron Ingot",
   "machine": "refinery",
   "inputs": {"iron_ore": 35.0, "water": 20.0},
   "outputs": {"iron_ingot": 65.0}

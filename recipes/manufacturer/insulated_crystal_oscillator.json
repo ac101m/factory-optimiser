@@ -1,6 +1,6 @@
 {
   "id": "insulated_crystal_oscillator",
-  "name": "Insulated Crystal Oscillator",
+  "name": "Alternate: Insulated Crystal Oscillator",
   "machine": "manufacturer",
   "inputs": {"quartz_crystal": 18.75, "rubber": 13.125, "ai_limiter": 1.875},
   "outputs": {"crystal_oscillator": 1.875}

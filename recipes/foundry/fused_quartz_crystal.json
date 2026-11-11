@@ -1,6 +1,6 @@
 {
   "id": "fused_quartz_crystal",
-  "name": "Fused Quartz Crystal",
+  "name": "Alternate: Fused Quartz Crystal",
   "machine": "foundry",
   "inputs": {"raw_quartz": 75.0, "coal": 36.0},
   "outputs": {"quartz_crystal": 54.0}

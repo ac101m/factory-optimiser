@@ -1,6 +1,6 @@
 {
   "id": "heavy_oil_residue",
-  "name": "Heavy Oil Residue",
+  "name": "Alternate: Heavy Oil Residue",
   "machine": "refinery",
   "inputs": {"crude_oil": 30.0},
   "outputs": {"heavy_oil_residue": 40.0, "polymer_resin": 20.0}

@@ -1,6 +1,6 @@
 {
   "id": "silicon_high_speed_connector",
-  "name": "Silicon High-Speed Connector",
+  "name": "Alternate: Silicon High-Speed Connector",
   "machine": "manufacturer",
   "inputs": {"quickwire": 90.0, "silica": 37.5, "circuit_board": 3.0},
   "outputs": {"high_speed_connector": 3.0}

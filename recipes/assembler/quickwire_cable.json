@@ -1,6 +1,6 @@
 {
   "id": "quickwire_cable",
-  "name": "Quickwire Cable",
+  "name": "Alternate: Quickwire Cable",
   "machine": "assembler",
   "inputs": {"quickwire": 7.5, "rubber": 5.0},
   "outputs": {"cable": 27.5}

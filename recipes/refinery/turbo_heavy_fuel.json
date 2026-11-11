@@ -1,6 +1,6 @@
 {
   "id": "turbo_heavy_fuel",
-  "name": "Turbo Heavy Fuel",
+  "name": "Alternate: Turbo Heavy Fuel",
   "machine": "refinery",
   "inputs": {"heavy_oil_residue": 37.5, "compacted_coal": 30.0},
   "outputs": {"turbofuel": 30.0}
