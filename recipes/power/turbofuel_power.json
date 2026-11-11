@@ -1,0 +1,7 @@
+{
+  "id": "turbofuel_power",
+  "name": "Turbofuel Power",
+  "machine": "fuel_generator",
+  "inputs": {"turbofuel": 7.5},
+  "outputs": {"power": 250.0}
+}

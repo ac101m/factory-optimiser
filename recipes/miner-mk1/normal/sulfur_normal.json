@@ -1,0 +1,8 @@
+{
+  "id": "sulfur_normal",
+  "name": "Sulfur (Normal)",
+  "machine": "miner_mk1",
+  "inputs": {},
+  "outputs": {"sulfur": 60.0},
+  "max_machines": 5
+}

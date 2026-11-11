@@ -1,0 +1,7 @@
+{
+  "id": "turbo_blend_fuel",
+  "name": "Turbo Blend Fuel",
+  "machine": "blender",
+  "inputs": {"fuel": 15.0, "heavy_oil_residue": 30.0, "sulfur": 22.5, "petroleum_coke": 22.5},
+  "outputs": {"turbofuel": 45.0}
+}

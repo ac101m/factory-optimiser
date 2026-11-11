@@ -1,0 +1,7 @@
+{
+  "id": "compacted_coal_power",
+  "name": "Compacted Coal Power",
+  "machine": "coal_generator",
+  "inputs": {"compacted_coal": 7.142857, "water": 45.0},
+  "outputs": {"power": 75.0}
+}

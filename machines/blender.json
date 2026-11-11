@@ -1,0 +1,6 @@
+{
+  "id": "blender",
+  "name": "Blender",
+  "power_draw": 75.0,
+  "max_sloops": 4
+}

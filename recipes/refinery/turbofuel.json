@@ -1,0 +1,7 @@
+{
+  "id": "turbofuel",
+  "name": "Turbofuel",
+  "machine": "refinery",
+  "inputs": {"fuel": 22.5, "compacted_coal": 15.0},
+  "outputs": {"turbofuel": 18.75}
+}
