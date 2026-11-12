@@ -1,0 +1,8 @@
+{
+  "id": "spire_coast_oil_well",
+  "name": "Spire Coast Oil Well",
+  "machine": "oil_extractor",
+  "inputs": {},
+  "outputs": {"crude_oil": 360.0},
+  "max_machines": 1
+}

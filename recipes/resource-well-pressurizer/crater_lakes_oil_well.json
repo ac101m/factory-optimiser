@@ -1,0 +1,8 @@
+{
+  "id": "crater_lakes_oil_well",
+  "name": "Crater Lakes Oil Well",
+  "machine": "oil_extractor",
+  "inputs": {},
+  "outputs": {"crude_oil": 540.0},
+  "max_machines": 1
+}
