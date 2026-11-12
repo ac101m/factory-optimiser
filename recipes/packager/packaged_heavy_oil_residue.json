@@ -1,0 +1,7 @@
+{
+  "id": "packaged_heavy_oil_residue",
+  "name": "Packaged Heavy Oil Residue",
+  "machine": "packager",
+  "inputs": {"heavy_oil_residue": 30.0, "empty_canister": 30.0},
+  "outputs": {"packaged_heavy_oil_residue": 30.0}
+}

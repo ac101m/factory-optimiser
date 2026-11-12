@@ -1,0 +1,7 @@
+{
+  "id": "packaged_ionized_fuel",
+  "name": "Packaged Ionized Fuel",
+  "machine": "packager",
+  "inputs": {"ionized_fuel": 80.0, "empty_fluid_tank": 40.0},
+  "outputs": {"packaged_ionized_fuel": 40.0}
+}

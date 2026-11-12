@@ -1,0 +1,7 @@
+{
+  "id": "packaged_oil",
+  "name": "Packaged Oil",
+  "machine": "packager",
+  "inputs": {"crude_oil": 30.0, "empty_canister": 30.0},
+  "outputs": {"packaged_oil": 30.0}
+}

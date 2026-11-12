@@ -1,0 +1,7 @@
+{
+  "id": "packaged_sulfuric_acid",
+  "name": "Packaged Sulfuric Acid",
+  "machine": "packager",
+  "inputs": {"sulfuric_acid": 40.0, "empty_canister": 40.0},
+  "outputs": {"packaged_sulfuric_acid": 40.0}
+}

@@ -1,0 +1,7 @@
+{
+  "id": "packaged_water",
+  "name": "Packaged Water",
+  "machine": "packager",
+  "inputs": {"water": 60.0, "empty_canister": 60.0},
+  "outputs": {"packaged_water": 60.0}
+}

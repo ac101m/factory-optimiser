@@ -1,0 +1,7 @@
+{
+  "id": "packaged_nitric_acid",
+  "name": "Packaged Nitric Acid",
+  "machine": "packager",
+  "inputs": {"nitric_acid": 30.0, "empty_fluid_tank": 30.0},
+  "outputs": {"packaged_nitric_acid": 30.0}
+}

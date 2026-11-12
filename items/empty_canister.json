@@ -1,0 +1,6 @@
+{
+  "id": "empty_canister",
+  "name": "Empty Canister",
+  "sinkable": true,
+  "sink_points": 60
+}

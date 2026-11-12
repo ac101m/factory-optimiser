@@ -1,0 +1,7 @@
+{
+  "id": "packaged_fuel",
+  "name": "Packaged Fuel",
+  "machine": "packager",
+  "inputs": {"fuel": 40.0, "empty_canister": 40.0},
+  "outputs": {"packaged_fuel": 40.0}
+}

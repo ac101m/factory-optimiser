@@ -1,0 +1,6 @@
+{
+  "id": "packaged_fuel",
+  "name": "Packaged Fuel",
+  "sinkable": true,
+  "sink_points": 270
+}

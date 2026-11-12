@@ -1,0 +1,7 @@
+{
+  "id": "packaged_turbofuel",
+  "name": "Packaged Turbofuel",
+  "machine": "packager",
+  "inputs": {"turbofuel": 20.0, "empty_canister": 20.0},
+  "outputs": {"packaged_turbofuel": 20.0}
+}

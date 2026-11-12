@@ -1,0 +1,7 @@
+{
+  "id": "empty_canister",
+  "name": "Empty Canister",
+  "machine": "constructor",
+  "inputs": {"plastic": 30.0},
+  "outputs": {"empty_canister": 60.0}
+}
