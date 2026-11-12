@@ -267,6 +267,7 @@ RECIPE_MANIFEST = {
     "Recipe_Alternate_Diamond_OilBased_C": _M("oil_based_diamonds", "recipes/accelerator/oil_based_diamonds.json"),
     "Recipe_Alternate_Diamond_Petroleum_C": _M("petroleum_diamonds", "recipes/accelerator/petroleum_diamonds.json"),
     "Recipe_Alternate_Diamond_Pink_C": _M("pink_diamonds", "recipes/converter/pink_diamonds.json"),
+    "Recipe_Alternate_Diamond_Turbo_C": _M("turbo_diamonds", "recipes/accelerator/turbo_diamonds.json"),
     "Recipe_Alternate_ElectricMotor_C": _M("electric_motor", "recipes/assembler/electric_motor.json"),
     "Recipe_Alternate_ElectroAluminumScrap_C": _M("electrode_aluminum_scrap", "recipes/refinery/electrode_aluminum_scrap.json"),
     "Recipe_Alternate_ElectrodeCircuitBoard_C": _M("electrode_circuit_board", "recipes/assembler/electrode_circuit_board.json"),

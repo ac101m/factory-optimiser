@@ -1,0 +1,7 @@
+{
+  "id": "turbo_diamonds",
+  "name": "Alternate: Turbo Diamonds",
+  "machine": "accelerator",
+  "inputs": {"coal": 600.0, "packaged_turbofuel": 40.0},
+  "outputs": {"diamonds": 60.0}
+}
