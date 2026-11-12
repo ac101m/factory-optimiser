@@ -1,0 +1,7 @@
+{
+  "id": "ai_expansion_server",
+  "name": "AI Expansion Server",
+  "machine": "quantum_encoder",
+  "inputs": {"magnetic_field_generator": 4.0, "neural_quantum_processor": 4.0, "superposition_oscillator": 4.0, "excited_photonic_matter": 100.0},
+  "outputs": {"ai_expansion_server": 4.0, "dark_matter_residue": 100.0}
+}

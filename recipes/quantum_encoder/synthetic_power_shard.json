@@ -1,0 +1,7 @@
+{
+  "id": "synthetic_power_shard",
+  "name": "Synthetic Power Shard",
+  "machine": "quantum_encoder",
+  "inputs": {"time_crystal": 10.0, "dark_matter_crystal": 10.0, "quartz_crystal": 60.0, "excited_photonic_matter": 60.0},
+  "outputs": {"power_shard": 5.0, "dark_matter_residue": 60.0}
+}

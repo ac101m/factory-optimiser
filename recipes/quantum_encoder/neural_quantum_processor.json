@@ -1,0 +1,7 @@
+{
+  "id": "neural_quantum_processor",
+  "name": "Neural-Quantum Processor",
+  "machine": "quantum_encoder",
+  "inputs": {"time_crystal": 15.0, "supercomputer": 3.0, "ficsite_trigon": 45.0, "excited_photonic_matter": 75.0},
+  "outputs": {"neural_quantum_processor": 3.0, "dark_matter_residue": 75.0}
+}

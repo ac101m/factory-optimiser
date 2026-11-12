@@ -1,0 +1,6 @@
+{
+  "id": "quantum_encoder",
+  "name": "Quantum Encoder",
+  "power_draw": 1000.0,
+  "max_sloops": 4
+}

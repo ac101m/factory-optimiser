@@ -1,0 +1,6 @@
+{
+  "id": "magnetic_field_generator",
+  "name": "Magnetic Field Generator",
+  "sinkable": true,
+  "sink_points": 11000
+}

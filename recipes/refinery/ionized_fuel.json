@@ -1,0 +1,7 @@
+{
+  "id": "ionized_fuel",
+  "name": "Ionized Fuel",
+  "machine": "refinery",
+  "inputs": {"rocket_fuel": 40.0, "power_shard": 2.5},
+  "outputs": {"ionized_fuel": 40.0, "compacted_coal": 5.0}
+}

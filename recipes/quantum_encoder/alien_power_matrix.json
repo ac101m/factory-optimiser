@@ -1,0 +1,7 @@
+{
+  "id": "alien_power_matrix",
+  "name": "Alien Power Matrix",
+  "machine": "quantum_encoder",
+  "inputs": {"sam_fluctuator": 12.5, "power_shard": 7.5, "superposition_oscillator": 7.5, "excited_photonic_matter": 60.0},
+  "outputs": {"alien_power_matrix": 2.5, "dark_matter_residue": 60.0}
+}

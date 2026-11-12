@@ -1,0 +1,7 @@
+{
+  "id": "ionized_fuel_power",
+  "name": "Ionized Fuel Power",
+  "machine": "fuel_generator",
+  "inputs": {"ionized_fuel": 3.0},
+  "outputs": {"power": 250.0}
+}

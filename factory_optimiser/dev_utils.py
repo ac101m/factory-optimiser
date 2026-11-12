@@ -102,6 +102,7 @@ MACHINE_MANIFEST = {
     "Build_GeneratorGeoThermal_C": _Machine("geothermal_generator", "machines/geothermal_generator.json", 0),
     "Build_HadronCollider_C": _Machine("accelerator", "machines/accelerator.json", 4),
     "Build_ManufacturerMk1_C": _Machine("manufacturer", "machines/manufacturer.json", 4),
+    "Build_QuantumEncoder_C": _Machine("quantum_encoder", "machines/quantum_encoder.json", 4),
     "Build_MinerMk1_C": _Machine("miner_mk1", "machines/miner.json", 0),
     "Build_OilPump_C": _Machine("oil_extractor", "machines/oil_extractor.json", 0),
     "Build_OilRefinery_C": _Machine("refinery", "machines/refinery.json", 2),
@@ -112,6 +113,7 @@ MACHINE_MANIFEST = {
 
 ITEM_MANIFEST = {
     "Desc_CircuitBoardHighSpeed_C": _M("ai_limiter", "items/ai_limiter.json"),
+    "Desc_AlienPowerFuel_C": _M("alien_power_matrix", "items/alien_power_matrix.json"),
     "Desc_AluminumPlate_C": _M("alclad_aluminum_sheet", "items/alclad_aluminum_sheet.json"),
     "Desc_AluminumCasing_C": _M("aluminum_casing", "items/aluminum_casing.json"),
     "Desc_AluminumIngot_C": _M("aluminum_ingot", "items/aluminum_ingot.json"),
@@ -133,6 +135,7 @@ ITEM_MANIFEST = {
     "Desc_CopperSheet_C": _M("copper_sheet", "items/copper_sheet.json"),
     "Desc_LiquidOil_C": _M("crude_oil", "items/crude_oil.json"),
     "Desc_CrystalOscillator_C": _M("crystal_oscillator", "items/crystal_oscillator.json"),
+    "Desc_CrystalShard_C": _M("power_shard", "items/power_shard.json"),
     "Desc_DarkMatter_C": _M("dark_matter_crystal", "items/dark_matter_crystal.json"),
     "Desc_DarkEnergy_C": _M("dark_matter_residue", "items/dark_matter_residue.json"),
     "Desc_Diamond_C": _M("diamonds", "items/diamonds.json"),
@@ -141,6 +144,7 @@ ITEM_MANIFEST = {
     "Desc_GasTank_C": _M("empty_fluid_tank", "items/empty_fluid_tank.json"),
     "Desc_SteelPlateReinforced_C": _M("encased_industrial_beam", "items/encased_industrial_beam.json"),
     "Desc_QuantumEnergy_C": _M("excited_photonic_matter", "items/excited_photonic_matter.json"),
+    "Desc_QuantumOscillator_C": _M("superposition_oscillator", "items/superposition_oscillator.json"),
     "Desc_FicsiteIngot_C": _M("ficsite_ingot", "items/ficsite_ingot.json"),
     "Desc_FicsiteMesh_C": _M("ficsite_trigon", "items/ficsite_trigon.json"),
     "Desc_LiquidFuel_C": _M("fuel", "items/fuel.json"),
@@ -149,6 +153,7 @@ ITEM_MANIFEST = {
     "Desc_ModularFrameHeavy_C": _M("heavy_modular_frame", "items/heavy_modular_frame.json"),
     "Desc_HeavyOilResidue_C": _M("heavy_oil_residue", "items/heavy_oil_residue.json"),
     "Desc_HighSpeedConnector_C": _M("high_speed_connector", "items/high_speed_connector.json"),
+    "Desc_IonizedFuel_C": _M("ionized_fuel", "items/ionized_fuel.json"),
     "Desc_IronIngot_C": _M("iron_ingot", "items/iron_ingot.json"),
     "Desc_OreIron_C": _M("iron_ore", "items/iron_ore.json"),
     "Desc_IronPlate_C": _M("iron_plate", "items/iron_plate.json"),
@@ -176,7 +181,10 @@ ITEM_MANIFEST = {
     "Desc_SAMIngot_C": _M("reanimated_sam", "items/reanimated_sam.json"),
     "Desc_Silica_C": _M("silica", "items/silica.json"),
     "Desc_SpaceElevatorPart_1_C": _M("smart_plating", "items/smart_plating.json"),
+    "Desc_SpaceElevatorPart_12_C": _M("ai_expansion_server", "items/ai_expansion_server.json"),
+    "Desc_SpaceElevatorPart_2_C": _M("versatile_framework", "items/versatile_framework.json"),
     "Desc_SpaceElevatorPart_4_C": _M("modular_engine", "items/modular_engine.json"),
+    "Desc_SpaceElevatorPart_6_C": _M("magnetic_field_generator", "items/magnetic_field_generator.json"),
     "Desc_SpaceElevatorPart_8_C": _M("thermal_propulsion_rocket", "items/thermal_propulsion_rocket.json"),
     "Desc_Stator_C": _M("stator", "items/stator.json"),
     "Desc_SteelPlate_C": _M("steel_beam", "items/steel_beam.json"),
@@ -186,6 +194,7 @@ ITEM_MANIFEST = {
     "Desc_SulfuricAcid_C": _M("sulfuric_acid", "items/sulfuric_acid.json"),
     "Desc_ComputerSuper_C": _M("supercomputer", "items/supercomputer.json"),
     "Desc_IronScrew_C": _M("screws", "items/screws.json"),
+    "Desc_TemporalProcessor_C": _M("neural_quantum_processor", "items/neural_quantum_processor.json"),
     "Desc_TimeCrystal_C": _M("time_crystal", "items/time_crystal.json"),
     "Desc_MotorLightweight_C": _M("turbo_motor", "items/turbo_motor.json"),
     "Desc_LiquidTurboFuel_C": _M("turbofuel", "items/turbofuel.json"),
@@ -271,6 +280,7 @@ RECIPE_MANIFEST = {
     "Recipe_Alternate_WetConcrete_C": _M("wet_concrete", "recipes/refinery/wet_concrete.json"),
     "Recipe_Alternate_Wire_1_C": _M("iron_wire", "recipes/constructor/iron_wire.json"),
     "Recipe_Alternate_Wire_2_C": _M("caterium_wire", "recipes/constructor/caterium_wire.json"),
+    "Recipe_AlienPowerFuel_C": _M("alien_power_matrix", "recipes/quantum_encoder/alien_power_matrix.json"),
     "Recipe_AluminaSolution_C": _M("alumina_solution", "recipes/refinery/alumina_solution.json"),
     "Recipe_AluminumScrap_C": _M("aluminum_scrap", "recipes/refinery/aluminum_scrap.json"),
     "Recipe_AluminumCasing_C": _M("aluminum_casing", "recipes/constructor/aluminum_casing.json"),
@@ -311,6 +321,7 @@ RECIPE_MANIFEST = {
     "Recipe_IngotIron_C": _M("iron_ingot", "recipes/smelter/iron_ingot.json"),
     "Recipe_IngotSAM_C": _M("reanimated_sam", "recipes/constructor/reanimated_sam.json"),
     "Recipe_IngotSteel_C": _M("steel_ingot", "recipes/foundry/steel_ingot.json"),
+    "Recipe_IonizedFuel_C": _M("ionized_fuel", "recipes/refinery/ionized_fuel.json"),
     "Recipe_IronPlateReinforced_C": _M("reinforced_iron_plate", "recipes/assembler/reinforced_iron_plate.json"),
     "Recipe_IronPlate_C": _M("iron_plate", "recipes/constructor/iron_plate.json"),
     "Recipe_IronRod_C": _M("iron_rod", "recipes/constructor/iron_rod.json"),
@@ -345,7 +356,10 @@ RECIPE_MANIFEST = {
     "Recipe_Screw_C": _M("screws", "recipes/constructor/screws.json"),
     "Recipe_Silica_C": _M("silica", "recipes/constructor/silica.json"),
     "Recipe_SpaceElevatorPart_1_C": _M("smart_plating", "recipes/assembler/smart_plating.json"),
+    "Recipe_SpaceElevatorPart_12_C": _M("ai_expansion_server", "recipes/quantum_encoder/ai_expansion_server.json"),
+    "Recipe_SpaceElevatorPart_2_C": _M("versatile_framework", "recipes/assembler/versatile_framework.json"),
     "Recipe_SpaceElevatorPart_4_C": _M("modular_engine", "recipes/manufacturer/modular_engine.json"),
+    "Recipe_SpaceElevatorPart_6_C": _M("magnetic_field_generator", "recipes/assembler/magnetic_field_generator.json"),
     "Recipe_SpaceElevatorPart_8_C": _M("thermal_propulsion_rocket", "recipes/manufacturer/thermal_propulsion_rocket.json"),
     "Recipe_Stator_C": _M("stator", "recipes/assembler/stator.json"),
     "Recipe_SteelBeam_C": _M("steel_beam", "recipes/constructor/steel_beam.json"),
@@ -353,6 +367,9 @@ RECIPE_MANIFEST = {
     "Recipe_Sulfur_Coal_C": _M("sulfur_coal", "recipes/converter/sulfur_coal.json"),
     "Recipe_Sulfur_Iron_C": _M("sulfur_iron", "recipes/converter/sulfur_iron.json"),
     "Recipe_SulfuricAcid_C": _M("sulfuric_acid", "recipes/refinery/sulfuric_acid.json"),
+    "Recipe_SuperpositionOscillator_C": _M("superposition_oscillator", "recipes/quantum_encoder/superposition_oscillator.json"),
+    "Recipe_SyntheticPowerShard_C": _M("synthetic_power_shard", "recipes/quantum_encoder/synthetic_power_shard.json"),
+    "Recipe_TemporalProcessor_C": _M("neural_quantum_processor", "recipes/quantum_encoder/neural_quantum_processor.json"),
     "Recipe_TimeCrystal_C": _M("time_crystal", "recipes/converter/time_crystal.json"),
     "Recipe_Uranium_Bauxite_C": _M("uranium_ore_bauxite", "recipes/converter/uranium_ore_bauxite.json"),
     "Recipe_Wire_C": _M("wire", "recipes/constructor/wire.json"),
@@ -406,7 +423,7 @@ def _buildables(text: str) -> list[str]:
 # --------------------------------------------------------------------------
 
 
-_ITEM_GROUPS = ("FGItemDescriptor", "FGResourceDescriptor", "FGConsumableDescriptor")
+_ITEM_GROUPS = ("FGItemDescriptor", "FGResourceDescriptor", "FGConsumableDescriptor", "FGPowerShardDescriptor")
 
 
 def item_form(docs: list[dict]) -> dict[str, str]:

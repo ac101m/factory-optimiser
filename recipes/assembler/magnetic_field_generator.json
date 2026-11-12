@@ -1,0 +1,7 @@
+{
+  "id": "magnetic_field_generator",
+  "name": "Magnetic Field Generator",
+  "machine": "assembler",
+  "inputs": {"versatile_framework": 2.5, "electromagnetic_control_rod": 1.0},
+  "outputs": {"magnetic_field_generator": 1.0}
+}

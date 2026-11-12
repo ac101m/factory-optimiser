@@ -1,0 +1,7 @@
+{
+  "id": "versatile_framework",
+  "name": "Versatile Framework",
+  "machine": "assembler",
+  "inputs": {"modular_frame": 2.5, "steel_beam": 30.0},
+  "outputs": {"versatile_framework": 5.0}
+}

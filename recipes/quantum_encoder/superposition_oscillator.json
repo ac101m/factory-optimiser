@@ -1,0 +1,7 @@
+{
+  "id": "superposition_oscillator",
+  "name": "Superposition Oscillator",
+  "machine": "quantum_encoder",
+  "inputs": {"dark_matter_crystal": 30.0, "crystal_oscillator": 5.0, "alclad_aluminum_sheet": 45.0, "excited_photonic_matter": 125.0},
+  "outputs": {"superposition_oscillator": 5.0, "dark_matter_residue": 125.0}
+}
