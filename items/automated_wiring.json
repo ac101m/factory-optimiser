@@ -1,0 +1,6 @@
+{
+  "id": "automated_wiring",
+  "name": "Automated Wiring",
+  "sinkable": true,
+  "sink_points": 1440
+}

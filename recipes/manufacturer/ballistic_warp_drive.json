@@ -1,0 +1,7 @@
+{
+  "id": "ballistic_warp_drive",
+  "name": "Ballistic Warp Drive",
+  "machine": "manufacturer",
+  "inputs": {"thermal_propulsion_rocket": 1.0, "singularity_cell": 5.0, "superposition_oscillator": 2.0, "dark_matter_crystal": 40.0},
+  "outputs": {"ballistic_warp_drive": 1.0}
+}

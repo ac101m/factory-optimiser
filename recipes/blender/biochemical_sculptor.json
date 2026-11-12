@@ -1,0 +1,7 @@
+{
+  "id": "biochemical_sculptor",
+  "name": "Biochemical Sculptor",
+  "machine": "blender",
+  "inputs": {"assembly_director_system": 0.5, "ficsite_trigon": 40.0, "water": 10.0},
+  "outputs": {"biochemical_sculptor": 2.0}
+}

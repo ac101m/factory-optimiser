@@ -115,6 +115,9 @@ MACHINE_MANIFEST = {
 }
 
 ITEM_MANIFEST = {
+    "Desc_SpaceElevatorPart_5_C": _M("adaptive_control_unit", "items/adaptive_control_unit.json"),
+    "Desc_SpaceElevatorPart_7_C": _M("assembly_director_system", "items/assembly_director_system.json"),
+    "Desc_SpaceElevatorPart_3_C": _M("automated_wiring", "items/automated_wiring.json"),
     "Desc_CircuitBoardHighSpeed_C": _M("ai_limiter", "items/ai_limiter.json"),
     "Desc_AlienPowerFuel_C": _M("alien_power_matrix", "items/alien_power_matrix.json"),
     "Desc_AluminumPlate_C": _M("alclad_aluminum_sheet", "items/alclad_aluminum_sheet.json"),
@@ -122,8 +125,10 @@ ITEM_MANIFEST = {
     "Desc_AluminumIngot_C": _M("aluminum_ingot", "items/aluminum_ingot.json"),
     "Desc_AluminumScrap_C": _M("aluminum_scrap", "items/aluminum_scrap.json"),
     "Desc_AluminaSolution_C": _M("alumina_solution", "items/alumina_solution.json"),
+    "Desc_SpaceElevatorPart_11_C": _M("ballistic_warp_drive", "items/ballistic_warp_drive.json"),
     "Desc_Battery_C": _M("battery", "items/battery.json"),
     "Desc_OreBauxite_C": _M("bauxite", "items/bauxite.json"),
+    "Desc_SpaceElevatorPart_10_C": _M("biochemical_sculptor", "items/biochemical_sculptor.json"),
     "Desc_Cable_C": _M("cable", "items/cable.json"),
     "Desc_GoldIngot_C": _M("caterium_ingot", "items/caterium_ingot.json"),
     "Desc_OreGold_C": _M("caterium_ore", "items/caterium_ore.json"),
@@ -385,6 +390,11 @@ RECIPE_MANIFEST = {
     "Recipe_Silica_C": _M("silica", "recipes/constructor/silica.json"),
     "Recipe_SingularityCell_C": _M("singularity_cell", "recipes/manufacturer/singularity_cell.json"),
     "Recipe_SpaceElevatorPart_1_C": _M("smart_plating", "recipes/assembler/smart_plating.json"),
+    "Recipe_SpaceElevatorPart_3_C": _M("automated_wiring", "recipes/assembler/automated_wiring.json"),
+    "Recipe_SpaceElevatorPart_5_C": _M("adaptive_control_unit", "recipes/manufacturer/adaptive_control_unit.json"),
+    "Recipe_SpaceElevatorPart_7_C": _M("assembly_director_system", "recipes/assembler/assembly_director_system.json"),
+    "Recipe_SpaceElevatorPart_10_C": _M("biochemical_sculptor", "recipes/blender/biochemical_sculptor.json"),
+    "Recipe_SpaceElevatorPart_11_C": _M("ballistic_warp_drive", "recipes/manufacturer/ballistic_warp_drive.json"),
     "Recipe_SpaceElevatorPart_12_C": _M("ai_expansion_server", "recipes/quantum_encoder/ai_expansion_server.json"),
     "Recipe_SpaceElevatorPart_9_C": _M("nuclear_pasta", "recipes/accelerator/nuclear_pasta.json"),
     "Recipe_SpaceElevatorPart_2_C": _M("versatile_framework", "recipes/assembler/versatile_framework.json"),

@@ -1,0 +1,7 @@
+{
+  "id": "automated_wiring",
+  "name": "Automated Wiring",
+  "machine": "assembler",
+  "inputs": {"stator": 2.5, "cable": 50.0},
+  "outputs": {"automated_wiring": 2.5}
+}

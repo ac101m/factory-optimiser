@@ -1,0 +1,7 @@
+{
+  "id": "adaptive_control_unit",
+  "name": "Adaptive Control Unit",
+  "machine": "manufacturer",
+  "inputs": {"automated_wiring": 5.0, "circuit_board": 5.0, "heavy_modular_frame": 1.0, "computer": 2.0},
+  "outputs": {"adaptive_control_unit": 1.0}
+}

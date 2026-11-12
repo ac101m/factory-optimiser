@@ -1,0 +1,7 @@
+{
+  "id": "assembly_director_system",
+  "name": "Assembly Director System",
+  "machine": "assembler",
+  "inputs": {"adaptive_control_unit": 1.5, "supercomputer": 0.75},
+  "outputs": {"assembly_director_system": 0.75}
+}
