@@ -1,0 +1,7 @@
+{
+  "id": "nuclear_power_plutonium",
+  "name": "Nuclear Power (Plutonium)",
+  "machine": "nuclear_power_plant",
+  "inputs": {"plutonium_fuel_rod": 0.1, "water": 240.0},
+  "outputs": {"power": 2500.0, "plutonium_waste": 1.0}
+}

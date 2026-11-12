@@ -1,0 +1,7 @@
+{
+  "id": "non_fissile_uranium",
+  "name": "Non-Fissile Uranium",
+  "machine": "blender",
+  "inputs": {"uranium_waste": 37.5, "silica": 25.0, "nitric_acid": 15.0, "sulfuric_acid": 15.0},
+  "outputs": {"non_fissile_uranium": 50.0, "water": 15.0}
+}

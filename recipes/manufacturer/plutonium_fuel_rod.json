@@ -1,0 +1,7 @@
+{
+  "id": "plutonium_fuel_rod",
+  "name": "Plutonium Fuel Rod",
+  "machine": "manufacturer",
+  "inputs": {"encased_plutonium_cell": 7.5, "steel_beam": 4.5, "electromagnetic_control_rod": 1.5, "heat_sink": 2.5},
+  "outputs": {"plutonium_fuel_rod": 0.25}
+}

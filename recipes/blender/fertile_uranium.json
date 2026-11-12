@@ -1,0 +1,7 @@
+{
+  "id": "fertile_uranium",
+  "name": "Alternate: Fertile Uranium",
+  "machine": "blender",
+  "inputs": {"uranium": 25.0, "uranium_waste": 25.0, "nitric_acid": 15.0, "sulfuric_acid": 25.0},
+  "outputs": {"non_fissile_uranium": 100.0, "water": 40.0}
+}

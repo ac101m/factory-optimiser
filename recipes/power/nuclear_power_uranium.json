@@ -1,0 +1,7 @@
+{
+  "id": "nuclear_power_uranium",
+  "name": "Nuclear Power (Uranium)",
+  "machine": "nuclear_power_plant",
+  "inputs": {"uranium_fuel_rod": 0.2, "water": 240.0},
+  "outputs": {"power": 2500.0, "uranium_waste": 10.0}
+}

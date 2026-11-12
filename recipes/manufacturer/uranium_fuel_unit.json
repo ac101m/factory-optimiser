@@ -1,0 +1,7 @@
+{
+  "id": "uranium_fuel_unit",
+  "name": "Alternate: Uranium Fuel Unit",
+  "machine": "manufacturer",
+  "inputs": {"encased_uranium_cell": 20.0, "electromagnetic_control_rod": 2.0, "crystal_oscillator": 0.6, "rotor": 2.0},
+  "outputs": {"uranium_fuel_rod": 0.6}
+}

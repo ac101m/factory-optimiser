@@ -1,0 +1,7 @@
+{
+  "id": "uranium_fuel_rod",
+  "name": "Uranium Fuel Rod",
+  "machine": "manufacturer",
+  "inputs": {"encased_uranium_cell": 20.0, "encased_industrial_beam": 1.2, "electromagnetic_control_rod": 2.0},
+  "outputs": {"uranium_fuel_rod": 0.4}
+}

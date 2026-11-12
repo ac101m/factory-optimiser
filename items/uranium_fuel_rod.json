@@ -1,0 +1,6 @@
+{
+  "id": "uranium_fuel_rod",
+  "name": "Uranium Fuel Rod",
+  "sinkable": true,
+  "sink_points": 43468
+}

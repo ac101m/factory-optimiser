@@ -1,0 +1,8 @@
+{
+  "id": "nuclear_pasta",
+  "name": "Nuclear Pasta",
+  "machine": "accelerator",
+  "inputs": {"copper_powder": 100.0, "pressure_conversion_cube": 0.5},
+  "outputs": {"nuclear_pasta": 0.5},
+  "power_draw": 1000.0
+}

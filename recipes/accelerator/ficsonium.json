@@ -1,0 +1,8 @@
+{
+  "id": "ficsonium",
+  "name": "Ficsonium",
+  "machine": "accelerator",
+  "inputs": {"plutonium_waste": 10.0, "singularity_cell": 10.0, "dark_matter_residue": 200.0},
+  "outputs": {"ficsonium": 10.0},
+  "power_draw": 1000.0
+}

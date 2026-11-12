@@ -1,0 +1,6 @@
+{
+  "id": "plutonium_waste",
+  "name": "Plutonium Waste",
+  "sinkable": false,
+  "sink_points": 0
+}

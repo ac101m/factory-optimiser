@@ -1,0 +1,7 @@
+{
+  "id": "singularity_cell",
+  "name": "Singularity Cell",
+  "machine": "manufacturer",
+  "inputs": {"nuclear_pasta": 1.0, "dark_matter_crystal": 20.0, "iron_plate": 100.0, "concrete": 200.0},
+  "outputs": {"singularity_cell": 10.0}
+}

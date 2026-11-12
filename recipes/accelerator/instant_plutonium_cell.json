@@ -1,0 +1,8 @@
+{
+  "id": "instant_plutonium_cell",
+  "name": "Alternate: Instant Plutonium Cell",
+  "machine": "accelerator",
+  "inputs": {"non_fissile_uranium": 75.0, "aluminum_casing": 10.0},
+  "outputs": {"encased_plutonium_cell": 10.0},
+  "power_draw": 500.0
+}

@@ -1,0 +1,7 @@
+{
+  "id": "copper_powder",
+  "name": "Copper Powder",
+  "machine": "constructor",
+  "inputs": {"copper_ingot": 300.0},
+  "outputs": {"copper_powder": 50.0}
+}

@@ -1,0 +1,8 @@
+{
+  "id": "plutonium_pellet",
+  "name": "Plutonium Pellet",
+  "machine": "accelerator",
+  "inputs": {"non_fissile_uranium": 100.0, "uranium_waste": 25.0},
+  "outputs": {"plutonium_pellet": 30.0},
+  "power_draw": 500.0
+}

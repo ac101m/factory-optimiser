@@ -1,0 +1,7 @@
+{
+  "id": "ficsonium_fuel_rod",
+  "name": "Ficsonium Fuel Rod",
+  "machine": "quantum_encoder",
+  "inputs": {"ficsonium": 5.0, "electromagnetic_control_rod": 5.0, "ficsite_trigon": 100.0, "excited_photonic_matter": 50.0},
+  "outputs": {"ficsonium_fuel_rod": 2.5, "dark_matter_residue": 50.0}
+}

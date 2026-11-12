@@ -1,0 +1,7 @@
+{
+  "id": "infused_uranium_cell",
+  "name": "Alternate: Infused Uranium Cell",
+  "machine": "manufacturer",
+  "inputs": {"uranium": 25.0, "silica": 15.0, "sulfur": 25.0, "quickwire": 75.0},
+  "outputs": {"encased_uranium_cell": 20.0}
+}

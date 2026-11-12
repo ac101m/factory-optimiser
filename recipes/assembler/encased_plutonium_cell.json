@@ -1,0 +1,7 @@
+{
+  "id": "encased_plutonium_cell",
+  "name": "Encased Plutonium Cell",
+  "machine": "assembler",
+  "inputs": {"plutonium_pellet": 10.0, "concrete": 20.0},
+  "outputs": {"encased_plutonium_cell": 5.0}
+}

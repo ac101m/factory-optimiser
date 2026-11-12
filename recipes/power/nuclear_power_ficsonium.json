@@ -1,0 +1,7 @@
+{
+  "id": "nuclear_power_ficsonium",
+  "name": "Nuclear Power (Ficsonium)",
+  "machine": "nuclear_power_plant",
+  "inputs": {"ficsonium_fuel_rod": 1.0, "water": 240.0},
+  "outputs": {"power": 2500.0}
+}

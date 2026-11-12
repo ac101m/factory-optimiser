@@ -1,0 +1,7 @@
+{
+  "id": "encased_uranium_cell",
+  "name": "Encased Uranium Cell",
+  "machine": "blender",
+  "inputs": {"uranium": 50.0, "concrete": 15.0, "sulfuric_acid": 40.0},
+  "outputs": {"encased_uranium_cell": 25.0, "sulfuric_acid": 10.0}
+}

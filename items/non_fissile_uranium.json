@@ -1,0 +1,6 @@
+{
+  "id": "non_fissile_uranium",
+  "name": "Non-Fissile Uranium",
+  "sinkable": false,
+  "sink_points": 0
+}
