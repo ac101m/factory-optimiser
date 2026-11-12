@@ -1,0 +1,6 @@
+{
+  "id": "diamonds",
+  "name": "Diamonds",
+  "sinkable": true,
+  "sink_points": 240
+}

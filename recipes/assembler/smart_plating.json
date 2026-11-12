@@ -1,0 +1,7 @@
+{
+  "id": "smart_plating",
+  "name": "Smart Plating",
+  "machine": "assembler",
+  "inputs": {"reinforced_iron_plate": 2.0, "rotor": 2.0},
+  "outputs": {"smart_plating": 2.0}
+}

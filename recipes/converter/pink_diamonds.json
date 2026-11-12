@@ -1,0 +1,7 @@
+{
+  "id": "pink_diamonds",
+  "name": "Alternate: Pink Diamonds",
+  "machine": "converter",
+  "inputs": {"coal": 120.0, "quartz_crystal": 45.0},
+  "outputs": {"diamonds": 15.0}
+}

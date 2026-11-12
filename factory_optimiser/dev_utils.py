@@ -100,6 +100,7 @@ MACHINE_MANIFEST = {
     "Build_GeneratorCoal_C": _Machine("coal_generator", "machines/coal_generator.json", 0),
     "Build_GeneratorFuel_C": _Machine("fuel_generator", "machines/fuel_generator.json", 0),
     "Build_GeneratorGeoThermal_C": _Machine("geothermal_generator", "machines/geothermal_generator.json", 0),
+    "Build_HadronCollider_C": _Machine("accelerator", "machines/accelerator.json", 4),
     "Build_ManufacturerMk1_C": _Machine("manufacturer", "machines/manufacturer.json", 4),
     "Build_MinerMk1_C": _Machine("miner_mk1", "machines/miner.json", 0),
     "Build_OilPump_C": _Machine("oil_extractor", "machines/oil_extractor.json", 0),
@@ -132,10 +133,14 @@ ITEM_MANIFEST = {
     "Desc_CopperSheet_C": _M("copper_sheet", "items/copper_sheet.json"),
     "Desc_LiquidOil_C": _M("crude_oil", "items/crude_oil.json"),
     "Desc_CrystalOscillator_C": _M("crystal_oscillator", "items/crystal_oscillator.json"),
+    "Desc_DarkMatter_C": _M("dark_matter_crystal", "items/dark_matter_crystal.json"),
+    "Desc_DarkEnergy_C": _M("dark_matter_residue", "items/dark_matter_residue.json"),
+    "Desc_Diamond_C": _M("diamonds", "items/diamonds.json"),
     "Desc_DissolvedSilica_C": _M("dissolved_silica", "items/dissolved_silica.json"),
     "Desc_ElectromagneticControlRod_C": _M("electromagnetic_control_rod", "items/electromagnetic_control_rod.json"),
     "Desc_GasTank_C": _M("empty_fluid_tank", "items/empty_fluid_tank.json"),
     "Desc_SteelPlateReinforced_C": _M("encased_industrial_beam", "items/encased_industrial_beam.json"),
+    "Desc_QuantumEnergy_C": _M("excited_photonic_matter", "items/excited_photonic_matter.json"),
     "Desc_FicsiteIngot_C": _M("ficsite_ingot", "items/ficsite_ingot.json"),
     "Desc_FicsiteMesh_C": _M("ficsite_trigon", "items/ficsite_trigon.json"),
     "Desc_LiquidFuel_C": _M("fuel", "items/fuel.json"),
@@ -167,8 +172,12 @@ ITEM_MANIFEST = {
     "Desc_Rotor_C": _M("rotor", "items/rotor.json"),
     "Desc_Rubber_C": _M("rubber", "items/rubber.json"),
     "Desc_SAM_C": _M("sam", "items/sam.json"),
+    "Desc_SAMFluctuator_C": _M("sam_fluctuator", "items/sam_fluctuator.json"),
     "Desc_SAMIngot_C": _M("reanimated_sam", "items/reanimated_sam.json"),
     "Desc_Silica_C": _M("silica", "items/silica.json"),
+    "Desc_SpaceElevatorPart_1_C": _M("smart_plating", "items/smart_plating.json"),
+    "Desc_SpaceElevatorPart_4_C": _M("modular_engine", "items/modular_engine.json"),
+    "Desc_SpaceElevatorPart_8_C": _M("thermal_propulsion_rocket", "items/thermal_propulsion_rocket.json"),
     "Desc_Stator_C": _M("stator", "items/stator.json"),
     "Desc_SteelPlate_C": _M("steel_beam", "items/steel_beam.json"),
     "Desc_SteelIngot_C": _M("steel_ingot", "items/steel_ingot.json"),
@@ -177,6 +186,7 @@ ITEM_MANIFEST = {
     "Desc_SulfuricAcid_C": _M("sulfuric_acid", "items/sulfuric_acid.json"),
     "Desc_ComputerSuper_C": _M("supercomputer", "items/supercomputer.json"),
     "Desc_IronScrew_C": _M("screws", "items/screws.json"),
+    "Desc_TimeCrystal_C": _M("time_crystal", "items/time_crystal.json"),
     "Desc_MotorLightweight_C": _M("turbo_motor", "items/turbo_motor.json"),
     "Desc_LiquidTurboFuel_C": _M("turbofuel", "items/turbofuel.json"),
     "Desc_OreUranium_C": _M("uranium", "items/uranium.json"),
@@ -204,6 +214,12 @@ RECIPE_MANIFEST = {
     "Recipe_Alternate_CoolingDevice_C": _M("cooling_device", "recipes/blender/cooling_device.json"),
     "Recipe_Alternate_CopperRotor_C": _M("copper_rotor", "recipes/assembler/copper_rotor.json"),
     "Recipe_Alternate_CrystalOscillator_C": _M("insulated_crystal_oscillator", "recipes/manufacturer/insulated_crystal_oscillator.json"),
+    "Recipe_Alternate_DarkMatter_Crystallization_C": _M("dark_matter_crystallization", "recipes/accelerator/dark_matter_crystallization.json"),
+    "Recipe_Alternate_DarkMatter_Trap_C": _M("dark_matter_trap", "recipes/accelerator/dark_matter_trap.json"),
+    "Recipe_Alternate_Diamond_Cloudy_C": _M("cloudy_diamonds", "recipes/accelerator/cloudy_diamonds.json"),
+    "Recipe_Alternate_Diamond_OilBased_C": _M("oil_based_diamonds", "recipes/accelerator/oil_based_diamonds.json"),
+    "Recipe_Alternate_Diamond_Petroleum_C": _M("petroleum_diamonds", "recipes/accelerator/petroleum_diamonds.json"),
+    "Recipe_Alternate_Diamond_Pink_C": _M("pink_diamonds", "recipes/converter/pink_diamonds.json"),
     "Recipe_Alternate_ElectroAluminumScrap_C": _M("electrode_aluminum_scrap", "recipes/refinery/electrode_aluminum_scrap.json"),
     "Recipe_Alternate_ElectrodeCircuitBoard_C": _M("electrode_circuit_board", "recipes/assembler/electrode_circuit_board.json"),
     "Recipe_Alternate_ElectromagneticControlRod_1_C": _M("electromagnetic_connection_rod", "recipes/assembler/electromagnetic_connection_rod.json"),
@@ -276,6 +292,9 @@ RECIPE_MANIFEST = {
     "Recipe_Copper_Quartz_C": _M("copper_ore_quartz", "recipes/converter/copper_ore_quartz.json"),
     "Recipe_Copper_Sulfur_C": _M("copper_ore_sulfur", "recipes/converter/copper_ore_sulfur.json"),
     "Recipe_CrystalOscillator_C": _M("crystal_oscillator", "recipes/manufacturer/crystal_oscillator.json"),
+    "Recipe_DarkEnergy_C": _M("dark_matter_residue", "recipes/converter/dark_matter_residue.json"),
+    "Recipe_DarkMatter_C": _M("dark_matter_crystal", "recipes/accelerator/dark_matter_crystal.json"),
+    "Recipe_Diamond_C": _M("diamonds", "recipes/accelerator/diamonds.json"),
     "Recipe_ElectromagneticControlRod_C": _M("electromagnetic_control_rod", "recipes/assembler/electromagnetic_control_rod.json"),
     "Recipe_EncasedIndustrialBeam_C": _M("encased_industrial_beam", "recipes/assembler/encased_industrial_beam.json"),
     "Recipe_FicsiteIngot_AL_C": _M("ficsite_ingot_aluminum", "recipes/converter/ficsite_ingot_aluminum.json"),
@@ -310,6 +329,7 @@ RECIPE_MANIFEST = {
     "Recipe_Plastic_C": _M("plastic", "recipes/refinery/plastic.json"),
     "Recipe_PressureConversionCube_C": _M("pressure_conversion_cube", "recipes/assembler/pressure_conversion_cube.json"),
     "Recipe_PureAluminumIngot_C": _M("pure_aluminum_ingot", "recipes/smelter/pure_aluminum_ingot.json"),
+    "Recipe_QuantumEnergy_C": _M("excited_photonic_matter", "recipes/converter/excited_photonic_matter.json"),
     "Recipe_QuartzCrystal_C": _M("quartz_crystal", "recipes/constructor/quartz_crystal.json"),
     "Recipe_Quartz_Bauxite_C": _M("raw_quartz_bauxite", "recipes/converter/raw_quartz_bauxite.json"),
     "Recipe_Quartz_Coal_C": _M("raw_quartz_coal", "recipes/converter/raw_quartz_coal.json"),
@@ -321,14 +341,19 @@ RECIPE_MANIFEST = {
     "Recipe_RocketFuel_C": _M("rocket_fuel", "recipes/blender/rocket_fuel.json"),
     "Recipe_Rotor_C": _M("rotor", "recipes/assembler/rotor.json"),
     "Recipe_Rubber_C": _M("rubber", "recipes/refinery/rubber.json"),
+    "Recipe_SAMFluctuator_C": _M("sam_fluctuator", "recipes/manufacturer/sam_fluctuator.json"),
     "Recipe_Screw_C": _M("screws", "recipes/constructor/screws.json"),
     "Recipe_Silica_C": _M("silica", "recipes/constructor/silica.json"),
+    "Recipe_SpaceElevatorPart_1_C": _M("smart_plating", "recipes/assembler/smart_plating.json"),
+    "Recipe_SpaceElevatorPart_4_C": _M("modular_engine", "recipes/manufacturer/modular_engine.json"),
+    "Recipe_SpaceElevatorPart_8_C": _M("thermal_propulsion_rocket", "recipes/manufacturer/thermal_propulsion_rocket.json"),
     "Recipe_Stator_C": _M("stator", "recipes/assembler/stator.json"),
     "Recipe_SteelBeam_C": _M("steel_beam", "recipes/constructor/steel_beam.json"),
     "Recipe_SteelPipe_C": _M("steel_pipe", "recipes/constructor/steel_pipe.json"),
     "Recipe_Sulfur_Coal_C": _M("sulfur_coal", "recipes/converter/sulfur_coal.json"),
     "Recipe_Sulfur_Iron_C": _M("sulfur_iron", "recipes/converter/sulfur_iron.json"),
     "Recipe_SulfuricAcid_C": _M("sulfuric_acid", "recipes/refinery/sulfuric_acid.json"),
+    "Recipe_TimeCrystal_C": _M("time_crystal", "recipes/converter/time_crystal.json"),
     "Recipe_Uranium_Bauxite_C": _M("uranium_ore_bauxite", "recipes/converter/uranium_ore_bauxite.json"),
     "Recipe_Wire_C": _M("wire", "recipes/constructor/wire.json"),
 }
@@ -818,6 +843,22 @@ def compare_recipe(docs, game_class: str, entry: _M, repo_path: str | Path) -> l
         diffs.append(_Diff(entry.path, "outputs", game["outputs"], repo.get("outputs")))
     if repo.get("machine") != game["machine"]:
         diffs.append(_Diff(entry.path, "machine", game["machine"], repo.get("machine")))
+    # Variable-power machines (accelerator, converter, quantum encoder...) draw
+    # per-recipe power the docs store as two fields: the draw oscillates during
+    # a cycle between `constant` (min) and `constant + factor` (max), so the
+    # steady scalar to model is the average = constant + factor/2. The repo may
+    # model this per-recipe (a "power_draw" override) or as a single machine
+    # average (e.g. the converter, uniform across recipes); only validate when
+    # the repo declares an override (absent = machine average, legitimate).
+    if "power_draw" in repo:
+        raw = _find_docs_class(docs, "FGRecipe", game_class)
+        c = float(raw.get("mVariablePowerConsumptionConstant", 0.0))
+        f = float(raw.get("mVariablePowerConsumptionFactor", 0.0))
+        expected = c + f / 2.0
+        # 1.0 = the universal fixed-machine default (constant 1 + factor 0);
+        # a recipe with that gets no meaningful override from the docs.
+        if abs(expected - 1.0) > 1e-9 and abs(float(repo.get("power_draw", 0.0)) - expected) > 1e-6:
+            diffs.append(_Diff(entry.path, "power_draw", expected, repo.get("power_draw")))
     return diffs
 
 

@@ -1,0 +1,8 @@
+{
+  "id": "dark_matter_crystal",
+  "name": "Dark Matter Crystal",
+  "machine": "accelerator",
+  "inputs": {"diamonds": 30.0, "dark_matter_residue": 150.0},
+  "outputs": {"dark_matter_crystal": 30.0},
+  "power_draw": 1000.0
+}

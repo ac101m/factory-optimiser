@@ -1,0 +1,8 @@
+{
+  "id": "oil_based_diamonds",
+  "name": "Alternate: Oil-Based Diamonds",
+  "machine": "accelerator",
+  "inputs": {"crude_oil": 200.0},
+  "outputs": {"diamonds": 40.0},
+  "power_draw": 500.0
+}

@@ -1,0 +1,7 @@
+{
+  "id": "modular_engine",
+  "name": "Modular Engine",
+  "machine": "manufacturer",
+  "inputs": {"motor": 2.0, "rubber": 15.0, "smart_plating": 2.0},
+  "outputs": {"modular_engine": 1.0}
+}

@@ -1,0 +1,7 @@
+{
+  "id": "time_crystal",
+  "name": "Time Crystal",
+  "machine": "converter",
+  "inputs": {"diamonds": 12.0},
+  "outputs": {"time_crystal": 6.0}
+}

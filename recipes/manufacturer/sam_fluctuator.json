@@ -1,0 +1,7 @@
+{
+  "id": "sam_fluctuator",
+  "name": "SAM Fluctuator",
+  "machine": "manufacturer",
+  "inputs": {"reanimated_sam": 60.0, "wire": 50.0, "steel_pipe": 30.0},
+  "outputs": {"sam_fluctuator": 10.0}
+}

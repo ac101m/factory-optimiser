@@ -1,0 +1,8 @@
+{
+  "id": "petroleum_diamonds",
+  "name": "Alternate: Petroleum Diamonds",
+  "machine": "accelerator",
+  "inputs": {"petroleum_coke": 720.0},
+  "outputs": {"diamonds": 30.0},
+  "power_draw": 500.0
+}

@@ -1,0 +1,7 @@
+{
+  "id": "thermal_propulsion_rocket",
+  "name": "Thermal Propulsion Rocket",
+  "machine": "manufacturer",
+  "inputs": {"modular_engine": 2.5, "turbo_motor": 1.0, "cooling_system": 3.0, "fused_modular_frame": 1.0},
+  "outputs": {"thermal_propulsion_rocket": 1.0}
+}

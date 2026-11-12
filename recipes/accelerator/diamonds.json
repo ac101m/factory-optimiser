@@ -1,0 +1,8 @@
+{
+  "id": "diamonds",
+  "name": "Diamonds",
+  "machine": "accelerator",
+  "inputs": {"coal": 600.0},
+  "outputs": {"diamonds": 30.0},
+  "power_draw": 500.0
+}

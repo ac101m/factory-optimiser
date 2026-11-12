@@ -1,0 +1,6 @@
+{
+  "id": "accelerator",
+  "name": "Particle Accelerator",
+  "power_draw": 250.0,
+  "max_sloops": 4
+}

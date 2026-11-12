@@ -1,0 +1,7 @@
+{
+  "id": "excited_photonic_matter",
+  "name": "Excited Photonic Matter",
+  "machine": "converter",
+  "inputs": {},
+  "outputs": {"excited_photonic_matter": 200.0}
+}

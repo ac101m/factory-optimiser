@@ -1,0 +1,7 @@
+{
+  "id": "dark_matter_residue",
+  "name": "Dark Matter Residue",
+  "machine": "converter",
+  "inputs": {"reanimated_sam": 50.0},
+  "outputs": {"dark_matter_residue": 100.0}
+}

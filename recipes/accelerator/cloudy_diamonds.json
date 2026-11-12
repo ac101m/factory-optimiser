@@ -1,0 +1,8 @@
+{
+  "id": "cloudy_diamonds",
+  "name": "Alternate: Cloudy Diamonds",
+  "machine": "accelerator",
+  "inputs": {"coal": 240.0, "limestone": 480.0},
+  "outputs": {"diamonds": 20.0},
+  "power_draw": 500.0
+}
