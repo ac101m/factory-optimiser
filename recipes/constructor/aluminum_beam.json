@@ -1,0 +1,7 @@
+{
+  "id": "aluminum_beam",
+  "name": "Alternate: Aluminum Beam",
+  "machine": "constructor",
+  "inputs": {"aluminum_ingot": 22.5},
+  "outputs": {"steel_beam": 22.5}
+}

@@ -1,0 +1,7 @@
+{
+  "id": "alclad_casing",
+  "name": "Alternate: Alclad Casing",
+  "machine": "assembler",
+  "inputs": {"aluminum_ingot": 150.0, "copper_ingot": 75.0},
+  "outputs": {"aluminum_casing": 112.5}
+}

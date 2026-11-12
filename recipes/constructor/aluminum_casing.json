@@ -1,0 +1,7 @@
+{
+  "id": "aluminum_casing",
+  "name": "Aluminum Casing",
+  "machine": "constructor",
+  "inputs": {"aluminum_ingot": 90.0},
+  "outputs": {"aluminum_casing": 60.0}
+}

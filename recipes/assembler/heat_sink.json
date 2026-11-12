@@ -1,0 +1,7 @@
+{
+  "id": "heat_sink",
+  "name": "Heat Sink",
+  "machine": "assembler",
+  "inputs": {"alclad_aluminum_sheet": 37.5, "copper_sheet": 22.5},
+  "outputs": {"heat_sink": 7.5}
+}

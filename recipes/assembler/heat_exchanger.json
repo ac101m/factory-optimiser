@@ -1,0 +1,7 @@
+{
+  "id": "heat_exchanger",
+  "name": "Alternate: Heat Exchanger",
+  "machine": "assembler",
+  "inputs": {"aluminum_casing": 30.0, "rubber": 30.0},
+  "outputs": {"heat_sink": 10.0}
+}

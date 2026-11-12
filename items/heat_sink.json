@@ -1,0 +1,6 @@
+{
+  "id": "heat_sink",
+  "name": "Heat Sink",
+  "sinkable": true,
+  "sink_points": 2804
+}

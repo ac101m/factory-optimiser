@@ -1,0 +1,7 @@
+{
+  "id": "alclad_aluminum_sheet",
+  "name": "Alclad Aluminum Sheet",
+  "machine": "assembler",
+  "inputs": {"aluminum_ingot": 30.0, "copper_ingot": 10.0},
+  "outputs": {"alclad_aluminum_sheet": 30.0}
+}
