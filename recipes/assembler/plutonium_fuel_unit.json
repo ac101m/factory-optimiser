@@ -1,0 +1,7 @@
+{
+  "id": "plutonium_fuel_unit",
+  "name": "Alternate: Plutonium Fuel Unit",
+  "machine": "assembler",
+  "inputs": {"encased_plutonium_cell": 10.0, "pressure_conversion_cube": 0.5},
+  "outputs": {"plutonium_fuel_rod": 0.5}
+}

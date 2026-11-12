@@ -1,0 +1,7 @@
+{
+  "id": "electric_motor",
+  "name": "Alternate: Electric Motor",
+  "machine": "assembler",
+  "inputs": {"electromagnetic_control_rod": 3.75, "rotor": 7.5},
+  "outputs": {"motor": 7.5}
+}

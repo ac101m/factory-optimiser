@@ -1,0 +1,7 @@
+{
+  "id": "steeled_frame",
+  "name": "Alternate: Steeled Frame",
+  "machine": "assembler",
+  "inputs": {"reinforced_iron_plate": 2.0, "steel_pipe": 10.0},
+  "outputs": {"modular_frame": 3.0}
+}

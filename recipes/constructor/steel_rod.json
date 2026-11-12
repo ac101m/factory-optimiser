@@ -1,0 +1,7 @@
+{
+  "id": "steel_rod",
+  "name": "Alternate: Steel Rod",
+  "machine": "constructor",
+  "inputs": {"steel_ingot": 12.0},
+  "outputs": {"iron_rod": 48.0}
+}

@@ -1,0 +1,7 @@
+{
+  "id": "bolted_frame",
+  "name": "Alternate: Bolted Frame",
+  "machine": "assembler",
+  "inputs": {"reinforced_iron_plate": 7.5, "screws": 140.0},
+  "outputs": {"modular_frame": 5.0}
+}
