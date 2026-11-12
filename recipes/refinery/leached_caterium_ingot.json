@@ -1,0 +1,7 @@
+{
+  "id": "leached_caterium_ingot",
+  "name": "Alternate: Leached Caterium Ingot",
+  "machine": "refinery",
+  "inputs": {"caterium_ore": 54.0, "sulfuric_acid": 30.0},
+  "outputs": {"caterium_ingot": 36.0}
+}

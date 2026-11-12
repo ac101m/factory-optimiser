@@ -1,0 +1,7 @@
+{
+  "id": "leached_copper_ingot",
+  "name": "Alternate: Leached Copper Ingot",
+  "machine": "refinery",
+  "inputs": {"copper_ore": 45.0, "sulfuric_acid": 25.0},
+  "outputs": {"copper_ingot": 110.0}
+}

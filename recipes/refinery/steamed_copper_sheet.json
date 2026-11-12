@@ -1,0 +1,7 @@
+{
+  "id": "steamed_copper_sheet",
+  "name": "Alternate: Steamed Copper Sheet",
+  "machine": "refinery",
+  "inputs": {"copper_ingot": 22.5, "water": 22.5},
+  "outputs": {"copper_sheet": 22.5}
+}

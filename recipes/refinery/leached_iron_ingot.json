@@ -1,0 +1,7 @@
+{
+  "id": "leached_iron_ingot",
+  "name": "Alternate: Leached Iron Ingot",
+  "machine": "refinery",
+  "inputs": {"iron_ore": 50.0, "sulfuric_acid": 10.0},
+  "outputs": {"iron_ingot": 100.0}
+}

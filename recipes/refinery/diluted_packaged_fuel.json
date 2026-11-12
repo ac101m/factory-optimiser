@@ -1,0 +1,7 @@
+{
+  "id": "diluted_packaged_fuel",
+  "name": "Alternate: Diluted Packaged Fuel",
+  "machine": "refinery",
+  "inputs": {"heavy_oil_residue": 30.0, "packaged_water": 60.0},
+  "outputs": {"packaged_fuel": 60.0}
+}
