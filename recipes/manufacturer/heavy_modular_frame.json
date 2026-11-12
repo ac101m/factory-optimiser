@@ -1,0 +1,7 @@
+{
+  "id": "heavy_modular_frame",
+  "name": "Heavy Modular Frame",
+  "machine": "manufacturer",
+  "inputs": {"modular_frame": 10.0, "steel_pipe": 40.0, "encased_industrial_beam": 10.0, "screws": 240.0},
+  "outputs": {"heavy_modular_frame": 2.0}
+}

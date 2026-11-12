@@ -1,0 +1,7 @@
+{
+  "id": "heavy_encased_frame",
+  "name": "Alternate: Heavy Encased Frame",
+  "machine": "manufacturer",
+  "inputs": {"modular_frame": 7.5, "encased_industrial_beam": 9.375, "steel_pipe": 33.75, "concrete": 20.625},
+  "outputs": {"heavy_modular_frame": 2.8125}
+}

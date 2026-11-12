@@ -1,0 +1,7 @@
+{
+  "id": "cooling_system",
+  "name": "Cooling System",
+  "machine": "blender",
+  "inputs": {"heat_sink": 12.0, "rubber": 12.0, "water": 30.0, "nitrogen_gas": 150.0},
+  "outputs": {"cooling_system": 6.0}
+}

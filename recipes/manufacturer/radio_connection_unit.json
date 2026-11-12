@@ -1,0 +1,7 @@
+{
+  "id": "radio_connection_unit",
+  "name": "Alternate: Radio Connection Unit",
+  "machine": "manufacturer",
+  "inputs": {"heat_sink": 15.0, "high_speed_connector": 7.5, "quartz_crystal": 45.0},
+  "outputs": {"radio_control_unit": 3.75}
+}

@@ -1,0 +1,6 @@
+{
+  "id": "cooling_system",
+  "name": "Cooling System",
+  "sinkable": true,
+  "sink_points": 12006
+}

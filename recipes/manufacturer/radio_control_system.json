@@ -1,0 +1,7 @@
+{
+  "id": "radio_control_system",
+  "name": "Alternate: Radio Control System",
+  "machine": "manufacturer",
+  "inputs": {"crystal_oscillator": 1.5, "circuit_board": 15.0, "aluminum_casing": 90.0, "rubber": 45.0},
+  "outputs": {"radio_control_unit": 4.5}
+}

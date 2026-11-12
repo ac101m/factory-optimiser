@@ -1,0 +1,7 @@
+{
+  "id": "heavy_flexible_frame",
+  "name": "Alternate: Heavy Flexible Frame",
+  "machine": "manufacturer",
+  "inputs": {"modular_frame": 18.75, "encased_industrial_beam": 11.25, "rubber": 75.0, "screws": 390.0},
+  "outputs": {"heavy_modular_frame": 3.75}
+}

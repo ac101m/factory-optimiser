@@ -1,0 +1,7 @@
+{
+  "id": "radio_control_unit",
+  "name": "Radio Control Unit",
+  "machine": "manufacturer",
+  "inputs": {"aluminum_casing": 40.0, "crystal_oscillator": 1.25, "computer": 2.5},
+  "outputs": {"radio_control_unit": 2.5}
+}

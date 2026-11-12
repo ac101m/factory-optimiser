@@ -1,0 +1,6 @@
+{
+  "id": "radio_control_unit",
+  "name": "Radio Control Unit",
+  "sinkable": true,
+  "sink_points": 32352
+}
