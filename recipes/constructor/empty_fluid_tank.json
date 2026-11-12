@@ -1,0 +1,7 @@
+{
+  "id": "empty_fluid_tank",
+  "name": "Empty Fluid Tank",
+  "machine": "constructor",
+  "inputs": {"aluminum_ingot": 60.0},
+  "outputs": {"empty_fluid_tank": 60.0}
+}

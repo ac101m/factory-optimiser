@@ -1,0 +1,7 @@
+{
+  "id": "turbo_pressure_motor",
+  "name": "Alternate: Turbo Pressure Motor",
+  "machine": "manufacturer",
+  "inputs": {"motor": 7.5, "pressure_conversion_cube": 1.875, "packaged_nitrogen_gas": 45.0, "stator": 15.0},
+  "outputs": {"turbo_motor": 3.75}
+}

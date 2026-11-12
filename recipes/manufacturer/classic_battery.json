@@ -1,0 +1,7 @@
+{
+  "id": "classic_battery",
+  "name": "Alternate: Classic Battery",
+  "machine": "manufacturer",
+  "inputs": {"sulfur": 45.0, "alclad_aluminum_sheet": 52.5, "plastic": 60.0, "wire": 90.0},
+  "outputs": {"battery": 30.0}
+}

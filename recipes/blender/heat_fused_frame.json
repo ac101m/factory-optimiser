@@ -1,0 +1,7 @@
+{
+  "id": "heat_fused_frame",
+  "name": "Alternate: Heat-Fused Frame",
+  "machine": "blender",
+  "inputs": {"heavy_modular_frame": 3.0, "aluminum_ingot": 150.0, "nitric_acid": 24.0, "fuel": 30.0},
+  "outputs": {"fused_modular_frame": 3.0}
+}

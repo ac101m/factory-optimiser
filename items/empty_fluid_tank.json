@@ -1,0 +1,6 @@
+{
+  "id": "empty_fluid_tank",
+  "name": "Empty Fluid Tank",
+  "sinkable": true,
+  "sink_points": 170
+}

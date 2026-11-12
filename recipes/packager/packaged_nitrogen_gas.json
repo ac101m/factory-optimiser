@@ -1,0 +1,7 @@
+{
+  "id": "packaged_nitrogen_gas",
+  "name": "Packaged Nitrogen Gas",
+  "machine": "packager",
+  "inputs": {"nitrogen_gas": 240.0, "empty_fluid_tank": 60.0},
+  "outputs": {"packaged_nitrogen_gas": 60.0}
+}

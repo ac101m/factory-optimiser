@@ -1,0 +1,7 @@
+{
+  "id": "battery",
+  "name": "Battery",
+  "machine": "blender",
+  "inputs": {"sulfuric_acid": 50.0, "alumina_solution": 40.0, "aluminum_casing": 20.0},
+  "outputs": {"battery": 20.0, "water": 30.0}
+}

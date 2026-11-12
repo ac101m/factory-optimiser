@@ -1,0 +1,7 @@
+{
+  "id": "oc_supercomputer",
+  "name": "Alternate: OC Supercomputer",
+  "machine": "assembler",
+  "inputs": {"radio_control_unit": 6.0, "cooling_system": 6.0},
+  "outputs": {"supercomputer": 3.0}
+}

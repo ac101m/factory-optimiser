@@ -1,0 +1,7 @@
+{
+  "id": "super_state_computer",
+  "name": "Alternate: Super-State Computer",
+  "machine": "manufacturer",
+  "inputs": {"computer": 7.2, "electromagnetic_control_rod": 2.4, "battery": 24.0, "wire": 60.0},
+  "outputs": {"supercomputer": 2.4}
+}

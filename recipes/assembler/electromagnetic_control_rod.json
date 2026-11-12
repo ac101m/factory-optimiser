@@ -1,0 +1,7 @@
+{
+  "id": "electromagnetic_control_rod",
+  "name": "Electromagnetic Control Rod",
+  "machine": "assembler",
+  "inputs": {"stator": 6.0, "ai_limiter": 4.0},
+  "outputs": {"electromagnetic_control_rod": 4.0}
+}

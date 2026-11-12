@@ -1,0 +1,6 @@
+{
+  "id": "electromagnetic_control_rod",
+  "name": "Electromagnetic Control Rod",
+  "sinkable": true,
+  "sink_points": 2560
+}

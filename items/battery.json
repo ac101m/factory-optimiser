@@ -1,0 +1,6 @@
+{
+  "id": "battery",
+  "name": "Battery",
+  "sinkable": true,
+  "sink_points": 465
+}

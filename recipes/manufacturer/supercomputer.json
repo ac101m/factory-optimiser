@@ -1,0 +1,7 @@
+{
+  "id": "supercomputer",
+  "name": "Supercomputer",
+  "machine": "manufacturer",
+  "inputs": {"computer": 7.5, "ai_limiter": 3.75, "high_speed_connector": 5.625, "plastic": 52.5},
+  "outputs": {"supercomputer": 1.875}
+}

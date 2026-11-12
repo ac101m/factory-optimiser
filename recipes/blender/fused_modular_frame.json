@@ -1,0 +1,7 @@
+{
+  "id": "fused_modular_frame",
+  "name": "Fused Modular Frame",
+  "machine": "blender",
+  "inputs": {"heavy_modular_frame": 1.5, "aluminum_casing": 75.0, "nitrogen_gas": 37.5},
+  "outputs": {"fused_modular_frame": 1.5}
+}

@@ -1,0 +1,7 @@
+{
+  "id": "turbo_motor",
+  "name": "Turbo Motor",
+  "machine": "manufacturer",
+  "inputs": {"cooling_system": 7.5, "radio_control_unit": 3.75, "motor": 7.5, "rubber": 45.0},
+  "outputs": {"turbo_motor": 1.875}
+}

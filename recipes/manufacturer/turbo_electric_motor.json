@@ -1,0 +1,7 @@
+{
+  "id": "turbo_electric_motor",
+  "name": "Alternate: Turbo Electric Motor",
+  "machine": "manufacturer",
+  "inputs": {"motor": 6.5625, "radio_control_unit": 8.4375, "electromagnetic_control_rod": 4.6875, "rotor": 6.5625},
+  "outputs": {"turbo_motor": 2.8125}
+}

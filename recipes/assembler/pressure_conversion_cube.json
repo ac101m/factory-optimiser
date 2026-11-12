@@ -1,0 +1,7 @@
+{
+  "id": "pressure_conversion_cube",
+  "name": "Pressure Conversion Cube",
+  "machine": "assembler",
+  "inputs": {"fused_modular_frame": 1.0, "radio_control_unit": 2.0},
+  "outputs": {"pressure_conversion_cube": 1.0}
+}

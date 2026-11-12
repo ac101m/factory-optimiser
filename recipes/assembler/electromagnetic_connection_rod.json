@@ -1,0 +1,7 @@
+{
+  "id": "electromagnetic_connection_rod",
+  "name": "Alternate: Electromagnetic Connection Rod",
+  "machine": "assembler",
+  "inputs": {"stator": 8.0, "high_speed_connector": 4.0},
+  "outputs": {"electromagnetic_control_rod": 8.0}
+}
