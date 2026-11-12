@@ -1,0 +1,7 @@
+{
+  "id": "coke_steel_ingot",
+  "name": "Alternate: Coke Steel Ingot",
+  "machine": "foundry",
+  "inputs": {"iron_ore": 75.0, "petroleum_coke": 75.0},
+  "outputs": {"steel_ingot": 100.0}
+}

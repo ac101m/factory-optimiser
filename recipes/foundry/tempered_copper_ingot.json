@@ -1,0 +1,7 @@
+{
+  "id": "tempered_copper_ingot",
+  "name": "Alternate: Tempered Copper Ingot",
+  "machine": "foundry",
+  "inputs": {"copper_ore": 25.0, "petroleum_coke": 40.0},
+  "outputs": {"copper_ingot": 60.0}
+}

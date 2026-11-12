@@ -1,0 +1,7 @@
+{
+  "id": "compacted_steel_ingot",
+  "name": "Alternate: Compacted Steel Ingot",
+  "machine": "foundry",
+  "inputs": {"iron_ore": 5.0, "compacted_coal": 2.5},
+  "outputs": {"steel_ingot": 10.0}
+}

@@ -1,0 +1,7 @@
+{
+  "id": "copper_alloy_ingot",
+  "name": "Alternate: Copper Alloy Ingot",
+  "machine": "foundry",
+  "inputs": {"copper_ore": 50.0, "iron_ore": 50.0},
+  "outputs": {"copper_ingot": 100.0}
+}

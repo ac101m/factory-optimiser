@@ -1,0 +1,7 @@
+{
+  "id": "molded_beam",
+  "name": "Alternate: Molded Beam",
+  "machine": "foundry",
+  "inputs": {"steel_ingot": 120.0, "concrete": 80.0},
+  "outputs": {"steel_beam": 45.0}
+}

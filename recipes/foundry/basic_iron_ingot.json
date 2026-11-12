@@ -1,0 +1,7 @@
+{
+  "id": "basic_iron_ingot",
+  "name": "Alternate: Basic Iron Ingot",
+  "machine": "foundry",
+  "inputs": {"iron_ore": 25.0, "limestone": 40.0},
+  "outputs": {"iron_ingot": 50.0}
+}

@@ -1,0 +1,7 @@
+{
+  "id": "solid_steel_ingot",
+  "name": "Alternate: Solid Steel Ingot",
+  "machine": "foundry",
+  "inputs": {"iron_ingot": 40.0, "coal": 40.0},
+  "outputs": {"steel_ingot": 60.0}
+}
