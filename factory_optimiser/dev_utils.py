@@ -289,6 +289,7 @@ RECIPE_MANIFEST = {
     "Recipe_Alternate_IngotSteel_2_C": _M("compacted_steel_ingot", "recipes/foundry/compacted_steel_ingot.json"),
     "Recipe_Alternate_InstantPlutoniumCell_C": _M("instant_plutonium_cell", "recipes/accelerator/instant_plutonium_cell.json"),
     "Recipe_Alternate_InstantScrap_C": _M("instant_scrap", "recipes/blender/instant_scrap.json"),
+    "Recipe_Alternate_IonizedFuel_Dark_C": _M("dark_ion_fuel", "recipes/converter/dark_ion_fuel.json"),
     "Recipe_Alternate_IronIngot_Basic_C": _M("basic_iron_ingot", "recipes/foundry/basic_iron_ingot.json"),
     "Recipe_Alternate_IronIngot_Leached_C": _M("leached_iron_ingot", "recipes/refinery/leached_iron_ingot.json"),
     "Recipe_Alternate_ModularFrame_C": _M("steeled_frame", "recipes/assembler/steeled_frame.json"),

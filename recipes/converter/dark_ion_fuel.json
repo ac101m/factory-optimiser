@@ -1,0 +1,7 @@
+{
+  "id": "dark_ion_fuel",
+  "name": "Alternate: Dark-Ion Fuel",
+  "machine": "converter",
+  "inputs": {"packaged_rocket_fuel": 240.0, "dark_matter_crystal": 80.0},
+  "outputs": {"ionized_fuel": 200.0, "compacted_coal": 40.0}
+}
