@@ -1,0 +1,7 @@
+{
+  "id": "plastic_smart_plating",
+  "name": "Alternate: Plastic Smart Plating",
+  "machine": "manufacturer",
+  "inputs": {"reinforced_iron_plate": 2.5, "rotor": 2.5, "plastic": 7.5},
+  "outputs": {"smart_plating": 5.0}
+}

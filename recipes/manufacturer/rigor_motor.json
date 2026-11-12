@@ -1,0 +1,7 @@
+{
+  "id": "rigor_motor",
+  "name": "Alternate: Rigor Motor",
+  "machine": "manufacturer",
+  "inputs": {"rotor": 3.75, "stator": 3.75, "crystal_oscillator": 1.25},
+  "outputs": {"motor": 7.5}
+}

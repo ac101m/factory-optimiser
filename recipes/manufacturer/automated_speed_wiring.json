@@ -1,0 +1,7 @@
+{
+  "id": "automated_speed_wiring",
+  "name": "Alternate: Automated Speed Wiring",
+  "machine": "manufacturer",
+  "inputs": {"stator": 3.75, "wire": 75.0, "high_speed_connector": 1.875},
+  "outputs": {"automated_wiring": 7.5}
+}

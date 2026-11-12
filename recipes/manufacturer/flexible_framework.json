@@ -1,0 +1,7 @@
+{
+  "id": "flexible_framework",
+  "name": "Alternate: Flexible Framework",
+  "machine": "manufacturer",
+  "inputs": {"modular_frame": 3.75, "steel_beam": 22.5, "rubber": 30.0},
+  "outputs": {"versatile_framework": 7.5}
+}
