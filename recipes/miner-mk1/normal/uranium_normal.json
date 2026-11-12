@@ -4,5 +4,5 @@
   "machine": "miner_mk1",
   "inputs": {},
   "outputs": {"uranium": 60.0},
-  "max_machines": 2
+  "map_resource": "uranium_node_normal"
 }

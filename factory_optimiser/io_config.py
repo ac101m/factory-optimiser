@@ -103,6 +103,10 @@ class Recipe:
     unlimited: bool = False          # derived from max_machines=-1 in JSON:
                                      # extractor on a genuinely-infinite resource
                                      # (e.g. water); skips the uncapped warning
+    map_resource: str | None = None  # node-group tag shared across miner tiers;
+                                     # the group cap lives in
+                                     # parameters.map_resources (one miner per
+                                     # node, so mk1/2/3 sum to the node count)
 
 
 @dataclass(frozen=True)
@@ -148,6 +152,11 @@ class Parameters:
     #: the load it draws (a real grid cannot run at exactly 100% of its
     #: generation). Default 0.01 = 1% headroom.
     power_overproduction: float = 0.01
+    #: Node-group caps: each map resource (one resource x purity, e.g.
+    #: "iron_node_normal") bounds the TOTAL number of machines across every
+    #: recipe tagged ``map_resource = <same key>`` — one miner per node, so
+    #: miner tiers mk1/2/3 share a single cap. The cap is the node count.
+    map_resources: dict[str, float] = field(default_factory=dict)
 
 
 def sloop_multipliers(k: int, total_slots: int) -> Grade:
@@ -289,6 +298,7 @@ def load_recipe(path: str | Path) -> Recipe:
     if not outputs:
         raise ConfigError(f"recipe {recipe_id!r} ({path}): no outputs")
     power_draw = float(raw.get("power_draw", 0.0))
+    map_resource = raw.get("map_resource")
     max_machines = raw.get("max_machines")
     unlimited = False
     if max_machines is not None:
@@ -311,6 +321,7 @@ def load_recipe(path: str | Path) -> Recipe:
         power_draw=power_draw,
         max_machines=max_machines,
         unlimited=unlimited,
+        map_resource=map_resource,
     )
 
 
@@ -383,6 +394,12 @@ def load_parameters(path: str | Path) -> Parameters:
         if not str(k).startswith("_")
     }
 
+    map_resources = {
+        str(k): float(v)
+        for k, v in raw.get("map_resources", {}).items()
+        if not str(k).startswith("_")
+    }
+
     aug_raw = raw.get("augmenters", {})
     augmenters = Augmenters(
         cost=int(aug_raw.get("cost", 10)),
@@ -410,6 +427,7 @@ def load_parameters(path: str | Path) -> Parameters:
         augmenters=augmenters,
         overclock_tiers=tiers,
         power_overproduction=float(power_raw.get("overproduction", 0.01)),
+        map_resources=map_resources,
     )
 
 

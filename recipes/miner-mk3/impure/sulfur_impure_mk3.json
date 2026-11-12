@@ -1,0 +1,8 @@
+{
+  "id": "sulfur_impure_mk3",
+  "name": "Sulfur (Impure) Mk.3",
+  "machine": "miner_mk3",
+  "inputs": {},
+  "outputs": {"sulfur": 120.0},
+  "map_resource": "sulfur_node_impure"
+}

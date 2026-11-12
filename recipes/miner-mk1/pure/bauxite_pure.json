@@ -4,5 +4,5 @@
   "machine": "miner_mk1",
   "inputs": {},
   "outputs": {"bauxite": 120.0},
-  "max_machines": 6
+  "map_resource": "bauxite_node_pure"
 }

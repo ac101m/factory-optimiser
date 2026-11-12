@@ -1,0 +1,8 @@
+{
+  "id": "caterium_ore_pure_mk2",
+  "name": "Caterium Ore (Pure) Mk.2",
+  "machine": "miner_mk2",
+  "inputs": {},
+  "outputs": {"caterium_ore": 240.0},
+  "map_resource": "caterium_node_pure"
+}

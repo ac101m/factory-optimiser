@@ -30,6 +30,8 @@ Constraints
     power balance : sum (m(N)*c*rho_k*beta_power - c^1.321928*pi_k*power_draw) * x >= -N*W
                     (N*W = flat MW each augmenter generates; bonus doesn't apply)
     machine caps  : sum_k sum_c x[r][k][c] <= max_machines  (clock doesn't change it)
+    node groups   : sum_{r in group} sum_k sum_c x[r][k][c] <= map_resources[group]
+                    (recipes tagged map_resource=group; one miner per node)
 
 Objective
     maximize sum_i p[i] * s[i]   (implemented as minimize of the negation,
@@ -225,6 +227,19 @@ def build_problem(
         if recipe.max_machines is not None:
             row = {activity_col[(rc, k, clk)]: 1.0 for (rc, k, clk) in activity_seq if rc == r}
             add_row(row, lb=-np.inf, ub=recipe.max_machines, name=f"cap:{recipe.id}")
+
+    # 5b) Shared node-group caps (parameters.map_resources): the TOTAL number of
+    # machines across every recipe tagged with the same map_resource (e.g. all
+    # miner tiers mk1/2/3 on "iron_node_normal") is bounded by the node count —
+    # one miner per node. Clocks and sloops don't change the machine count.
+    for group_name, group_cap in config.parameters.map_resources.items():
+        row = {
+            activity_col[(rc, k, clk)]: 1.0
+            for (rc, k, clk) in activity_seq
+            if recipes_by_idx[rc][1].map_resource == group_name
+        }
+        if row:
+            add_row(row, lb=-np.inf, ub=group_cap, name=f"mapres:{group_name}")
 
     constraints = [LinearConstraint(np.stack(rows), rows_lb, rows_ub)] if rows else []
 

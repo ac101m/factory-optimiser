@@ -1,0 +1,8 @@
+{
+  "id": "uranium_impure_mk2",
+  "name": "Uranium (Impure) Mk.2",
+  "machine": "miner_mk2",
+  "inputs": {},
+  "outputs": {"uranium": 60.0},
+  "map_resource": "uranium_node_impure"
+}

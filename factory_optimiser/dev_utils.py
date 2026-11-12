@@ -104,6 +104,8 @@ MACHINE_MANIFEST = {
     "Build_ManufacturerMk1_C": _Machine("manufacturer", "machines/manufacturer.json", 4),
     "Build_QuantumEncoder_C": _Machine("quantum_encoder", "machines/quantum_encoder.json", 4),
     "Build_MinerMk1_C": _Machine("miner_mk1", "machines/miner.json", 0),
+    "Build_MinerMk2_C": _Machine("miner_mk2", "machines/miner_mk2.json", 0),
+    "Build_MinerMk3_C": _Machine("miner_mk3", "machines/miner_mk3.json", 0),
     "Build_OilPump_C": _Machine("oil_extractor", "machines/oil_extractor.json", 0),
     "Build_OilRefinery_C": _Machine("refinery", "machines/refinery.json", 2),
     "Build_Packager_C": _Machine("packager", "machines/packager.json", 0),

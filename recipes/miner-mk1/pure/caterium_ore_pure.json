@@ -4,5 +4,5 @@
   "machine": "miner_mk1",
   "inputs": {},
   "outputs": {"caterium_ore": 120.0},
-  "max_machines": 8
+  "map_resource": "caterium_node_pure"
 }

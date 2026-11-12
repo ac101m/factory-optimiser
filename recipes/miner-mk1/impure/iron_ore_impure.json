@@ -4,5 +4,5 @@
   "machine": "miner_mk1",
   "inputs": {},
   "outputs": {"iron_ore": 30.0},
-  "max_machines": 39
+  "map_resource": "iron_node_impure"
 }

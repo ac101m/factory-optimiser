@@ -1,0 +1,8 @@
+{
+  "id": "limestone_pure_mk2",
+  "name": "Limestone (Pure) Mk.2",
+  "machine": "miner_mk2",
+  "inputs": {},
+  "outputs": {"limestone": 240.0},
+  "map_resource": "limestone_node_pure"
+}

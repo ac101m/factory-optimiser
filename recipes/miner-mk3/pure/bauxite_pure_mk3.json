@@ -1,0 +1,8 @@
+{
+  "id": "bauxite_pure_mk3",
+  "name": "Bauxite (Pure) Mk.3",
+  "machine": "miner_mk3",
+  "inputs": {},
+  "outputs": {"bauxite": 480.0},
+  "map_resource": "bauxite_node_pure"
+}

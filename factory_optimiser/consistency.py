@@ -107,6 +107,54 @@ def check_config(config: Config, include_info: bool = False) -> list[Issue]:
                     "never run",
                 )
             )
+        # A recipe must be capped by exactly one mechanism: either its own
+        # max_machines or a map_resource node group whose cap lives in
+        # config/parameters.json. Having both is a double cap with no legitimate
+        # use (they might even disagree) — reject it as an error.
+        if r.max_machines is not None and r.map_resource is not None:
+            issues.append(
+                Issue(
+                    "error",
+                    "dual-cap",
+                    f"recipe {r.id!r} has both max_machines={r.max_machines:g} and "
+                    f"map_resource={r.map_resource!r}; use exactly one (map-node "
+                    "caps live in config/parameters.json -> map_resources)",
+                )
+            )
+
+    # Node-group caps: every map_resource tag must have a cap (else the group
+    # is unbounded and the tag is meaningless); every declared cap should be
+    # exercised by at least one recipe, and caps must be positive.
+    for group, cap in params.map_resources.items():
+        if cap <= 0:
+            issues.append(
+                Issue(
+                    "error",
+                    "nonpositive-cap",
+                    f"map resource {group!r} has cap {cap:g}; a node group can "
+                    "never run",
+                )
+            )
+    for r in config.recipes:
+        if r.map_resource is not None and r.map_resource not in params.map_resources:
+            issues.append(
+                Issue(
+                    "error",
+                    "unknown-map-resource",
+                    f"recipe {r.id!r} tags map_resource {r.map_resource!r} but "
+                    "config/parameters.json -> map_resources has no entry for it",
+                )
+            )
+    used_groups = {r.map_resource for r in config.recipes if r.map_resource is not None}
+    for group in sorted(set(params.map_resources) - used_groups):
+        issues.append(
+            Issue(
+                "warning",
+                "unused-map-resource",
+                f"map resource {group!r} has a cap in map_resources but no recipe "
+                "tags it (stale node count?)",
+            )
+        )
 
     # Overclock tier list: values must be positive; beyond the game's 250% cap
     # is legal config but out-of-game behavior (warning).
@@ -222,19 +270,24 @@ def check_config(config: Config, include_info: bool = False) -> list[Issue]:
             )
         )
 
-    # Extractor recipes (no inputs) without a node cap -> unbounded supply,
-    # almost certainly a missing max_machines. An extractor on a truly-infinite
-    # map resource (water) may set max_machines = -1 to declare itself
-    # deliberately unlimited; the loader normalizes that into Recipe.unlimited,
-    # so it doesn't trip this warning.
+    # Extractor recipes (no inputs) without any cap -> unbounded supply,
+    # almost certainly a missing max_machines / map_resource. An extractor on a
+    # truly-infinite map resource (water) may set max_machines = -1 to declare
+    # itself deliberately unlimited; the loader normalizes that into
+    # Recipe.unlimited, so it doesn't trip this warning.
     for r in config.recipes:
-        if not r.inputs and r.max_machines is None and not r.unlimited:
+        if (
+            not r.inputs
+            and r.max_machines is None
+            and r.map_resource is None
+            and not r.unlimited
+        ):
             issues.append(
                 Issue(
                     "warning",
                     "uncapped-extractor",
                     f"extractor recipe {r.id!r} has no inputs and no max_machines "
-                    "cap; its output supply is unbounded",
+                    "or map_resource cap; its output supply is unbounded",
                 )
             )
 

@@ -1,0 +1,8 @@
+{
+  "id": "limestone_impure_mk3",
+  "name": "Limestone (Impure) Mk.3",
+  "machine": "miner_mk3",
+  "inputs": {},
+  "outputs": {"limestone": 120.0},
+  "map_resource": "limestone_node_impure"
+}

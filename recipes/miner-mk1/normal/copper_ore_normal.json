@@ -4,5 +4,5 @@
   "machine": "miner_mk1",
   "inputs": {},
   "outputs": {"copper_ore": 60.0},
-  "max_machines": 29
+  "map_resource": "copper_node_normal"
 }

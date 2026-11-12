@@ -1,0 +1,8 @@
+{
+  "id": "sam_pure_mk3",
+  "name": "SAM (Pure) Mk.3",
+  "machine": "miner_mk3",
+  "inputs": {},
+  "outputs": {"sam": 480.0},
+  "map_resource": "sam_node_pure"
+}

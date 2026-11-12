@@ -1,0 +1,8 @@
+{
+  "id": "bauxite_normal_mk2",
+  "name": "Bauxite (Normal) Mk.2",
+  "machine": "miner_mk2",
+  "inputs": {},
+  "outputs": {"bauxite": 120.0},
+  "map_resource": "bauxite_node_normal"
+}

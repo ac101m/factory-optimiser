@@ -1,0 +1,8 @@
+{
+  "id": "quartz_impure_mk2",
+  "name": "Quartz (Impure) Mk.2",
+  "machine": "miner_mk2",
+  "inputs": {},
+  "outputs": {"raw_quartz": 60.0},
+  "map_resource": "raw_quartz_node_impure"
+}

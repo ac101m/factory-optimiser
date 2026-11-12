@@ -1,0 +1,8 @@
+{
+  "id": "quartz_normal_mk2",
+  "name": "Quartz (Normal) Mk.2",
+  "machine": "miner_mk2",
+  "inputs": {},
+  "outputs": {"raw_quartz": 120.0},
+  "map_resource": "raw_quartz_node_normal"
+}

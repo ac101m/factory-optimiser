@@ -1,0 +1,8 @@
+{
+  "id": "sam_normal_mk2",
+  "name": "SAM (Normal) Mk.2",
+  "machine": "miner_mk2",
+  "inputs": {},
+  "outputs": {"sam": 120.0},
+  "map_resource": "sam_node_normal"
+}

@@ -4,5 +4,5 @@
   "machine": "miner_mk1",
   "inputs": {},
   "outputs": {"sam": 30.0},
-  "max_machines": 10
+  "map_resource": "sam_node_impure"
 }

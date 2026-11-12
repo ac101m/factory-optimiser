@@ -4,5 +4,5 @@
   "machine": "miner_mk1",
   "inputs": {},
   "outputs": {"sulfur": 30.0},
-  "max_machines": 6
+  "map_resource": "sulfur_node_impure"
 }

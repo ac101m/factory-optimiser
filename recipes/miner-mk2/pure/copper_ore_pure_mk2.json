@@ -1,0 +1,8 @@
+{
+  "id": "copper_ore_pure_mk2",
+  "name": "Copper Ore (Pure) Mk.2",
+  "machine": "miner_mk2",
+  "inputs": {},
+  "outputs": {"copper_ore": 240.0},
+  "map_resource": "copper_node_pure"
+}

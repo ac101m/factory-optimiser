@@ -1,0 +1,8 @@
+{
+  "id": "uranium_normal_mk2",
+  "name": "Uranium (Normal) Mk.2",
+  "machine": "miner_mk2",
+  "inputs": {},
+  "outputs": {"uranium": 120.0},
+  "map_resource": "uranium_node_normal"
+}

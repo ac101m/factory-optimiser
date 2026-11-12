@@ -1,0 +1,8 @@
+{
+  "id": "sam_impure_mk2",
+  "name": "SAM (Impure) Mk.2",
+  "machine": "miner_mk2",
+  "inputs": {},
+  "outputs": {"sam": 60.0},
+  "map_resource": "sam_node_impure"
+}

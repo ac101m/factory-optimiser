@@ -1,0 +1,8 @@
+{
+  "id": "coal_normal_mk3",
+  "name": "Coal (Normal) Mk.3",
+  "machine": "miner_mk3",
+  "inputs": {},
+  "outputs": {"coal": 240.0},
+  "map_resource": "coal_node_normal"
+}

@@ -1,0 +1,8 @@
+{
+  "id": "bauxite_impure_mk2",
+  "name": "Bauxite (Impure) Mk.2",
+  "machine": "miner_mk2",
+  "inputs": {},
+  "outputs": {"bauxite": 60.0},
+  "map_resource": "bauxite_node_impure"
+}

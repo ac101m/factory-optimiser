@@ -196,8 +196,9 @@ def _cmd_sweep(args, config) -> int:
         return 0
 
     # resources: in the miner-recipe model, the "map resource" lever is how
-    # many extractor nodes (miner recipes) you can place. Report the marginal
-    # value of one more node for each raw material.
+    # many nodes (miner tiers share one count per resource x purity; other
+    # extractors bump their own recipe cap). Report the marginal value of one
+    # more node for each capped lever.
     nodes = sweep_extractor_nodes(config)
     if args["--json"]:
         out: dict = {"dimension": "resources", "extractors": {}}
@@ -205,24 +206,21 @@ def _cmd_sweep(args, config) -> int:
     lines.append(
         f"  {'node':30s} {'yields':>18s} {'caps':>5s} {'pts/min@base':>13s} {'pts/min@+1 node':>16s} {'marginal':>10s}"
     )
-    for r, cap, base_pts, bumped in nodes:
-        recipe = config.recipes[r]
-        label = f"{recipe.name or recipe.id} [{recipe.machine}]"
-        yields = ", ".join(f"{config.item_name(i, i)} {rate:g}/min" for i, rate in recipe.outputs.items())
-        marginal = bumped - base_pts
+    for m in nodes:
+        marginal = m.marginal
         lines.append(
-            f"  {label:30s} {yields:>18s} {cap:>5g} {base_pts:>13,.1f} {bumped:>16,.1f} {marginal:>+10,.1f}"
+            f"  {m.label:30s} {m.yields:>18s} {m.cap:>5g} {m.base_pts:>13,.1f} {m.bumped_pts:>16,.1f} {marginal:>+10,.1f}"
         )
         if args["--json"]:
-            out["extractors"][recipe.id] = {
-                "produces": {i: round(r2, 4) for i, r2 in recipe.outputs.items()},
-                "base_nodes": cap,
-                "points_at_base": round(base_pts, 4),
-                "points_with_one_more_node": round(bumped, 4),
+            out["extractors"][m.label] = {
+                "produces": {i: round(r2, 4) for i, r2 in m.produces.items()},
+                "base_nodes": m.cap,
+                "points_at_base": round(m.base_pts, 4),
+                "points_with_one_more_node": round(m.bumped_pts, 4),
                 "marginal_points_per_node": round(marginal, 4),
             }
     if not lines[2:] and not nodes:
-        lines.append("  (no extractor recipes with max_machines caps found)")
+        lines.append("  (no capped extractor recipes found)")
     if args["--json"]:
         _dump_json(out)
     else:

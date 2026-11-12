@@ -4,5 +4,5 @@
   "machine": "miner_mk1",
   "inputs": {},
   "outputs": {"coal": 30.0},
-  "max_machines": 15
+  "map_resource": "coal_node_impure"
 }

@@ -1,0 +1,8 @@
+{
+  "id": "coal_pure_mk2",
+  "name": "Coal (Pure) Mk.2",
+  "machine": "miner_mk2",
+  "inputs": {},
+  "outputs": {"coal": 240.0},
+  "map_resource": "coal_node_pure"
+}

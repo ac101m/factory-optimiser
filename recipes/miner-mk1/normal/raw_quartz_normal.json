@@ -4,5 +4,5 @@
   "machine": "miner_mk1",
   "inputs": {},
   "outputs": {"raw_quartz": 60.0},
-  "max_machines": 7
+  "map_resource": "raw_quartz_node_normal"
 }

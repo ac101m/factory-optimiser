@@ -1,0 +1,8 @@
+{
+  "id": "caterium_ore_normal_mk2",
+  "name": "Caterium Ore (Normal) Mk.2",
+  "machine": "miner_mk2",
+  "inputs": {},
+  "outputs": {"caterium_ore": 120.0},
+  "map_resource": "caterium_node_normal"
+}

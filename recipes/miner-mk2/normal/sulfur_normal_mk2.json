@@ -1,0 +1,8 @@
+{
+  "id": "sulfur_normal_mk2",
+  "name": "Sulfur (Normal) Mk.2",
+  "machine": "miner_mk2",
+  "inputs": {},
+  "outputs": {"sulfur": 120.0},
+  "map_resource": "sulfur_node_normal"
+}

@@ -4,5 +4,5 @@
   "machine": "miner_mk1",
   "inputs": {},
   "outputs": {"limestone": 120.0},
-  "max_machines": 29
+  "map_resource": "limestone_node_pure"
 }

@@ -20,8 +20,40 @@
   },
 
   "resources": {
-    "_note": "OPTIONAL extra per-item cap on total recipe consumption. Map extraction is modeled as MINER/MACHINE recipes (see recipes/*, machine type 'miner'): the per-node limit is that recipe's max_machines. Leave this table empty when miners are modeled as recipes (as here) so supply is not double-limited.",
+    "_note": "OPTIONAL extra per-item cap on total recipe consumption. Map extraction is modeled as MINER/MACHINE recipes (see recipes/*); the per-node limit for miners lives in the map_resources table below (ingress), NOT here. Leave this table empty when miners are modeled as recipes so supply is not double-limited.",
     "_example_cap_on_a_raw_item": {"water": 300.0}
+  },
+
+  "map_resources": {
+    "_note": "Node-group caps for mined map resources: each key is one resource x purity (one in-game node type, e.g. 'iron_node_normal'). Every mining recipe (any miner tier mk1/mk2/mk3) carries map_resource = <same key>, and the TOTAL number of machines across the group is capped at the value here — one miner per node, so tiers share the cap. Counts are the number of nodes of that type.",
+    "bauxite_node_impure": 5,
+    "bauxite_node_normal": 6,
+    "bauxite_node_pure": 6,
+    "caterium_node_normal": 9,
+    "caterium_node_pure": 8,
+    "coal_node_impure": 15,
+    "coal_node_normal": 31,
+    "coal_node_pure": 16,
+    "copper_node_impure": 13,
+    "copper_node_normal": 29,
+    "copper_node_pure": 13,
+    "iron_node_impure": 39,
+    "iron_node_normal": 42,
+    "iron_node_pure": 46,
+    "limestone_node_impure": 15,
+    "limestone_node_normal": 50,
+    "limestone_node_pure": 29,
+    "raw_quartz_node_impure": 3,
+    "raw_quartz_node_normal": 7,
+    "raw_quartz_node_pure": 7,
+    "sam_node_impure": 10,
+    "sam_node_normal": 6,
+    "sam_node_pure": 3,
+    "sulfur_node_impure": 6,
+    "sulfur_node_normal": 5,
+    "sulfur_node_pure": 5,
+    "uranium_node_impure": 3,
+    "uranium_node_normal": 2
   },
 
   "_sloops": {

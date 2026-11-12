@@ -1,0 +1,8 @@
+{
+  "id": "iron_ore_pure_mk2",
+  "name": "Iron Ore (Pure) Mk.2",
+  "machine": "miner_mk2",
+  "inputs": {},
+  "outputs": {"iron_ore": 240.0},
+  "map_resource": "iron_node_pure"
+}

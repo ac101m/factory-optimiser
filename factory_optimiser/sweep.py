@@ -135,36 +135,78 @@ def sweep_resource(
 def extractor_recipes(config: Config) -> list[int]:
     """Indices of *extractor* recipes: no material inputs (miners, pumps, ...).
 
-    These are how raw map resources are created in the recipes model: each
-    node purity is one recipe whose ``max_machines`` is the node count.
+    These are how raw map resources are created in the recipes model. They are
+    capped either per-recipe (``max_machines``, e.g. oil pumps) or by a shared
+    node group (``map_resource`` + ``parameters.map_resources``, e.g. miners).
     """
     return [r for r, recipe in enumerate(config.recipes) if not recipe.inputs]
+
+
+@dataclass
+class NodeMarginal:
+    """Marginal value of one extra node of a capped extractor (group or single)."""
+
+    label: str
+    produces: dict[str, float]
+    cap: float
+    base_pts: float
+    bumped_pts: float
+
+    @property
+    def marginal(self) -> float:
+        return self.bumped_pts - self.base_pts
+
+    @property
+    def yields(self) -> str:
+        return ", ".join(f"{i} {rate:g}/min" for i, rate in self.produces.items())
 
 
 def sweep_extractor_nodes(
     config: Config,
     *,
     time_limit: float = 30.0,
-) -> list[tuple[int, float, float, float]]:
-    """Marginal value of one extra node of each extractor recipe.
+) -> list[NodeMarginal]:
+    """Marginal value of one extra node of each capped extractor.
 
-    Returns ``(recipe_idx, base_cap, points_at_base, points_at_base_plus_one)``.
-    This is the resource marginal curve under the miner-recipe model — "which
-    node should I expand next?".
+    Returns one :class:`NodeMarginal` per map-resource group (all miner tiers
+    on "iron_node_normal" share the node count, so the lever raises that group's
+    count by one) and per per-recipe-capped extractor (oil/water/wells bump
+    their own ``max_machines``). This is the resource marginal curve under the
+    miner-recipe model — "which node should I expand next?".
     """
     import dataclasses
 
-    out: list[tuple[int, float, float, float]] = []
+    base_pts = best_augmenter(config, time_limit=time_limit).points_per_min
+    out: list[NodeMarginal] = []
+
+    def _member_of(key: str):
+        return next((r for r in config.recipes if r.map_resource == key), None)
+
+    # Node-group levers: bump the shared cap in the config dict by one node.
+    for key in sorted(config.parameters.map_resources):
+        cap = config.parameters.map_resources[key]
+        member = _member_of(key)
+        if member is None:
+            continue  # stale entry; consistency.py warns about it
+        label = f"{member.name or key}"
+        config.parameters.map_resources[key] = cap + 1
+        try:
+            bumped = best_augmenter(config, time_limit=time_limit).points_per_min
+        finally:
+            config.parameters.map_resources[key] = cap
+        out.append(NodeMarginal(label, dict(member.outputs), cap, base_pts, bumped))
+
+    # Per-recipe caps (oil pumps, water, wells): bump that recipe's own cap.
     for r in extractor_recipes(config):
         recipe = config.recipes[r]
         if recipe.max_machines is None:
             continue  # uncapped extractor: "add a node" is meaningless
-        base_pts = best_augmenter(config, time_limit=time_limit).points_per_min
+        label = f"{recipe.name or recipe.id} [{recipe.machine}]"
         bumped_recipe = dataclasses.replace(recipe, max_machines=recipe.max_machines + 1)
         config.recipes[r] = bumped_recipe
         try:
             bumped = best_augmenter(config, time_limit=time_limit).points_per_min
         finally:
             config.recipes[r] = recipe
-        out.append((r, recipe.max_machines, base_pts, bumped))
+        out.append(NodeMarginal(label, dict(recipe.outputs), recipe.max_machines, base_pts, bumped))
     return out
