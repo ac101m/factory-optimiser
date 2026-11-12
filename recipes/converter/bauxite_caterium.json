@@ -1,0 +1,7 @@
+{
+  "id": "bauxite_caterium",
+  "name": "Bauxite (Caterium)",
+  "machine": "converter",
+  "inputs": {"reanimated_sam": 10.0, "caterium_ore": 150.0},
+  "outputs": {"bauxite": 120.0}
+}

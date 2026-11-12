@@ -1,0 +1,6 @@
+{
+  "id": "converter",
+  "name": "Converter",
+  "power_draw": 250.0,
+  "max_sloops": 2
+}

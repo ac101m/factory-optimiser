@@ -1,0 +1,7 @@
+{
+  "id": "ficsite_ingot_aluminum",
+  "name": "Ficsite Ingot (Aluminum)",
+  "machine": "converter",
+  "inputs": {"reanimated_sam": 60.0, "aluminum_ingot": 120.0},
+  "outputs": {"ficsite_ingot": 30.0}
+}

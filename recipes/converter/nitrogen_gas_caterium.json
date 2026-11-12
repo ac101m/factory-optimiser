@@ -1,0 +1,7 @@
+{
+  "id": "nitrogen_gas_caterium",
+  "name": "Nitrogen Gas (Caterium)",
+  "machine": "converter",
+  "inputs": {"reanimated_sam": 10.0, "caterium_ore": 120.0},
+  "outputs": {"nitrogen_gas": 120.0}
+}

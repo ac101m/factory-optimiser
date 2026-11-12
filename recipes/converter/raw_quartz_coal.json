@@ -1,0 +1,7 @@
+{
+  "id": "raw_quartz_coal",
+  "name": "Raw Quartz (Coal)",
+  "machine": "converter",
+  "inputs": {"reanimated_sam": 10.0, "coal": 240.0},
+  "outputs": {"raw_quartz": 120.0}
+}

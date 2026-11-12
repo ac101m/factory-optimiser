@@ -1,0 +1,7 @@
+{
+  "id": "coal_limestone",
+  "name": "Coal (Limestone)",
+  "machine": "converter",
+  "inputs": {"reanimated_sam": 10.0, "limestone": 360.0},
+  "outputs": {"coal": 120.0}
+}

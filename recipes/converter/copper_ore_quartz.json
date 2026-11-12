@@ -1,0 +1,7 @@
+{
+  "id": "copper_ore_quartz",
+  "name": "Copper Ore (Quartz)",
+  "machine": "converter",
+  "inputs": {"reanimated_sam": 10.0, "raw_quartz": 100.0},
+  "outputs": {"copper_ore": 120.0}
+}

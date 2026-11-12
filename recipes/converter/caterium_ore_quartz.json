@@ -1,0 +1,7 @@
+{
+  "id": "caterium_ore_quartz",
+  "name": "Caterium Ore (Quartz)",
+  "machine": "converter",
+  "inputs": {"reanimated_sam": 10.0, "raw_quartz": 120.0},
+  "outputs": {"caterium_ore": 120.0}
+}

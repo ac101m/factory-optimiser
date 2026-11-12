@@ -94,6 +94,7 @@ MACHINE_MANIFEST = {
     "Build_AssemblerMk1_C": _Machine("assembler", "machines/assembler.json", 2),
     "Build_Blender_C": _Machine("blender", "machines/blender.json", 4),
     "Build_ConstructorMk1_C": _Machine("constructor", "machines/constructor.json", 1),
+    "Build_Converter_C": _Machine("converter", "machines/converter.json", 2),
     "Build_FoundryMk1_C": _Machine("foundry", "machines/foundry.json", 2),
     "Build_FrackingSmasher_C": _Machine("resource_well_pressurizer", "machines/resource_well_pressurizer.json", 0),
     "Build_GeneratorCoal_C": _Machine("coal_generator", "machines/coal_generator.json", 0),
@@ -135,6 +136,8 @@ ITEM_MANIFEST = {
     "Desc_ElectromagneticControlRod_C": _M("electromagnetic_control_rod", "items/electromagnetic_control_rod.json"),
     "Desc_GasTank_C": _M("empty_fluid_tank", "items/empty_fluid_tank.json"),
     "Desc_SteelPlateReinforced_C": _M("encased_industrial_beam", "items/encased_industrial_beam.json"),
+    "Desc_FicsiteIngot_C": _M("ficsite_ingot", "items/ficsite_ingot.json"),
+    "Desc_FicsiteMesh_C": _M("ficsite_trigon", "items/ficsite_trigon.json"),
     "Desc_LiquidFuel_C": _M("fuel", "items/fuel.json"),
     "Desc_ModularFrameFused_C": _M("fused_modular_frame", "items/fused_modular_frame.json"),
     "Desc_AluminumPlateReinforced_C": _M("heat_sink", "items/heat_sink.json"),
@@ -163,6 +166,8 @@ ITEM_MANIFEST = {
     "Desc_RocketFuel_C": _M("rocket_fuel", "items/rocket_fuel.json"),
     "Desc_Rotor_C": _M("rotor", "items/rotor.json"),
     "Desc_Rubber_C": _M("rubber", "items/rubber.json"),
+    "Desc_SAM_C": _M("sam", "items/sam.json"),
+    "Desc_SAMIngot_C": _M("reanimated_sam", "items/reanimated_sam.json"),
     "Desc_Silica_C": _M("silica", "items/silica.json"),
     "Desc_Stator_C": _M("stator", "items/stator.json"),
     "Desc_SteelPlate_C": _M("steel_beam", "items/steel_beam.json"),
@@ -174,6 +179,7 @@ ITEM_MANIFEST = {
     "Desc_IronScrew_C": _M("screws", "items/screws.json"),
     "Desc_MotorLightweight_C": _M("turbo_motor", "items/turbo_motor.json"),
     "Desc_LiquidTurboFuel_C": _M("turbofuel", "items/turbofuel.json"),
+    "Desc_OreUranium_C": _M("uranium", "items/uranium.json"),
     "Desc_Water_C": _M("water", "items/water.json"),
     "Desc_Wire_C": _M("wire", "items/wire.json"),
 }
@@ -254,16 +260,28 @@ RECIPE_MANIFEST = {
     "Recipe_AluminumCasing_C": _M("aluminum_casing", "recipes/constructor/aluminum_casing.json"),
     "Recipe_AluminumSheet_C": _M("alclad_aluminum_sheet", "recipes/assembler/alclad_aluminum_sheet.json"),
     "Recipe_Battery_C": _M("battery", "recipes/blender/battery.json"),
+    "Recipe_Bauxite_Caterium_C": _M("bauxite_caterium", "recipes/converter/bauxite_caterium.json"),
+    "Recipe_Bauxite_Copper_C": _M("bauxite_copper", "recipes/converter/bauxite_copper.json"),
     "Recipe_Cable_C": _M("cable", "recipes/constructor/cable.json"),
+    "Recipe_Caterium_Copper_C": _M("caterium_ore_copper", "recipes/converter/caterium_ore_copper.json"),
+    "Recipe_Caterium_Quartz_C": _M("caterium_ore_quartz", "recipes/converter/caterium_ore_quartz.json"),
     "Recipe_CircuitBoard_C": _M("circuit_board", "recipes/assembler/circuit_board.json"),
+    "Recipe_Coal_Iron_C": _M("coal_iron", "recipes/converter/coal_iron.json"),
+    "Recipe_Coal_Limestone_C": _M("coal_limestone", "recipes/converter/coal_limestone.json"),
     "Recipe_ComputerSuper_C": _M("supercomputer", "recipes/manufacturer/supercomputer.json"),
     "Recipe_Computer_C": _M("computer", "recipes/manufacturer/computer.json"),
     "Recipe_Concrete_C": _M("concrete", "recipes/constructor/concrete.json"),
     "Recipe_CoolingSystem_C": _M("cooling_system", "recipes/blender/cooling_system.json"),
     "Recipe_CopperSheet_C": _M("copper_sheet", "recipes/constructor/copper_sheet.json"),
+    "Recipe_Copper_Quartz_C": _M("copper_ore_quartz", "recipes/converter/copper_ore_quartz.json"),
+    "Recipe_Copper_Sulfur_C": _M("copper_ore_sulfur", "recipes/converter/copper_ore_sulfur.json"),
     "Recipe_CrystalOscillator_C": _M("crystal_oscillator", "recipes/manufacturer/crystal_oscillator.json"),
     "Recipe_ElectromagneticControlRod_C": _M("electromagnetic_control_rod", "recipes/assembler/electromagnetic_control_rod.json"),
     "Recipe_EncasedIndustrialBeam_C": _M("encased_industrial_beam", "recipes/assembler/encased_industrial_beam.json"),
+    "Recipe_FicsiteIngot_AL_C": _M("ficsite_ingot_aluminum", "recipes/converter/ficsite_ingot_aluminum.json"),
+    "Recipe_FicsiteIngot_CAT_C": _M("ficsite_ingot_caterium", "recipes/converter/ficsite_ingot_caterium.json"),
+    "Recipe_FicsiteIngot_Iron_C": _M("ficsite_ingot_iron", "recipes/converter/ficsite_ingot_iron.json"),
+    "Recipe_FicsiteMesh_C": _M("ficsite_trigon", "recipes/constructor/ficsite_trigon.json"),
     "Recipe_FusedModularFrame_C": _M("fused_modular_frame", "recipes/blender/fused_modular_frame.json"),
     "Recipe_GasTank_C": _M("empty_fluid_tank", "recipes/constructor/empty_fluid_tank.json"),
     "Recipe_HeatSink_C": _M("heat_sink", "recipes/assembler/heat_sink.json"),
@@ -272,22 +290,29 @@ RECIPE_MANIFEST = {
     "Recipe_IngotCaterium_C": _M("caterium_ingot", "recipes/smelter/caterium_ingot.json"),
     "Recipe_IngotCopper_C": _M("copper_ingot", "recipes/smelter/copper_ingot.json"),
     "Recipe_IngotIron_C": _M("iron_ingot", "recipes/smelter/iron_ingot.json"),
+    "Recipe_IngotSAM_C": _M("reanimated_sam", "recipes/constructor/reanimated_sam.json"),
     "Recipe_IngotSteel_C": _M("steel_ingot", "recipes/foundry/steel_ingot.json"),
     "Recipe_IronPlateReinforced_C": _M("reinforced_iron_plate", "recipes/assembler/reinforced_iron_plate.json"),
     "Recipe_IronPlate_C": _M("iron_plate", "recipes/constructor/iron_plate.json"),
     "Recipe_IronRod_C": _M("iron_rod", "recipes/constructor/iron_rod.json"),
+    "Recipe_Iron_Limestone_C": _M("iron_ore_limestone", "recipes/converter/iron_ore_limestone.json"),
+    "Recipe_Limestone_Sulfur_C": _M("limestone_sulfur", "recipes/converter/limestone_sulfur.json"),
     "Recipe_LiquidFuel_C": _M("fuel", "recipes/refinery/fuel.json"),
     "Recipe_ModularFrameHeavy_C": _M("heavy_modular_frame", "recipes/manufacturer/heavy_modular_frame.json"),
     "Recipe_ModularFrame_C": _M("modular_frame", "recipes/assembler/modular_frame.json"),
     "Recipe_MotorTurbo_C": _M("turbo_motor", "recipes/manufacturer/turbo_motor.json"),
     "Recipe_Motor_C": _M("motor", "recipes/assembler/motor.json"),
     "Recipe_NitricAcid_C": _M("nitric_acid", "recipes/blender/nitric_acid.json"),
+    "Recipe_Nitrogen_Bauxite_C": _M("nitrogen_gas_bauxite", "recipes/converter/nitrogen_gas_bauxite.json"),
+    "Recipe_Nitrogen_Caterium_C": _M("nitrogen_gas_caterium", "recipes/converter/nitrogen_gas_caterium.json"),
     "Recipe_PackagedNitrogen_C": _M("packaged_nitrogen_gas", "recipes/packager/packaged_nitrogen_gas.json"),
     "Recipe_PetroleumCoke_C": _M("petroleum_coke", "recipes/refinery/petroleum_coke.json"),
     "Recipe_Plastic_C": _M("plastic", "recipes/refinery/plastic.json"),
     "Recipe_PressureConversionCube_C": _M("pressure_conversion_cube", "recipes/assembler/pressure_conversion_cube.json"),
     "Recipe_PureAluminumIngot_C": _M("pure_aluminum_ingot", "recipes/smelter/pure_aluminum_ingot.json"),
     "Recipe_QuartzCrystal_C": _M("quartz_crystal", "recipes/constructor/quartz_crystal.json"),
+    "Recipe_Quartz_Bauxite_C": _M("raw_quartz_bauxite", "recipes/converter/raw_quartz_bauxite.json"),
+    "Recipe_Quartz_Coal_C": _M("raw_quartz_coal", "recipes/converter/raw_quartz_coal.json"),
     "Recipe_Quickwire_C": _M("quickwire", "recipes/constructor/quickwire.json"),
     "Recipe_RadioControlUnit_C": _M("radio_control_unit", "recipes/manufacturer/radio_control_unit.json"),
     "Recipe_ResidualFuel_C": _M("residual_fuel", "recipes/refinery/residual_fuel.json"),
@@ -301,7 +326,10 @@ RECIPE_MANIFEST = {
     "Recipe_Stator_C": _M("stator", "recipes/assembler/stator.json"),
     "Recipe_SteelBeam_C": _M("steel_beam", "recipes/constructor/steel_beam.json"),
     "Recipe_SteelPipe_C": _M("steel_pipe", "recipes/constructor/steel_pipe.json"),
+    "Recipe_Sulfur_Coal_C": _M("sulfur_coal", "recipes/converter/sulfur_coal.json"),
+    "Recipe_Sulfur_Iron_C": _M("sulfur_iron", "recipes/converter/sulfur_iron.json"),
     "Recipe_SulfuricAcid_C": _M("sulfuric_acid", "recipes/refinery/sulfuric_acid.json"),
+    "Recipe_Uranium_Bauxite_C": _M("uranium_ore_bauxite", "recipes/converter/uranium_ore_bauxite.json"),
     "Recipe_Wire_C": _M("wire", "recipes/constructor/wire.json"),
 }
 
@@ -624,6 +652,18 @@ def _recipes_for_item(docs: list[dict], item_class: str) -> list[str]:
     return sorted(found, key=str.lower)
 
 
+def _recipes_by_machine(docs: list[dict], machine_class: str) -> list[str]:
+    """Public display names of every FGRecipe produced in ``machine_class``."""
+    found: set[str] = set()
+    for g in docs:
+        if _nc_tail(g["NativeClass"]) != "FGRecipe":
+            continue
+        for r in g["Classes"]:
+            if machine_class in _buildables(r.get("mProducedIn", "")):
+                found.add(r.get("mDisplayName", r["ClassName"]))
+    return sorted(found, key=str.lower)
+
+
 def _emit(data: dict, notes: list[str]) -> int:
     for n in notes:
         print(f"# {n}", file=sys.stderr)
@@ -799,6 +839,22 @@ def compare_machine(docs, game_class: str, entry: _Machine, repo_path: str | Pat
     diffs: list[_Diff] = []
     if repo.get("name") != game["name"]:
         diffs.append(_Diff(entry.path, "name", game["name"], repo.get("name")))
+    # Variable-power machines (FGBuildableManufacturerVariablePower: e.g. the
+    # Converter) export mPowerConsumption=0 but carry their real draw as an
+    # estimated [lo, hi] range. Our scalar is a hand-chosen point in that range
+    # (the docs give no single authoritative value), so any value within it is
+    # correct; a bare 0.0 (the game's placeholder) is not.
+    raw, _ = _class_record(docs, game_class)
+    if raw is not None and "mEstimatedMininumPowerConsumption" in raw:
+        lo = float(raw.get("mEstimatedMininumPowerConsumption", 0.0))
+        hi = float(raw.get("mEstimatedMaximumPowerConsumption", lo))
+        repo_pw = float(repo.get("power_draw", 0.0))
+        if not (lo - 1e-9 <= repo_pw <= hi + 1e-9):
+            diffs.append(_Diff(entry.path, "power_draw", f"{lo:g}–{hi:g}", repo.get("power_draw")))
+        overclockable = repo.get("overclockable", True)
+        if abs(float(overclockable) - float(game.get("overclockable", True))) > 1e-9:
+            diffs.append(_Diff(entry.path, "overclockable", game.get("overclockable"), repo.get("overclockable")))
+        return diffs
     for key in ("power_draw", "overclockable"):
         # overclockable defaults to True in our loader even when absent
         repo_v = repo.get(key, True) if key == "overclockable" else repo.get(key, 0.0)
@@ -868,6 +924,7 @@ Usage:
   dev_utils machine <name> [<id>] [options]
   dev_utils recipe <name> [<id>] [options]
   dev_utils recipes-for <item> [options]
+  dev_utils recipes-by <machine> [options]
   dev_utils diff [options]
   dev_utils --version
   dev_utils --help
@@ -880,6 +937,8 @@ Commands:
   recipe <name>  Lift a recipe from the docs (per-min rates, repo JSON).
   recipes-for <item>
                  List the recipes whose product includes the item.
+  recipes-by <machine>
+                 List the recipes whose machine produces them.
   diff           Diff every manifest entry against the repo JSON files.
 
 Arguments:
@@ -890,6 +949,8 @@ Arguments:
   <id>     Our internal id; defaults to the manifest id, else a slug of the
            display name.
   <item>   Item name to look up; same matching rules as <name>.
+  <machine>
+           Machine name to look up; same matching rules as <name>.
 
 Options:
   --game-dir DIR   Path to a Satisfactory install (CommunityResources/Docs is
@@ -959,6 +1020,22 @@ def _cmd_recipes_for(args, docs) -> int:
     return 0
 
 
+@_with_docs
+def _cmd_recipes_by(args, docs) -> int:
+    try:
+        machine_class, machine_name = _resolve_query(_machine_candidates(docs), args["<machine>"], "machine")
+    except KeyError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 2
+    recipes = _recipes_by_machine(docs, machine_class)
+    if not recipes:
+        print(f"(no recipes in the docs use {machine_name!r})")
+        return 0
+    for name in recipes:
+        print(name)
+    return 0
+
+
 def _cmd_diff(args) -> int:
     try:
         report = build_report(args["--game-dir"], ".")
@@ -983,6 +1060,8 @@ def main(argv: list[str] | None = None) -> int:
         return _cmd_recipe(args)
     if args["recipes-for"]:
         return _cmd_recipes_for(args)
+    if args["recipes-by"]:
+        return _cmd_recipes_by(args)
     if args["diff"]:
         return _cmd_diff(args)
     return 2  # unreachable: docopt requires one of the usage forms

@@ -1,0 +1,7 @@
+{
+  "id": "reanimated_sam",
+  "name": "Reanimated SAM",
+  "machine": "constructor",
+  "inputs": {"sam": 120.0},
+  "outputs": {"reanimated_sam": 30.0}
+}

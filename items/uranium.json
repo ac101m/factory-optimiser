@@ -1,0 +1,6 @@
+{
+  "id": "uranium",
+  "name": "Uranium",
+  "sinkable": true,
+  "sink_points": 35
+}

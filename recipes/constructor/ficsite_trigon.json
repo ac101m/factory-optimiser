@@ -1,0 +1,7 @@
+{
+  "id": "ficsite_trigon",
+  "name": "Ficsite Trigon",
+  "machine": "constructor",
+  "inputs": {"ficsite_ingot": 10.0},
+  "outputs": {"ficsite_trigon": 30.0}
+}

@@ -1,0 +1,7 @@
+{
+  "id": "coal_iron",
+  "name": "Coal (Iron)",
+  "machine": "converter",
+  "inputs": {"reanimated_sam": 10.0, "iron_ore": 180.0},
+  "outputs": {"coal": 120.0}
+}

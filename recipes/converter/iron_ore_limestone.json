@@ -1,0 +1,7 @@
+{
+  "id": "iron_ore_limestone",
+  "name": "Iron Ore (Limestone)",
+  "machine": "converter",
+  "inputs": {"reanimated_sam": 10.0, "limestone": 240.0},
+  "outputs": {"iron_ore": 120.0}
+}

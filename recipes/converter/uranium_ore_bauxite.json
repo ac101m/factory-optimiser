@@ -1,0 +1,7 @@
+{
+  "id": "uranium_ore_bauxite",
+  "name": "Uranium Ore (Bauxite)",
+  "machine": "converter",
+  "inputs": {"reanimated_sam": 10.0, "bauxite": 480.0},
+  "outputs": {"uranium": 120.0}
+}

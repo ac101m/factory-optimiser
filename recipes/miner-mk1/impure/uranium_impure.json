@@ -1,0 +1,8 @@
+{
+  "id": "uranium_impure",
+  "name": "Uranium (Impure)",
+  "machine": "miner_mk1",
+  "inputs": {},
+  "outputs": {"uranium": 30.0},
+  "max_machines": 3
+}

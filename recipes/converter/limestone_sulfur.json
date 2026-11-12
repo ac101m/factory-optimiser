@@ -1,0 +1,7 @@
+{
+  "id": "limestone_sulfur",
+  "name": "Limestone (Sulfur)",
+  "machine": "converter",
+  "inputs": {"reanimated_sam": 10.0, "sulfur": 20.0},
+  "outputs": {"limestone": 120.0}
+}

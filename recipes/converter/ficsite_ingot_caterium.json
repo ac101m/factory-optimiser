@@ -1,0 +1,7 @@
+{
+  "id": "ficsite_ingot_caterium",
+  "name": "Ficsite Ingot (Caterium)",
+  "machine": "converter",
+  "inputs": {"reanimated_sam": 45.0, "caterium_ingot": 60.0},
+  "outputs": {"ficsite_ingot": 15.0}
+}

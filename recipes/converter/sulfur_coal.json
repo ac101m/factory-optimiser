@@ -1,0 +1,7 @@
+{
+  "id": "sulfur_coal",
+  "name": "Sulfur (Coal)",
+  "machine": "converter",
+  "inputs": {"reanimated_sam": 10.0, "coal": 200.0},
+  "outputs": {"sulfur": 120.0}
+}

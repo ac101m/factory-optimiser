@@ -1,0 +1,7 @@
+{
+  "id": "copper_ore_sulfur",
+  "name": "Copper Ore (Sulfur)",
+  "machine": "converter",
+  "inputs": {"reanimated_sam": 10.0, "sulfur": 120.0},
+  "outputs": {"copper_ore": 120.0}
+}

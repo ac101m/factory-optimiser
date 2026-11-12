@@ -1,0 +1,7 @@
+{
+  "id": "raw_quartz_bauxite",
+  "name": "Raw Quartz (Bauxite)",
+  "machine": "converter",
+  "inputs": {"reanimated_sam": 10.0, "bauxite": 100.0},
+  "outputs": {"raw_quartz": 120.0}
+}

@@ -1,0 +1,7 @@
+{
+  "id": "ficsite_ingot_iron",
+  "name": "Ficsite Ingot (Iron)",
+  "machine": "converter",
+  "inputs": {"reanimated_sam": 40.0, "iron_ingot": 240.0},
+  "outputs": {"ficsite_ingot": 10.0}
+}

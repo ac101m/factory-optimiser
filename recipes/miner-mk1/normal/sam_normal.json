@@ -1,0 +1,8 @@
+{
+  "id": "sam_normal",
+  "name": "SAM (Normal)",
+  "machine": "miner_mk1",
+  "inputs": {},
+  "outputs": {"sam": 60.0},
+  "max_machines": 6
+}

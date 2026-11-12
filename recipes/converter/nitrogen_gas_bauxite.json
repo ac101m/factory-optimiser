@@ -1,0 +1,7 @@
+{
+  "id": "nitrogen_gas_bauxite",
+  "name": "Nitrogen Gas (Bauxite)",
+  "machine": "converter",
+  "inputs": {"reanimated_sam": 10.0, "bauxite": 100.0},
+  "outputs": {"nitrogen_gas": 120.0}
+}

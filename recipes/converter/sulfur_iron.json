@@ -1,0 +1,7 @@
+{
+  "id": "sulfur_iron",
+  "name": "Sulfur (Iron)",
+  "machine": "converter",
+  "inputs": {"reanimated_sam": 10.0, "iron_ore": 300.0},
+  "outputs": {"sulfur": 120.0}
+}

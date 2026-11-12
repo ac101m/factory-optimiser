@@ -1,0 +1,7 @@
+{
+  "id": "caterium_ore_copper",
+  "name": "Caterium Ore (Copper)",
+  "machine": "converter",
+  "inputs": {"reanimated_sam": 10.0, "copper_ore": 150.0},
+  "outputs": {"caterium_ore": 120.0}
+}
