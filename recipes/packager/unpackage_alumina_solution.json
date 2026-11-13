@@ -1,0 +1,7 @@
+{
+  "id": "unpackage_alumina_solution",
+  "name": "Unpackage Alumina Solution",
+  "machine": "packager",
+  "inputs": {"packaged_alumina_solution": 120.0},
+  "outputs": {"alumina_solution": 120.0, "empty_canister": 120.0}
+}
