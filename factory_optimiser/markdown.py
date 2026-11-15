@@ -226,7 +226,7 @@ def optimize_markdown(config: Config, best: AugResult, curve: list[AugResult]) -
         sloop_tag = f" ({m.sloops_per_machine} sloops)" if m.sloops_per_machine else ""
         W(
             f"| {m._recipe.name}{sloop_tag} | {m.machine} | {m.machines:,.0f} "
-            f"({m.activity:.1f}) | {_clock_breakdown(m)} | {m.clock_pct:.1f}% |"
+            f"({m.activity:.4f}) | {_clock_breakdown(m)} | {m.clock_pct:.1f}% |"
         )
     W("")
 

@@ -160,146 +160,146 @@ Aggregate material balance across the whole plan (production includes extraction
 
 | Recipe | machine | # | clock | equivalent all-machine clock |
 |---|---|---:|---:|---:|
-| Alternate: Dark Matter Trap | accelerator | 69 (68.2) | 100% + 1x22.9% | 98.9% |
-| Alternate: Turbo Diamonds | accelerator | 83 (82.9) | 100% + 1x91.7% | 99.9% |
-| Nuclear Pasta | accelerator | 58 (57.5) | 100% + 1x50% | 99.1% |
-| Plutonium Pellet | accelerator | 26 (25.2) | 100% + 1x20% | 96.9% |
-| AI Limiter | assembler | 269 (268.4) | 100% + 1x42.8% | 99.8% |
-| Alclad Aluminum Sheet | assembler | 276 (275.2) | 100% + 1x15.9% | 99.7% |
-| Alternate: Alclad Casing | assembler | 17 (16.4) | 100% + 1x35.6% | 96.2% |
-| Alternate: Cheap Silica | assembler | 296 (295.1) | 100% + 1x13.9% | 99.7% |
-| Alternate: Coated Iron Plate | assembler | 49 (48.8) | 100% + 1x79.2% | 99.6% |
-| Alternate: Copper Rotor | assembler | 84 (84.0) | 100% + 1x95.7% | 99.9% |
-| Alternate: Crystal Computer | assembler | 134 (133.5) | 100% + 1x48.9% | 99.6% |
-| Alternate: Electric Motor | assembler | 66 (65.1) | 100% + 1x13.1% | 98.7% |
-| Alternate: Encased Industrial Pipe | assembler | 337 (336.7) | 100% + 1x73.4% | 99.9% |
-| Alternate: Fused Quickwire | assembler | 516 (515.4) | 100% + 1x43.9% | 99.9% |
-| Alternate: Silicon Circuit Board | assembler | 472 (471.8) | 100% + 1x81% | 100.0% |
-| Alternate: Steeled Frame | assembler | 396 (395.9) | 100% + 1x90.2% | 100.0% |
-| Alternate: Stitched Iron Plate | assembler | 192 (191.9) | 100% + 1x87.6% | 99.9% |
-| Assembly Director System | assembler | 193 (192.7) | 100% + 1x72.1% | 99.9% |
-| Automated Wiring | assembler | 579 (578.2) | 100% + 1x16.2% | 99.9% |
-| Electromagnetic Control Rod | assembler | 203 (202.2) | 100% + 1x15.8% | 99.6% |
-| Encased Plutonium Cell | assembler | 76 (75.6) | 100% + 1x60% | 99.5% |
-| Heat Sink | assembler | 63 (62.8) | 100% + 1x80% | 99.7% |
-| Magnetic Field Generator | assembler | 89 (88.1) | 100% + 1x12.5% | 99.0% |
-| Motor | assembler | 1 (0.1) | 100% + 1x5.3% | 5.3% |
-| Pressure Conversion Cube | assembler | 58 (57.5) | 100% + 1x50% | 99.1% |
-| Smart Plating | assembler | 144 (143.8) | 100% + 1x75% | 99.8% |
-| Stator | assembler | 578 (577.8) | 100% + 1x77.7% | 100.0% |
-| Alternate: Cooling Device | blender | 35 (34.5) | 100% + 1x50% | 98.6% |
-| Alternate: Diluted Fuel | blender | 212 (212.0) | 100% + 1x97.9% | 100.0% |
-| Alternate: Heat-Fused Frame | blender | 39 (38.3) | 100% + 1x33.3% | 98.3% |
-| Alternate: Nitro Rocket Fuel | blender | 23 (22.5) | 100% + 1x52.5% | 97.9% |
-| Alternate: Turbo Blend Fuel | blender | 98 (97.8) | 100% + 1x84.5% | 99.8% |
-| Biochemical Sculptor | blender | 2 (1.5) | 100% + 1x46.5% | 73.2% |
-| Nitric Acid | blender | 69 (68.4) | 100% + 1x38.8% | 99.1% |
-| Non-Fissile Uranium | blender | 51 (50.4) | 100% + 1x40% | 98.8% |
-| Rocket Fuel | blender | 38 (37.6) | 100% + 1x56.4% | 98.9% |
-| Alternate: Cast Screws | constructor | 328 (327.4) | 100% + 1x43.2% | 99.8% |
-| Alternate: Iron Pipe | constructor | 1,023 (1022.3) | 100% + 1x25% | 99.9% |
-| Alternate: Iron Wire | constructor | 4,486 (4485.3) | 100% + 1x29.9% | 100.0% |
-| Cable | constructor | 964 (963.6) | 100% + 1x60.3% | 100.0% |
-| Copper Powder | constructor | 116 (115.0) | 100% | 99.1% |
-| Empty Canister | constructor | 56 (55.3) | 100% + 1x27.8% | 98.7% |
-| Empty Fluid Tank | constructor | 12 (11.5) | 100% + 1x50% | 95.8% |
-| Ficsite Trigon | constructor | 47 (46.0) | 100% + 1x1.5% | 97.9% |
-| Iron Plate | constructor | 175 (174.9) | 100% + 1x85.9% | 99.9% |
-| Reanimated SAM | constructor | 85 (85.0) | 100% | 100.0% |
-| Bauxite (Caterium) | converter | 31 (30.3) | 100% + 1x28.3% | 97.7% |
-| Bauxite (Copper) | converter | 26 (25.5) | 100% + 1x45.6% | 97.9% |
-| Coal (Limestone) | converter | 85 (84.5) | 100% + 1x51.4% | 99.4% |
-| Excited Photonic Matter | converter | 48 (47.4) | 100% + 1x42.2% | 98.8% |
-| Ficsite Ingot (Aluminum) | converter | 16 (15.3) | 100% + 1x33.8% | 95.9% |
-| Nitrogen Gas (Caterium) | converter | 23 (22.7) | 100% + 1x71.6% | 98.8% |
-| Time Crystal | converter | 415 (414.6) | 100% + 1x58.3% | 99.9% |
-| Alternate: Compacted Steel Ingot | foundry | 2 (1.9) | 100% + 1x91.4% | 95.7% |
-| Alternate: Molded Beam | foundry | 20 (19.7) | 100% + 1x72.8% | 98.6% |
-| Alternate: Solid Steel Ingot | foundry | 40 (39.1) | 100% + 1x13.6% | 97.8% |
-| Rocket Fuel Power | fuel_generator | 685 (685.0) | 250% + 1x243.8% | 250.0% |
-| Geothermal Power (Impure) | geothermal_generator | 9 (9.0) | 100% | 100.0% |
-| Geothermal Power (Normal) | geothermal_generator | 13 (13.0) | 100% | 100.0% |
-| Geothermal Power (Pure) | geothermal_generator | 9 (9.0) | 100% | 100.0% |
-| Adaptive Control Unit | manufacturer | 290 (289.1) | 100% + 1x8.1% | 99.7% |
-| Alternate: Caterium Computer | manufacturer | 253 (252.3) | 100% + 1x31.8% | 99.7% |
-| Alternate: Classic Battery | manufacturer | 78 (77.6) | 100% + 1x55.5% | 99.4% |
-| Alternate: Flexible Framework | manufacturer | 30 (29.4) | 100% + 1x37.5% | 97.9% |
-| Alternate: Heavy Encased Frame | manufacturer | 144 (143.7) | 100% + 1x67.3% | 99.8% |
-| Alternate: Infused Uranium Cell | manufacturer | 84 (84.0) | 100% | 100.0% |
-| Alternate: Insulated Crystal Oscillator | manufacturer | 285 (284.5) | 100% + 1x53.7% | 99.8% |
-| Alternate: Super-State Computer | manufacturer | 97 (96.9) | 100% + 1x94.4% | 99.9% |
-| Alternate: Turbo Pressure Motor | manufacturer | 16 (15.3) | 100% + 1x33.3% | 95.8% |
-| Alternate: Uranium Fuel Unit | manufacturer | 84 (84.0) | 100% | 100.0% |
-| Ballistic Warp Drive (4 sloops) | manufacturer | 23 (23.0) | 250% | 250.0% |
-| Modular Engine | manufacturer | 144 (143.8) | 100% + 1x75% | 99.8% |
-| Plutonium Fuel Rod | manufacturer | 51 (50.4) | 100% + 1x40% | 98.8% |
-| Radio Control Unit | manufacturer | 47 (46.0) | 100% | 97.9% |
-| Singularity Cell | manufacturer | 29 (28.8) | 100% + 1x75% | 99.1% |
-| Thermal Propulsion Rocket | manufacturer | 58 (57.5) | 100% + 1x50% | 99.1% |
-| Bauxite (Impure) Mk.3 | miner_mk3 | 5 (5.0) | 250% | 250.0% |
-| Bauxite (Normal) Mk.3 | miner_mk3 | 6 (6.0) | 250% | 250.0% |
-| Bauxite (Pure) Mk.3 | miner_mk3 | 6 (6.0) | 250% | 250.0% |
-| Caterium Ore (Normal) Mk.3 | miner_mk3 | 9 (9.0) | 250% | 250.0% |
-| Caterium Ore (Pure) Mk.3 | miner_mk3 | 8 (8.0) | 250% | 250.0% |
-| Coal (Impure) Mk.3 | miner_mk3 | 15 (15.0) | 250% | 250.0% |
-| Coal (Normal) Mk.3 | miner_mk3 | 31 (31.0) | 250% | 250.0% |
-| Coal (Pure) Mk.3 | miner_mk3 | 16 (16.0) | 250% | 250.0% |
-| Copper Ore (Impure) Mk.3 | miner_mk3 | 13 (13.0) | 250% | 250.0% |
-| Copper Ore (Normal) Mk.3 | miner_mk3 | 29 (29.0) | 250% | 250.0% |
-| Copper Ore (Pure) Mk.3 | miner_mk3 | 13 (13.0) | 250% | 250.0% |
-| Iron Ore (Impure) Mk.3 | miner_mk3 | 39 (39.0) | 250% | 250.0% |
-| Iron Ore (Normal) Mk.3 | miner_mk3 | 42 (42.0) | 250% | 250.0% |
-| Iron Ore (Pure) Mk.3 | miner_mk3 | 46 (46.0) | 250% | 250.0% |
-| Limestone (Impure) Mk.3 | miner_mk3 | 15 (15.0) | 250% | 250.0% |
-| Limestone (Normal) Mk.3 | miner_mk3 | 50 (50.0) | 250% | 250.0% |
-| Limestone (Pure) Mk.3 | miner_mk3 | 29 (29.0) | 250% | 250.0% |
-| Quartz (Impure) Mk.3 | miner_mk3 | 3 (3.0) | 250% | 250.0% |
-| Quartz (Normal) Mk.3 | miner_mk3 | 7 (7.0) | 250% | 250.0% |
-| Quartz (Pure) Mk.3 | miner_mk3 | 7 (7.0) | 250% | 250.0% |
-| SAM (Impure) Mk.3 | miner_mk3 | 10 (10.0) | 250% | 250.0% |
-| SAM (Normal) Mk.3 | miner_mk3 | 6 (6.0) | 250% | 250.0% |
-| SAM (Pure) Mk.3 | miner_mk3 | 3 (3.0) | 250% | 250.0% |
-| Sulfur (Impure) Mk.3 | miner_mk3 | 6 (6.0) | 250% | 250.0% |
-| Sulfur (Normal) Mk.3 | miner_mk3 | 5 (5.0) | 250% | 250.0% |
-| Sulfur (Pure) Mk.3 | miner_mk3 | 5 (5.0) | 250% | 250.0% |
-| Uranium (Impure) Mk.3 | miner_mk3 | 3 (3.0) | 250% | 250.0% |
-| Uranium (Normal) Mk.3 | miner_mk3 | 2 (2.0) | 250% | 250.0% |
-| Nuclear Power (Uranium) | nuclear_power_plant | 101 (100.8) | 250% + 1x200% | 249.5% |
-| Crude Oil (Impure) | oil_extractor | 10 (10.0) | 250% | 250.0% |
-| Crude Oil (Normal) | oil_extractor | 12 (12.0) | 250% | 250.0% |
-| Crude Oil (Pure) | oil_extractor | 8 (8.0) | 250% | 250.0% |
-| Packaged Nitrogen Gas | packager | 12 (11.5) | 100% + 1x50% | 95.8% |
-| Packaged Turbofuel | packager | 166 (165.8) | 100% + 1x83.3% | 99.9% |
-| AI Expansion Server | quantum_encoder | 8 (7.0) | 100% + 1x3.1% | 87.9% |
-| AI Expansion Server (2 sloops) | quantum_encoder | 6 (6.0) | 250% | 250.0% |
-| Neural-Quantum Processor | quantum_encoder | 30 (29.4) | 100% + 1x37.5% | 97.9% |
-| Superposition Oscillator | quantum_encoder | 41 (40.6) | 100% + 1x62.5% | 99.1% |
-| Alternate: Electrode Aluminum Scrap | refinery | 127 (126.6) | 100% + 1x59.1% | 99.7% |
-| Alternate: Heavy Oil Residue | refinery | 420 (420.0) | 100% | 100.0% |
-| Alternate: Pure Caterium Ingot | refinery | 323 (322.1) | 100% + 1x14.9% | 99.7% |
-| Alternate: Pure Copper Ingot | refinery | 2,155 (2154.5) | 100% + 1x52.6% | 100.0% |
-| Alternate: Pure Iron Ingot | refinery | 2,632 (2631.2) | 100% + 1x15.5% | 100.0% |
-| Alternate: Pure Quartz Crystal | refinery | 102 (101.6) | 100% + 1x62% | 99.6% |
-| Alternate: Recycled Plastic | refinery | 241 (240.0) | 100% + 1x4.9% | 99.6% |
-| Alternate: Recycled Rubber | refinery | 258 (257.5) | 100% + 1x51.1% | 99.8% |
-| Alternate: Sloppy Alumina | refinery | 95 (94.9) | 100% + 1x94.4% | 99.9% |
-| Alternate: Steamed Copper Sheet | refinery | 1,022 (1021.7) | 100% + 1x66.7% | 100.0% |
-| Alternate: Wet Concrete | refinery | 232 (231.7) | 100% + 1x72.7% | 99.9% |
-| Petroleum Coke | refinery | 82 (81.6) | 100% + 1x64.2% | 99.6% |
-| Residual Rubber | refinery | 210 (210.0) | 100% | 100.0% |
-| Sulfuric Acid | refinery | 16 (15.1) | 100% + 1x12% | 94.5% |
-| Turbofuel | refinery | 63 (62.3) | 100% + 1x26.5% | 98.8% |
-| Central Nitrogen Gas Well | resource_well_pressurizer | 1 (1.0) | 250% | 250.0% |
-| Crater Lakes Oil Well | resource_well_pressurizer | 1 (1.0) | 250% | 250.0% |
-| Northern Nitrogen Gas Well | resource_well_pressurizer | 1 (1.0) | 250% | 250.0% |
-| Northwestern Nitrogen Gas Well | resource_well_pressurizer | 1 (1.0) | 250% | 250.0% |
-| Southeastern Nitrogen Gas Well | resource_well_pressurizer | 1 (1.0) | 250% | 250.0% |
-| Southern Nitrogen Gas Well | resource_well_pressurizer | 1 (1.0) | 250% | 250.0% |
-| Southwestern Nitrogen Gas Well | resource_well_pressurizer | 1 (1.0) | 250% | 250.0% |
-| Spire Coast Oil Well | resource_well_pressurizer | 1 (1.0) | 250% | 250.0% |
-| Swamp Oil Well | resource_well_pressurizer | 1 (1.0) | 250% | 250.0% |
-| Alternate: Pure Aluminum Ingot | smelter | 633 (633.0) | 100% + 1x95.7% | 100.0% |
-| Water Extraction | water_extractor | 1,915 (1914.3) | 100% + 1x26.5% | 100.0% |
+| Alternate: Dark Matter Trap | accelerator | 69 (68.2292) | 100% + 1x22.9% | 98.9% |
+| Alternate: Turbo Diamonds | accelerator | 83 (82.9167) | 100% + 1x91.7% | 99.9% |
+| Nuclear Pasta | accelerator | 58 (57.5000) | 100% + 1x50% | 99.1% |
+| Plutonium Pellet | accelerator | 26 (25.2000) | 100% + 1x20% | 96.9% |
+| AI Limiter | assembler | 269 (268.4281) | 100% + 1x42.8% | 99.8% |
+| Alclad Aluminum Sheet | assembler | 276 (275.1591) | 100% + 1x15.9% | 99.7% |
+| Alternate: Alclad Casing | assembler | 17 (16.3556) | 100% + 1x35.6% | 96.2% |
+| Alternate: Cheap Silica | assembler | 296 (295.1386) | 100% + 1x13.9% | 99.7% |
+| Alternate: Coated Iron Plate | assembler | 49 (48.7917) | 100% + 1x79.2% | 99.6% |
+| Alternate: Copper Rotor | assembler | 84 (83.9569) | 100% + 1x95.7% | 99.9% |
+| Alternate: Crystal Computer | assembler | 134 (133.4894) | 100% + 1x48.9% | 99.6% |
+| Alternate: Electric Motor | assembler | 66 (65.1314) | 100% + 1x13.1% | 98.7% |
+| Alternate: Encased Industrial Pipe | assembler | 337 (336.7341) | 100% + 1x73.4% | 99.9% |
+| Alternate: Fused Quickwire | assembler | 516 (515.4391) | 100% + 1x43.9% | 99.9% |
+| Alternate: Silicon Circuit Board | assembler | 472 (471.8101) | 100% + 1x81% | 100.0% |
+| Alternate: Steeled Frame | assembler | 396 (395.9018) | 100% + 1x90.2% | 100.0% |
+| Alternate: Stitched Iron Plate | assembler | 192 (191.8762) | 100% + 1x87.6% | 99.9% |
+| Assembly Director System | assembler | 193 (192.7206) | 100% + 1x72.1% | 99.9% |
+| Automated Wiring | assembler | 579 (578.1619) | 100% + 1x16.2% | 99.9% |
+| Electromagnetic Control Rod | assembler | 203 (202.1583) | 100% + 1x15.8% | 99.6% |
+| Encased Plutonium Cell | assembler | 76 (75.6000) | 100% + 1x60% | 99.5% |
+| Heat Sink | assembler | 63 (62.8000) | 100% + 1x80% | 99.7% |
+| Magnetic Field Generator | assembler | 89 (88.1250) | 100% + 1x12.5% | 99.0% |
+| Motor | assembler | 1 (0.0530) | 100% + 1x5.3% | 5.3% |
+| Pressure Conversion Cube | assembler | 58 (57.5000) | 100% + 1x50% | 99.1% |
+| Smart Plating | assembler | 144 (143.7500) | 100% + 1x75% | 99.8% |
+| Stator | assembler | 578 (577.7768) | 100% + 1x77.7% | 100.0% |
+| Alternate: Cooling Device | blender | 35 (34.5000) | 100% + 1x50% | 98.6% |
+| Alternate: Diluted Fuel | blender | 212 (211.9794) | 100% + 1x97.9% | 100.0% |
+| Alternate: Heat-Fused Frame | blender | 39 (38.3333) | 100% + 1x33.3% | 98.3% |
+| Alternate: Nitro Rocket Fuel | blender | 23 (22.5250) | 100% + 1x52.5% | 97.9% |
+| Alternate: Turbo Blend Fuel | blender | 98 (97.8453) | 100% + 1x84.5% | 99.8% |
+| Biochemical Sculptor | blender | 2 (1.4645) | 100% + 1x46.5% | 73.2% |
+| Nitric Acid | blender | 69 (68.3880) | 100% + 1x38.8% | 99.1% |
+| Non-Fissile Uranium | blender | 51 (50.4000) | 100% + 1x40% | 98.8% |
+| Rocket Fuel | blender | 38 (37.5641) | 100% + 1x56.4% | 98.9% |
+| Alternate: Cast Screws | constructor | 328 (327.4319) | 100% + 1x43.2% | 99.8% |
+| Alternate: Iron Pipe | constructor | 1,023 (1022.2505) | 100% + 1x25% | 99.9% |
+| Alternate: Iron Wire | constructor | 4,486 (4485.2988) | 100% + 1x29.9% | 100.0% |
+| Cable | constructor | 964 (963.6032) | 100% + 1x60.3% | 100.0% |
+| Copper Powder | constructor | 116 (115.0000) | 100% | 99.1% |
+| Empty Canister | constructor | 56 (55.2778) | 100% + 1x27.8% | 98.7% |
+| Empty Fluid Tank | constructor | 12 (11.5000) | 100% + 1x50% | 95.8% |
+| Ficsite Trigon | constructor | 47 (46.0152) | 100% + 1x1.5% | 97.9% |
+| Iron Plate | constructor | 175 (174.8592) | 100% + 1x85.9% | 99.9% |
+| Reanimated SAM | constructor | 85 (85.0000) | 100% | 100.0% |
+| Bauxite (Caterium) | converter | 31 (30.2832) | 100% + 1x28.3% | 97.7% |
+| Bauxite (Copper) | converter | 26 (25.4561) | 100% + 1x45.6% | 97.9% |
+| Coal (Limestone) | converter | 85 (84.5141) | 100% + 1x51.4% | 99.4% |
+| Excited Photonic Matter | converter | 48 (47.4219) | 100% + 1x42.2% | 98.8% |
+| Ficsite Ingot (Aluminum) | converter | 16 (15.3384) | 100% + 1x33.8% | 95.9% |
+| Nitrogen Gas (Caterium) | converter | 23 (22.7162) | 100% + 1x71.6% | 98.8% |
+| Time Crystal | converter | 415 (414.5834) | 100% + 1x58.3% | 99.9% |
+| Alternate: Compacted Steel Ingot | foundry | 2 (1.9142) | 100% + 1x91.4% | 95.7% |
+| Alternate: Molded Beam | foundry | 20 (19.7275) | 100% + 1x72.8% | 98.6% |
+| Alternate: Solid Steel Ingot | foundry | 40 (39.1360) | 100% + 1x13.6% | 97.8% |
+| Rocket Fuel Power | fuel_generator | 685 (684.9753) | 250% + 1x243.8% | 250.0% |
+| Geothermal Power (Impure) | geothermal_generator | 9 (9.0000) | 100% | 100.0% |
+| Geothermal Power (Normal) | geothermal_generator | 13 (13.0000) | 100% | 100.0% |
+| Geothermal Power (Pure) | geothermal_generator | 9 (9.0000) | 100% | 100.0% |
+| Adaptive Control Unit | manufacturer | 290 (289.0809) | 100% + 1x8.1% | 99.7% |
+| Alternate: Caterium Computer | manufacturer | 253 (252.3183) | 100% + 1x31.8% | 99.7% |
+| Alternate: Classic Battery | manufacturer | 78 (77.5552) | 100% + 1x55.5% | 99.4% |
+| Alternate: Flexible Framework | manufacturer | 30 (29.3750) | 100% + 1x37.5% | 97.9% |
+| Alternate: Heavy Encased Frame | manufacturer | 144 (143.6732) | 100% + 1x67.3% | 99.8% |
+| Alternate: Infused Uranium Cell | manufacturer | 84 (84.0000) | 100% | 100.0% |
+| Alternate: Insulated Crystal Oscillator | manufacturer | 285 (284.5373) | 100% + 1x53.7% | 99.8% |
+| Alternate: Super-State Computer | manufacturer | 97 (96.9440) | 100% + 1x94.4% | 99.9% |
+| Alternate: Turbo Pressure Motor | manufacturer | 16 (15.3333) | 100% + 1x33.3% | 95.8% |
+| Alternate: Uranium Fuel Unit | manufacturer | 84 (84.0000) | 100% | 100.0% |
+| Ballistic Warp Drive (4 sloops) | manufacturer | 23 (23.0000) | 250% | 250.0% |
+| Modular Engine | manufacturer | 144 (143.7500) | 100% + 1x75% | 99.8% |
+| Plutonium Fuel Rod | manufacturer | 51 (50.4000) | 100% + 1x40% | 98.8% |
+| Radio Control Unit | manufacturer | 47 (46.0000) | 100% | 97.9% |
+| Singularity Cell | manufacturer | 29 (28.7500) | 100% + 1x75% | 99.1% |
+| Thermal Propulsion Rocket | manufacturer | 58 (57.5000) | 100% + 1x50% | 99.1% |
+| Bauxite (Impure) Mk.3 | miner_mk3 | 5 (5.0000) | 250% | 250.0% |
+| Bauxite (Normal) Mk.3 | miner_mk3 | 6 (6.0000) | 250% | 250.0% |
+| Bauxite (Pure) Mk.3 | miner_mk3 | 6 (6.0000) | 250% | 250.0% |
+| Caterium Ore (Normal) Mk.3 | miner_mk3 | 9 (9.0000) | 250% | 250.0% |
+| Caterium Ore (Pure) Mk.3 | miner_mk3 | 8 (8.0000) | 250% | 250.0% |
+| Coal (Impure) Mk.3 | miner_mk3 | 15 (15.0000) | 250% | 250.0% |
+| Coal (Normal) Mk.3 | miner_mk3 | 31 (31.0000) | 250% | 250.0% |
+| Coal (Pure) Mk.3 | miner_mk3 | 16 (16.0000) | 250% | 250.0% |
+| Copper Ore (Impure) Mk.3 | miner_mk3 | 13 (13.0000) | 250% | 250.0% |
+| Copper Ore (Normal) Mk.3 | miner_mk3 | 29 (29.0000) | 250% | 250.0% |
+| Copper Ore (Pure) Mk.3 | miner_mk3 | 13 (13.0000) | 250% | 250.0% |
+| Iron Ore (Impure) Mk.3 | miner_mk3 | 39 (39.0000) | 250% | 250.0% |
+| Iron Ore (Normal) Mk.3 | miner_mk3 | 42 (42.0000) | 250% | 250.0% |
+| Iron Ore (Pure) Mk.3 | miner_mk3 | 46 (46.0000) | 250% | 250.0% |
+| Limestone (Impure) Mk.3 | miner_mk3 | 15 (15.0000) | 250% | 250.0% |
+| Limestone (Normal) Mk.3 | miner_mk3 | 50 (50.0000) | 250% | 250.0% |
+| Limestone (Pure) Mk.3 | miner_mk3 | 29 (29.0000) | 250% | 250.0% |
+| Quartz (Impure) Mk.3 | miner_mk3 | 3 (3.0000) | 250% | 250.0% |
+| Quartz (Normal) Mk.3 | miner_mk3 | 7 (7.0000) | 250% | 250.0% |
+| Quartz (Pure) Mk.3 | miner_mk3 | 7 (7.0000) | 250% | 250.0% |
+| SAM (Impure) Mk.3 | miner_mk3 | 10 (10.0000) | 250% | 250.0% |
+| SAM (Normal) Mk.3 | miner_mk3 | 6 (6.0000) | 250% | 250.0% |
+| SAM (Pure) Mk.3 | miner_mk3 | 3 (3.0000) | 250% | 250.0% |
+| Sulfur (Impure) Mk.3 | miner_mk3 | 6 (6.0000) | 250% | 250.0% |
+| Sulfur (Normal) Mk.3 | miner_mk3 | 5 (5.0000) | 250% | 250.0% |
+| Sulfur (Pure) Mk.3 | miner_mk3 | 5 (5.0000) | 250% | 250.0% |
+| Uranium (Impure) Mk.3 | miner_mk3 | 3 (3.0000) | 250% | 250.0% |
+| Uranium (Normal) Mk.3 | miner_mk3 | 2 (2.0000) | 250% | 250.0% |
+| Nuclear Power (Uranium) | nuclear_power_plant | 101 (100.8000) | 250% + 1x200% | 249.5% |
+| Crude Oil (Impure) | oil_extractor | 10 (10.0000) | 250% | 250.0% |
+| Crude Oil (Normal) | oil_extractor | 12 (12.0000) | 250% | 250.0% |
+| Crude Oil (Pure) | oil_extractor | 8 (8.0000) | 250% | 250.0% |
+| Packaged Nitrogen Gas | packager | 12 (11.5000) | 100% + 1x50% | 95.8% |
+| Packaged Turbofuel | packager | 166 (165.8334) | 100% + 1x83.3% | 99.9% |
+| AI Expansion Server | quantum_encoder | 8 (7.0313) | 100% + 1x3.1% | 87.9% |
+| AI Expansion Server (2 sloops) | quantum_encoder | 6 (6.0000) | 250% | 250.0% |
+| Neural-Quantum Processor | quantum_encoder | 30 (29.3750) | 100% + 1x37.5% | 97.9% |
+| Superposition Oscillator | quantum_encoder | 41 (40.6250) | 100% + 1x62.5% | 99.1% |
+| Alternate: Electrode Aluminum Scrap | refinery | 127 (126.5914) | 100% + 1x59.1% | 99.7% |
+| Alternate: Heavy Oil Residue | refinery | 420 (420.0000) | 100% | 100.0% |
+| Alternate: Pure Caterium Ingot | refinery | 323 (322.1495) | 100% + 1x14.9% | 99.7% |
+| Alternate: Pure Copper Ingot | refinery | 2,155 (2154.5264) | 100% + 1x52.6% | 100.0% |
+| Alternate: Pure Iron Ingot | refinery | 2,632 (2631.1551) | 100% + 1x15.5% | 100.0% |
+| Alternate: Pure Quartz Crystal | refinery | 102 (101.6205) | 100% + 1x62% | 99.6% |
+| Alternate: Recycled Plastic | refinery | 241 (240.0486) | 100% + 1x4.9% | 99.6% |
+| Alternate: Recycled Rubber | refinery | 258 (257.5112) | 100% + 1x51.1% | 99.8% |
+| Alternate: Sloppy Alumina | refinery | 95 (94.9436) | 100% + 1x94.4% | 99.9% |
+| Alternate: Steamed Copper Sheet | refinery | 1,022 (1021.6671) | 100% + 1x66.7% | 100.0% |
+| Alternate: Wet Concrete | refinery | 232 (231.7268) | 100% + 1x72.7% | 99.9% |
+| Petroleum Coke | refinery | 82 (81.6417) | 100% + 1x64.2% | 99.6% |
+| Residual Rubber | refinery | 210 (210.0000) | 100% | 100.0% |
+| Sulfuric Acid | refinery | 16 (15.1200) | 100% + 1x12% | 94.5% |
+| Turbofuel | refinery | 63 (62.2654) | 100% + 1x26.5% | 98.8% |
+| Central Nitrogen Gas Well | resource_well_pressurizer | 1 (1.0000) | 250% | 250.0% |
+| Crater Lakes Oil Well | resource_well_pressurizer | 1 (1.0000) | 250% | 250.0% |
+| Northern Nitrogen Gas Well | resource_well_pressurizer | 1 (1.0000) | 250% | 250.0% |
+| Northwestern Nitrogen Gas Well | resource_well_pressurizer | 1 (1.0000) | 250% | 250.0% |
+| Southeastern Nitrogen Gas Well | resource_well_pressurizer | 1 (1.0000) | 250% | 250.0% |
+| Southern Nitrogen Gas Well | resource_well_pressurizer | 1 (1.0000) | 250% | 250.0% |
+| Southwestern Nitrogen Gas Well | resource_well_pressurizer | 1 (1.0000) | 250% | 250.0% |
+| Spire Coast Oil Well | resource_well_pressurizer | 1 (1.0000) | 250% | 250.0% |
+| Swamp Oil Well | resource_well_pressurizer | 1 (1.0000) | 250% | 250.0% |
+| Alternate: Pure Aluminum Ingot | smelter | 633 (632.9572) | 100% + 1x95.7% | 100.0% |
+| Water Extraction | water_extractor | 1,915 (1914.2646) | 100% + 1x26.5% | 100.0% |
 
 ---
 
