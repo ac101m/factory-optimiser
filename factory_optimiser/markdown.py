@@ -12,6 +12,7 @@ the ``report`` CLI command.
 
 from __future__ import annotations
 
+import math
 from collections import OrderedDict
 
 from .io_config import CLOCK_POWER_EXP, Config, POWER_ITEM, sloop_multipliers
@@ -57,6 +58,23 @@ def _entry_power(recipe, config: Config, m: PlanMachine) -> tuple[float, float]:
     draw = m.machines * (clk ** CLOCK_POWER_EXP) * grade.pi * config.power_draw_for(recipe)
     gen = m.machines * clk * grade.rho * recipe.outputs.get(POWER_ITEM, 0.0)
     return draw, gen
+
+
+def _clock_breakdown(m: PlanMachine) -> str:
+    """'250% + 1x50%': whole machines at the clock tier plus the partial machine
+    trimmed to match the fractional activity — throughput-equivalent to running
+    every machine in the row at the uniform `clock_pct`."""
+    tier = m.clock_pct / 100.0 * m.machines / m.activity  # recover the clock tier
+    whole = math.floor(m.activity + 1e-9)
+    frac = m.activity - whole
+    main = tier * 100.0
+    if frac <= 1e-9:
+        return f"{main:.0f}%"
+    rem = frac * main
+    if rem < 0.05:
+        return f"{main:.0f}%"  # dust remainder, not a buildable instruction
+    rem_s = f"{rem:.0f}%" if abs(rem - round(rem)) < 0.05 else f"{rem:.1f}%"
+    return f"{main:.0f}% + 1x{rem_s}"
 
 
 def optimize_markdown(config: Config, best: AugResult, curve: list[AugResult]) -> str:
@@ -194,17 +212,21 @@ def optimize_markdown(config: Config, best: AugResult, curve: list[AugResult]) -
     W("")
     W(
         f"{len(plan)} recipe rows from {len({m.recipe_id for m in plan})} distinct recipes "
-        f"(rows repeat a recipe when sloop grades or clocks differ). Flat index of the "
-        f"per-machine tables in this document — the columns reproduce the plan's "
-        f"whole-machine clocks, where a row below 100% is an exact-balance remnant."
+        f"(rows repeat a recipe when sloop grades or clocks differ). `#` is the machines "
+        f"to build, with the raw fractional count in brackets; `clock` splits that build "
+        f"into whole machines at the clock tier plus one trimmed remainder (e.g. "
+        f"`250% + 1x50%`); `equivalent all-machine clock` is the single uniform clock "
+        f"that reproduces the same throughput. A row whose equivalent clock sits below "
+        f"the tier is an exact-balance remnant, not a choice."
     )
     W("")
-    W("| Recipe | machine | # | clock | slps |")
+    W("| Recipe | machine | # | clock | equivalent all-machine clock |")
     W("|---|---|---:|---:|---:|")
     for m in sorted(plan, key=lambda x: (x.machine, x._recipe.name)):
+        sloop_tag = f" ({m.sloops_per_machine} sloops)" if m.sloops_per_machine else ""
         W(
-            f"| {m._recipe.name} | {m.machine} | {m.machines:,.0f} | "
-            f"{m.clock_pct:.1f}% | {m.sloops_per_machine or '—'} |"
+            f"| {m._recipe.name}{sloop_tag} | {m.machine} | {m.machines:,.0f} "
+            f"({m.activity:.1f}) | {_clock_breakdown(m)} | {m.clock_pct:.1f}% |"
         )
     W("")
 
