@@ -146,6 +146,14 @@ class Parameters:
     #: values listed are available as choices; sorted, deduplicated, always
     #: containing 1.0 (the base clock). Default [1.0] = no overclocking.
     overclock_tiers: list[float] = field(default_factory=lambda: [1.0])
+    #: "All overclock" mode: when True, every overclockable machine gets ONLY
+    #: the top tier (max(overclock_tiers), the 250% game cap) — the model no
+    #: longer chooses a clock, it builds every overclockable machine at 250%.
+    #: Non-overclockable machines (geothermal) stay at base clock. This mirrors
+    #: the game case where you power-shard everything to max; it collapses the
+    #: clock dimension out of the MILP and roughly halves the machine count.
+    #: Default False (free choice across the tier list).
+    fixed_max_clock: bool = False
     #: Required power-generation overproduction (reserve): the grid must
     #: deliver ``(1 + power_overproduction) * consumption``, i.e. the plan
     #: always keeps a ``power_overproduction`` margin of capacity in hand over
@@ -411,7 +419,9 @@ def load_parameters(path: str | Path) -> Parameters:
     # Overclock tier list: parse `overclock.tiers` (or tolerate a bare list),
     # force 1.0 in (the base clock is always available), sort ascending.
     overclock_raw = raw.get("overclock", {})
+    fixed_max_clock = False
     if isinstance(overclock_raw, dict):
+        fixed_max_clock = bool(overclock_raw.get("fixed_max_clock", False))
         overclock_raw = overclock_raw.get("tiers", [1.0])
     tiers = sorted({float(t) for t in overclock_raw} | {1.0})
 
@@ -426,6 +436,7 @@ def load_parameters(path: str | Path) -> Parameters:
         somersloop_budget=float(raw.get("somersloop_budget", 0.0)),
         augmenters=augmenters,
         overclock_tiers=tiers,
+        fixed_max_clock=fixed_max_clock,
         power_overproduction=float(power_raw.get("overproduction", 0.01)),
         map_resources=map_resources,
     )

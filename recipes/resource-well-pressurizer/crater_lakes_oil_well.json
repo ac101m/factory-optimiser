@@ -1,7 +1,7 @@
 {
   "id": "crater_lakes_oil_well",
   "name": "Crater Lakes Oil Well",
-  "machine": "oil_extractor",
+  "machine": "resource_well_pressurizer",
   "inputs": {},
   "outputs": {"crude_oil": 540.0},
   "max_machines": 1

@@ -1,7 +1,7 @@
 {
   "id": "swamp_oil_well",
   "name": "Swamp Oil Well",
-  "machine": "oil_extractor",
+  "machine": "resource_well_pressurizer",
   "inputs": {},
   "outputs": {"crude_oil": 180.0},
   "max_machines": 1

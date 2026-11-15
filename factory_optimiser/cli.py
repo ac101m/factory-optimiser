@@ -4,6 +4,9 @@ Commands:
 
     check                   audit the data model for consistency (no solve)
     optimize                best build plan (includes the augmenter sweep)
+    report                  best build plan as a Markdown planning document
+                            (same solve as optimize, but human-readable,
+                            per-machine inputs/outputs for build planning)
     sweep augmenters        points/min per augmenter count (marginal curve)
     sweep somersloops       points/min per total Somersloop budget
     sweep resources         points/min per unit of each map resource (marginal)
@@ -31,6 +34,7 @@ from docopt import DocoptExit, docopt  # noqa: E402
 from . import __version__
 from .consistency import audit_text, check_config, has_errors, has_warnings
 from .io_config import ConfigError, load_config
+from .markdown import optimize_markdown
 from .report import (
     augmenter_curve_text,
     marginal_text,
@@ -51,6 +55,7 @@ Satisfactory sink-point factory optimizer (MILP).
 Usage:
   factory_optimiser check [options] [--strict]
   factory_optimiser optimize [options]
+  factory_optimiser report [options] [--output FILE]
   factory_optimiser sweep (augmenters | somersloops | resources) [options]
   factory_optimiser --version
   factory_optimiser --help
@@ -59,6 +64,10 @@ Commands:
   check                   Audit the data model for consistency (no solve; also
                           runs before every other command).
   optimize                Solve the optimal build plan (augmenter sweep included).
+  report                  Same solve as optimize, but writes a Markdown document
+                          (default ./build-plan.md) with a high-level overview and
+                          a per-machine breakdown of recipes, counts, clocks and
+                          inputs/outputs — for planning an actual build.
   sweep augmenters        Marginal-value curve: points/min per augmenter count.
   sweep somersloops       Marginal-value curve: points/min per Somersloop budget.
   sweep resources         Marginal-value curve: pts/min per extra extractor node on each raw material.
@@ -69,6 +78,8 @@ Options:
   -t DIR, --items DIR       Directory of item JSON files          [default: items]
   -p FILE, --parameters FILE
                             Parameters JSON                      [default: config/parameters.json]
+  -o FILE, --output FILE    Markdown output path (report only; '-' = stdout)
+                                                                    [default: build-plan.md]
   --max-augmenters N        Cap augmenter count (default: floor(Somersloop budget / cost))
   --no-augmenters           Force N=0 (no Alien Power Augmenters)
   --strict                  Treat audit warnings as failures too (check only).
@@ -111,6 +122,8 @@ def main(argv: list[str] | None = None) -> int:
     try:
         if args["optimize"]:
             return _cmd_optimize(args, config)
+        if args["report"]:
+            return _cmd_report(args, config)
         return _cmd_sweep(args, config)
     except SolveError as exc:
         print(f"error: {exc}", file=sys.stderr)
@@ -136,6 +149,22 @@ def _cmd_optimize(args, config) -> int:
         _dump_json(optimize_json(config, best, curve))
     else:
         print(optimize_text(config, best, curve))
+    return 0
+
+
+def _cmd_report(args, config) -> int:
+    """Solve like ``optimize``, then emit the Markdown build-plan document."""
+    max_n = _max_augmenters_arg(args)
+    curve = sweep_augmenters(config, max_n)
+    best = _pick_best(curve)
+    best = replace(best, solution=solve(best.solution.problem, minimize_machines=best.points_per_min))
+    md = optimize_markdown(config, best, curve)
+    out = args.get("--output") or "build-plan.md"
+    if out == "-":
+        print(md, end="")
+    else:
+        Path(out).write_text(md)
+        print(f"wrote {Path(out).resolve()}")
     return 0
 
 

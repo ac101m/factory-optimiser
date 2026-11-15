@@ -22,6 +22,8 @@ venv and deps:
 .venv/bin/factory-optimiser optimize      # best plan (augmenter sweep included)
 .venv/bin/factory-optimiser optimize --json
 .venv/bin/factory-optimiser optimize --no-augmenters
+.venv/bin/factory-optimiser report       # same solve, Markdown build-plan doc (./build-plan.md)
+.venv/bin/factory-optimiser report -o -  # ...to stdout instead
 .venv/bin/factory-optimiser sweep augmenters      # pts/min per augmenter count
 .venv/bin/factory-optimiser sweep somersloops     # pts/min per Somersloop budget
 .venv/bin/factory-optimiser sweep resources       # pts/min per extra extractor node per raw material

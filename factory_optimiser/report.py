@@ -22,6 +22,17 @@ from .sweep import AugResult
 
 _EPS = 1e-9
 
+#: Solver-dust floor for plan entries. Continuous (k=0) activities are free to
+#: carry a hair of numerical slack in dominated columns far above the EPS
+#: near-zero cut (HiGHS leaves residues like 4e-5 "machine-equivalents" there).
+#: Since downconvert maps any positive activity to at least one whole machine
+#: (trimming the clock to match), such dust would otherwise report as a fake
+#: "1 machine @ 0.0%" row. Anything below a thousandth of a machine is never a
+#: buildable instruction — real fractional activities in sensible plans are
+#: ~0.5 machines and up — so we drop it. (points/min are untouched: dust
+#: contributes ~0 output.)
+_DUST = 1e-3
+
 
 @dataclass
 class PlanMachine:
@@ -39,7 +50,7 @@ class PlanMachine:
 def downconvert(config: Config, solution: Solution) -> list[PlanMachine]:
     plan: list[PlanMachine] = []
     for (r, k, c), activity in sorted(solution.activities.items()):
-        if activity <= _EPS:
+        if activity <= _DUST:
             continue
         recipe = config.recipes[r]
         machines = math.ceil(activity - 1e-9)

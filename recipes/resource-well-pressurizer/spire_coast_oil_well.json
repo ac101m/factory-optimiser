@@ -1,7 +1,7 @@
 {
   "id": "spire_coast_oil_well",
   "name": "Spire Coast Oil Well",
-  "machine": "oil_extractor",
+  "machine": "resource_well_pressurizer",
   "inputs": {},
   "outputs": {"crude_oil": 360.0},
   "max_machines": 1

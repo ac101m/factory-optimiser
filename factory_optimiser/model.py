@@ -292,6 +292,11 @@ def _clocks_for(config: Config, machine: str, k: int) -> list[float]:
     """
     if not config.is_overclockable(machine):
         return [1.0]
+    if config.parameters.fixed_max_clock:
+        # "All overclock" mode (Parameters.fixed_max_clock): overclockable
+        # machines only ever run at the top tier (250%), so the clock choice is
+        # removed from the MILP entirely and every such machine builds at max.
+        return [max(config.parameters.overclock_tiers)]
     return list(config.parameters.overclock_tiers)
 
 

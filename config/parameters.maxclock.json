@@ -1,0 +1,63 @@
+{
+  "_comment": "VARIANT configuration: the 'all-overclocked' build (parameter pairs live in full here so this file is self-contained). Identical to parameters.json except overclock.fixed_max_clock=true: every overclockable machine is pinned to the 250% game cap, removing the clock choice from the MILP. ~halves the machine count vs the free-choice optimum for a few percent of points. Point the CLI at it with -p (e.g. factory-optimiser report -p config/parameters.maxclock.json)." ,
+  "somersloop_budget": 104,
+
+  "overclock": {
+    "tiers": [1.0, 1.25, 1.5, 1.75, 2.0, 2.25, 2.5],
+    "fixed_max_clock": true,
+    "_note": "All-overclocked variant: fixed_max_clock=true pins every overclockable machine to the top tier (max of the list = 250%). Non-overclockable machines (geothermal) stay at base. This collapses the clock dimension out of the model — every producer, extractor and slooped machine builds at 250%; only exact-balance sub-machine remnants and geothermal sit below. Tiers still list the full set for parity with parameters.json; the value used is the max."
+  },
+
+  "augmenters": {
+    "cost": 10,
+    "bonus": 0.10,
+    "power_mw": 500,
+    "_note": "Each Alien Power Augmenter costs `cost` Somersloops; adds `bonus` * base (unaugmented) generation, additively (not compounding); AND generates `power_mw` MW of flat power itself, to which the bonus does NOT apply (confirmed in-game)."
+  },
+
+  "power": {
+    "overproduction": 0.01,
+    "_note": "Generation overproduction (reserve) as a fraction of the load (default 0.01 = 1%). The grid must deliver (1 + overproduction) * consumption, so the optimizer never plans to run generation at exactly 100% of what consumers draw; the report keeps this much capacity as headroom. Generators were otherwise throttled to exactly match demand."
+  },
+
+  "resources": {
+    "_note": "OPTIONAL extra per-item cap on total recipe consumption. Map extraction is modeled as MINER/MACHINE recipes (see recipes/*); the per-node limit for miners lives in the map_resources table below (ingress), NOT here. Leave this table empty when miners are modeled as recipes so supply is not double-limited.",
+    "_example_cap_on_a_raw_item": {"water": 300.0}
+  },
+
+  "map_resources": {
+    "_note": "Node-group caps for mined map resources: each key is one resource x purity (one in-game node type, e.g. 'iron_node_normal'). Every mining recipe (any miner tier mk1/mk2/mk3) carries map_resource = <same key>, and the TOTAL number of machines across the group is capped at the value here — one miner per node, so tiers share the cap. Counts are the number of nodes of that type.",
+    "bauxite_node_impure": 5,
+    "bauxite_node_normal": 6,
+    "bauxite_node_pure": 6,
+    "caterium_node_normal": 9,
+    "caterium_node_pure": 8,
+    "coal_node_impure": 15,
+    "coal_node_normal": 31,
+    "coal_node_pure": 16,
+    "copper_node_impure": 13,
+    "copper_node_normal": 29,
+    "copper_node_pure": 13,
+    "iron_node_impure": 39,
+    "iron_node_normal": 42,
+    "iron_node_pure": 46,
+    "limestone_node_impure": 15,
+    "limestone_node_normal": 50,
+    "limestone_node_pure": 29,
+    "raw_quartz_node_impure": 3,
+    "raw_quartz_node_normal": 7,
+    "raw_quartz_node_pure": 7,
+    "sam_node_impure": 10,
+    "sam_node_normal": 6,
+    "sam_node_pure": 3,
+    "sulfur_node_impure": 6,
+    "sulfur_node_normal": 5,
+    "sulfur_node_pure": 5,
+    "uranium_node_impure": 3,
+    "uranium_node_normal": 2
+  },
+
+  "_sloops": {
+    "_note": "CONFIRMED in-game formula, hardcoded in factory_optimiser/io_config.sloop_multipliers: a machine with k of its T total Somersloop slots (T = the machine's max_sloops, see machines/*.json) gets rho = 1 + k/T on output, kappa = 1 on inputs (inputs do NOT increase), and pi = (1 + k/T)^2 on power draw. Full slots -> 2x output; e.g. 1 of 2 slots -> 1.5x output, same input, 2.25x power. Nothing is configured here."
+  }
+}
