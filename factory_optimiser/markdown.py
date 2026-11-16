@@ -61,20 +61,22 @@ def _entry_power(recipe, config: Config, m: PlanMachine) -> tuple[float, float]:
 
 
 def _clock_breakdown(m: PlanMachine) -> str:
-    """'250% + 1x50%': whole machines at the clock tier plus the partial machine
-    trimmed to match the fractional activity — throughput-equivalent to running
-    every machine in the row at the uniform `clock_pct`."""
+    """'10@100% + 1@50%': whole machines at the clock tier plus the partial
+    machine trimmed to match the fractional activity — throughput-equivalent to
+    running every machine in the row at the uniform `clock_pct`."""
     tier = m.clock_pct / 100.0 * m.machines / m.activity  # recover the clock tier
     whole = math.floor(m.activity + 1e-9)
     frac = m.activity - whole
     main = tier * 100.0
     if frac <= 1e-9:
-        return f"{main:.0f}%"
+        return f"{whole}@{main:.0f}%"
     rem = frac * main
     if rem < 0.05:
-        return f"{main:.0f}%"  # dust remainder, not a buildable instruction
+        return f"{whole}@{main:.0f}%"  # dust remainder, not a buildable instruction
     rem_s = f"{rem:.0f}%" if abs(rem - round(rem)) < 0.05 else f"{rem:.1f}%"
-    return f"{main:.0f}% + 1x{rem_s}"
+    if whole < 1:
+        return f"1@{rem_s}"  # fully trimmed row: nothing left running at the tier
+    return f"{whole}@{main:.0f}% + 1@{rem_s}"
 
 
 def optimize_markdown(config: Config, best: AugResult, curve: list[AugResult]) -> str:
@@ -101,15 +103,6 @@ def optimize_markdown(config: Config, best: AugResult, curve: list[AugResult]) -
         f"**Official optimum** — **{best.points_per_min:,.0f} pts/min** "
         f"(overclock tiers {tiers}; {aug}). All rates are per minute."
     )
-    if config.parameters.fixed_max_clock:
-        top = max(config.parameters.overclock_tiers) * 100
-        W("")
-        W(
-            f"**Configuration**: `fixed_max_clock` is ON — every overclockable machine is pinned to "
-            f"**{top:g}%**. The clock choice is removed from the model; whole-machine counts are then "
-            f"rounded up and trimmed back to ≤{top:g}%, so rows below {top:g}% are exact-balance "
-            f"remnants of that rounding, not choices. Non-overclockable machines stay at base clock."
-        )
     W("")
 
     # ---- high-level overview -------------------------------------------------
@@ -125,7 +118,13 @@ def optimize_markdown(config: Config, best: AugResult, curve: list[AugResult]) -
     )
     n_machines = sum(m.machines for m in plan)
     n_types = len({m.machine for m in plan})
-    W(f"| **Machines** | **{n_machines:,.0f}** | {len(plan)} recipe rows across {n_types} machine types |")
+    cap = config.parameters.machine_cap
+    machine_cell = (
+        f"**{n_machines:,.0f}** (cap {cap:,.0f} — binding)"
+        if cap is not None and n_machines >= cap - 0.5
+        else f"**{n_machines:,.0f}**" + (f" / cap {cap:,.0f}" if cap is not None else "")
+    )
+    W(f"| **Machines** | {machine_cell} | {len(plan)} recipe rows across {n_types} machine types |")
     W(f"| **Somersloops** | {sol.sloops_used:g} / {best.sloop_budget:g} | see overclock notes |")
     sink_items = sum(sol.sinks.values()) + sum(sol.raw_sinks.values())
     W(f"| **Sink throughput** | {sink_items:,.1f} items/min | one Awesome Sink covers it (1200/min cap, 30 MW) |")
@@ -212,15 +211,15 @@ def optimize_markdown(config: Config, best: AugResult, curve: list[AugResult]) -
     W("")
     W(
         f"{len(plan)} recipe rows from {len({m.recipe_id for m in plan})} distinct recipes "
-        f"(rows repeat a recipe when sloop grades or clocks differ). `#` is the machines "
-        f"to build, with the raw fractional count in brackets; `clock` splits that build "
-        f"into whole machines at the clock tier plus one trimmed remainder (e.g. "
-        f"`250% + 1x50%`); `equivalent all-machine clock` is the single uniform clock "
+        f"(rows repeat a recipe when sloop grades or clocks differ). `count` is the machines "
+        f"to build, with the raw fractional count in brackets; `clock` shows how to split that "
+        f"build into whole machines at the clock tier plus one trimmed remainder (e.g. "
+        f"`10@100% + 1@50%`); `equivalent all-machine clock` is the single uniform clock "
         f"that reproduces the same throughput. A row whose equivalent clock sits below "
         f"the tier is an exact-balance remnant, not a choice."
     )
     W("")
-    W("| Recipe | machine | # | clock | equivalent all-machine clock |")
+    W("| Recipe | machine | count | clock | equivalent all-machine clock |")
     W("|---|---|---:|---:|---:|")
     for m in sorted(plan, key=lambda x: (x.machine, x._recipe.name)):
         sloop_tag = f" ({m.sloops_per_machine} sloops)" if m.sloops_per_machine else ""
@@ -254,7 +253,7 @@ def optimize_markdown(config: Config, best: AugResult, curve: list[AugResult]) -
         total = produced.get(it, 0.0)
         W(f"## {item(it)} — {total:,.1f}/min")
         W("")
-        W("| Recipe | machine | # | clock | slps | /min | share |")
+        W("| Recipe | machine | count | clock | slps | /min | share |")
         W("|---|---|---:|---:|---:|---:|---:|")
         for m, v in sorted(rows, key=lambda t: -t[1]):
             W(
@@ -282,7 +281,7 @@ def optimize_markdown(config: Config, best: AugResult, curve: list[AugResult]) -
         d = sum(x._draw for x in rs)
         W(f"## {_machine_title(mid)} — {t:,.0f} machines · {d:,.0f} MW")
         W("")
-        W("| Recipe | # | clock | slps | inputs /min | outputs /min |")
+        W("| Recipe | count | clock | slps | inputs /min | outputs /min |")
         W("|---|---|---:|---:|---|---|")
         for x in sorted(rs, key=lambda x: -x.machines):
             ins = {item(i): v for i, v in x.inputs.items()}
@@ -330,7 +329,7 @@ def optimize_markdown(config: Config, best: AugResult, curve: list[AugResult]) -
         g = sum(x._gen for x in rs)
         W(f"## {_machine_title(mid)} — {t:,.0f} machines · **{g:,.0f} MW generated**")
         W("")
-        W("| Recipe | # | clock | slps | fuel /min | output |")
+        W("| Recipe | count | clock | slps | fuel /min | output |")
         W("|---|---|---:|---:|---|---|")
         for x in sorted(rs, key=lambda x: -x._gen):
             ins = {item(i): v for i, v in x.inputs.items()}

@@ -1,30 +1,39 @@
 {
-  "_comment": "Game/system parameters. Somersloop multipliers are the CONFIRMED in-game formula (see _sloops below and Design.md §8). Overclocking uses discrete clock tiers (the overclock key below); machines opt in per spec via machines/*.json 'overclockable'. Augmenter/geothermal and item sink_points may still be placeholder." ,
+  "_comment": "Game/system parameters. Somersloop multipliers are the CONFIRMED in-game formula (see _sloops below and Design.md §8). This variant extends the clock tiers down to 25% (25%-250% in 25% increments) so the solver may underclock when that pays, AND sets a global machine cap of 24,576. Everything else is identical to config/parameters.json (104 somersloops, augmenters, power, map resources).",
   "somersloop_budget": 104,
-
+  "machine_cap": 24576,
+  "_machine_cap_note": "Optional GLOBAL machine cap: total machine-equivalents across all recipes/clock tiers may not exceed this (null = unbounded). Prices building count against points: the solver overclocks the machines where that most pays to shed machines, and keeps power-efficient low clocks only where the power row binds. CLI override: --max-machines N.",
   "overclock": {
-    "tiers": [1.0, 1.25, 1.5, 1.75, 2.0, 2.25, 2.5],
-    "fixed_max_clock": false,
-    "_note": "Discrete clock values available to overclockable machines, as multiples of 100% clock. Min is 1.0 (no underclocking; a 50%-underclocked game grid is not physically buildable at the scale the solver wants), and above 100% steps every 25% up to the 250% game cap. The MILP gets one column per tier for each slooped grade and for the sole grade of 0-slot machines (miners); the continuous un-slooped grade of slot machines gets only the <=1.0 (underclock) subset. 1.0 is always included; tiers may need tuning once real sink points/recipes land. Set fixed_max_clock=true to pin every overclockable machine to the top tier (250%) - the 'all-overclocked' build: collapses the clock dimension out of the model, roughly halves the machine count, costs a few percent of points vs the free-choice optimum."
+    "tiers": [
+      0.25,
+      0.5,
+      0.75,
+      1.0,
+      1.25,
+      1.5,
+      1.75,
+      2.0,
+      2.25,
+      2.5
+    ],
+    "_note": "Discrete clock values available to overclockable machines, as multiples of 100% clock. This variant extends the tiers down to 25% (25%-250% in 25% steps), INTENTIONALLY including underclocking below 100% (the default config keeps 1.0 as the floor because a heavily-underclocked grid is unwieldy to build). Under a binding machine_cap the low clocks genuinely pay: the solver underclocks the trailing machines where that most frees power for the machines that must overclock to shed count. The MILP gets one column per tier for each slooped grade and for the sole grade of 0-slot machines (miners); the continuous un-slooped grade of slot machines gets only the <=1.0 (underclock) subset. 1.0 is always included."
   },
-
   "augmenters": {
     "cost": 10,
-    "bonus": 0.10,
+    "bonus": 0.1,
     "power_mw": 500,
     "_note": "Each Alien Power Augmenter costs `cost` Somersloops; adds `bonus` * base (unaugmented) generation, additively (not compounding); AND generates `power_mw` MW of flat power itself, to which the bonus does NOT apply (confirmed in-game)."
   },
-
   "power": {
     "overproduction": 0.01,
     "_note": "Generation overproduction (reserve) as a fraction of the load (default 0.01 = 1%). The grid must deliver (1 + overproduction) * consumption, so the optimizer never plans to run generation at exactly 100% of what consumers draw; the report keeps this much capacity as headroom. Generators were otherwise throttled to exactly match demand."
   },
-
   "resources": {
     "_note": "OPTIONAL extra per-item cap on total recipe consumption. Map extraction is modeled as MINER/MACHINE recipes (see recipes/*); the per-node limit for miners lives in the map_resources table below (ingress), NOT here. Leave this table empty when miners are modeled as recipes so supply is not double-limited.",
-    "_example_cap_on_a_raw_item": {"water": 300.0}
+    "_example_cap_on_a_raw_item": {
+      "water": 300.0
+    }
   },
-
   "map_resources": {
     "_note": "Node-group caps for mined map resources: each key is one resource x purity (one in-game node type, e.g. 'iron_node_normal'). Every mining recipe (any miner tier mk1/mk2/mk3) carries map_resource = <same key>, and the TOTAL number of machines across the group is capped at the value here — one miner per node, so tiers share the cap. Counts are the number of nodes of that type.",
     "bauxite_node_impure": 5,
@@ -56,7 +65,6 @@
     "uranium_node_impure": 3,
     "uranium_node_normal": 2
   },
-
   "_sloops": {
     "_note": "CONFIRMED in-game formula, hardcoded in factory_optimiser/io_config.sloop_multipliers: a machine with k of its T total Somersloop slots (T = the machine's max_sloops, see machines/*.json) gets rho = 1 + k/T on output, kappa = 1 on inputs (inputs do NOT increase), and pi = (1 + k/T)^2 on power draw. Full slots -> 2x output; e.g. 1 of 2 slots -> 1.5x output, same input, 2.25x power. Nothing is configured here."
   }

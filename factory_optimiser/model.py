@@ -200,6 +200,16 @@ def build_problem(
     row = {activity_col[(r, k, clk)]: float(k) for (r, k, clk) in activity_seq if k > 0}
     add_row(row, lb=-np.inf, ub=sloop_budget, name="sloop_budget")
 
+    # 3b) Optional global machine cap: total machine-equivalents across ALL
+    # recipes/grades/clocks <= cap (None = unbounded). Matches the "I can only
+    # build N machines" constraint in-game. Prices building count against the
+    # points objective, so the resolver sheds machines by overclocking the
+    # machines where that most pays, and keeps power-efficient low clocks only
+    # where power (row 4) genuinely binds.
+    if params.machine_cap is not None:
+        row = {activity_col[(r, k, clk)]: 1.0 for (r, k, clk) in activity_seq}
+        add_row(row, lb=-np.inf, ub=params.machine_cap, name="machine_cap")
+
     # 4) Power balance (only when power appears anywhere):
     #    consumption <= m(N)*generation + N*W,
     #    where W = augmenters.power_mw is the flat MW each augmenter produces
@@ -292,11 +302,6 @@ def _clocks_for(config: Config, machine: str, k: int) -> list[float]:
     """
     if not config.is_overclockable(machine):
         return [1.0]
-    if config.parameters.fixed_max_clock:
-        # "All overclock" mode (Parameters.fixed_max_clock): overclockable
-        # machines only ever run at the top tier (250%), so the clock choice is
-        # removed from the MILP entirely and every such machine builds at max.
-        return [max(config.parameters.overclock_tiers)]
     return list(config.parameters.overclock_tiers)
 
 

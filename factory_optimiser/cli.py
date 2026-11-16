@@ -82,6 +82,8 @@ Options:
                                                                     [default: build-plan.md]
   --max-augmenters N        Cap augmenter count (default: floor(Somersloop budget / cost))
   --no-augmenters           Force N=0 (no Alien Power Augmenters)
+  --max-machines N          Global machine cap: total machines <= N (overrides
+                            parameters.json machine_cap; unbounded when unset or 0).
   --strict                  Treat audit warnings as failures too (check only).
   -j, --json                Emit machine-readable JSON instead of a table.
   -h, --help                Show this message.
@@ -103,6 +105,14 @@ def main(argv: list[str] | None = None) -> int:
     except ConfigError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2
+
+    # Optional CLI-side machine cap: overrides the parameter file for this run.
+    max_machines = args.get("--max-machines")
+    if max_machines not in (None, 0):
+        config = replace(
+            config,
+            parameters=replace(config.parameters, machine_cap=float(max_machines)),
+        )
 
     # Consistency audit runs before anything else.
     issues = check_config(config)
