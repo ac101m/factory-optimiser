@@ -147,25 +147,6 @@ def optimize_markdown(config: Config, best: AugResult, curve: list[AugResult]) -
         W(f"| **TOTAL** | | | **{best.points_per_min:,.0f}** | 100% |")
         W("")
 
-    # ---- map resources extracted ---------------------------------------------
-    extractors = [m for m in plan if m.machine in EXTRACTOR_MACHINES]
-    if extractors:
-        agg: dict[str, float] = {}
-        machines_of: dict[str, float] = {}
-        for m in extractors:
-            for o, v in m.outputs.items():
-                agg[o] = agg.get(o, 0.0) + v
-                machines_of[o] = machines_of.get(o, 0.0) + m.machines
-        W("### Map resources extracted")
-        W("")
-        W("Miners are shown at their planned 250% clock; every tapped node group is maxed.")
-        W("")
-        W("| Resource | extractors | /min |")
-        W("|---|---:|---:|")
-        for o in sorted(agg, key=lambda o: -agg[o]):
-            W(f"| {item(o)} | {machines_of[o]:,.0f} | {agg[o]:,.0f} |")
-        W("")
-
     # ---- production per item -------------------------------------------------
     produced: dict[str, float] = {}
     consumed: dict[str, float] = {}

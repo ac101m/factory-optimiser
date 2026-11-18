@@ -23,26 +23,6 @@
 | Plutonium Fuel Rod | 153,184 | 12.6 | 1,930,118 | 0.4% |
 | **TOTAL** | | | **471,645,175** | 100% |
 
-### Map resources extracted
-
-Miners are shown at their planned 250% clock; every tapped node group is maxed.
-
-| Resource | extractors | /min |
-|---|---:|---:|
-| Water | 695 | 208,254 |
-| Iron Ore | 121 | 90,194 |
-| Limestone | 79 | 64,800 |
-| Coal | 62 | 42,300 |
-| Copper Ore | 55 | 36,900 |
-| Caterium Ore | 17 | 15,000 |
-| Raw Quartz | 17 | 13,500 |
-| Crude Oil | 33 | 12,600 |
-| Bauxite | 17 | 12,300 |
-| Nitrogen Gas | 6 | 12,000 |
-| Sulfur | 16 | 10,800 |
-| SAM | 19 | 10,200 |
-| Uranium | 5 | 2,100 |
-
 ---
 
 # Production per item
