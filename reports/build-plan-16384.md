@@ -153,7 +153,7 @@ Aggregate material balance across the whole plan (production includes extraction
 
 # All used recipes
 
-140 recipe rows from 137 distinct recipes (rows repeat a recipe when sloop grades or clocks differ). `count` is the machines to build, with the raw fractional count in brackets; `clock` shows how to split that build into whole machines at the clock tier plus one trimmed remainder (e.g. `10@100% + 1@50%`); `equivalent all-machine clock` is the single uniform clock that reproduces the same throughput. A row whose equivalent clock sits below the tier is an exact-balance remnant, not a choice.
+100 production recipe rows from 97 distinct recipes (rows repeat a recipe when sloop grades or clocks differ); extractors are listed in the Resource extraction table underneath. `count` is the machines to build, with the raw fractional count in brackets; `clock` shows how to split that build into whole machines at the clock tier plus one trimmed remainder (e.g. `10@100% + 1@50%`); `equivalent all-machine clock` is the single uniform clock that reproduces the same throughput. A row whose equivalent clock sits below the tier is an exact-balance remnant, not a choice.
 
 | Recipe | machine | count | clock | equivalent all-machine clock |
 |---|---|---:|---:|---:|
@@ -233,6 +233,37 @@ Aggregate material balance across the whole plan (production includes extraction
 | Radio Control Unit | manufacturer | 83 (82.3944) | 82@100% + 1@39.4% | 99.3% |
 | Singularity Cell | manufacturer | 30 (30.0000) | 30@100% | 100.0% |
 | Thermal Propulsion Rocket | manufacturer | 60 (60.0000) | 60@100% | 100.0% |
+| Nuclear Power (Uranium) | nuclear_power_plant | 101 (100.8000) | 100@250% + 1@200% | 249.5% |
+| Packaged Nitrogen Gas | packager | 2 (1.3606) | 1@250% + 1@90.1% | 170.1% |
+| Packaged Turbofuel | packager | 70 (69.3802) | 69@250% + 1@95.1% | 247.8% |
+| AI Expansion Server | quantum_encoder | 67 (66.6667) | 66@25% + 1@16.7% | 24.9% |
+| AI Expansion Server (2 sloops) | quantum_encoder | 1 (1.0000) | 1@250% | 250.0% |
+| AI Expansion Server (3 sloops) | quantum_encoder | 2 (2.0000) | 2@250% | 250.0% |
+| Neural-Quantum Processor | quantum_encoder | 129 (128.8889) | 128@25% + 1@22.2% | 25.0% |
+| Superposition Oscillator | quantum_encoder | 174 (173.3333) | 173@25% + 1@8.3% | 24.9% |
+| Alternate: Electrode Aluminum Scrap | refinery | 77 (76.3134) | 76@175% + 1@54.8% | 173.4% |
+| Alternate: Heavy Oil Residue | refinery | 240 (240.0000) | 240@175% | 175.0% |
+| Alternate: Pure Caterium Ingot | refinery | 195 (194.6074) | 194@175% + 1@106.3% | 174.6% |
+| Alternate: Pure Copper Ingot | refinery | 1,260 (1259.3629) | 1259@175% + 1@63.5% | 174.9% |
+| Alternate: Pure Iron Ingot | refinery | 1,369 (1368.4319) | 1368@175% + 1@75.6% | 174.9% |
+| Alternate: Pure Quartz Crystal | refinery | 59 (58.8803) | 58@175% + 1@154.1% | 174.6% |
+| Alternate: Recycled Plastic | refinery | 123 (122.9304) | 122@175% + 1@162.8% | 174.9% |
+| Alternate: Recycled Rubber | refinery | 137 (136.7946) | 136@175% + 1@139.1% | 174.7% |
+| Alternate: Sloppy Alumina | refinery | 59 (58.0638) | 58@175% + 1@11.2% | 172.2% |
+| Alternate: Steamed Copper Sheet | refinery | 541 (540.3053) | 540@175% + 1@53.4% | 174.8% |
+| Alternate: Wet Concrete | refinery | 128 (127.1081) | 127@175% + 1@18.9% | 173.8% |
+| Petroleum Coke | refinery | 53 (52.6363) | 52@175% + 1@111.4% | 173.8% |
+| Residual Rubber | refinery | 120 (120.0000) | 120@175% | 175.0% |
+| Sulfuric Acid | refinery | 14 (13.6126) | 13@175% + 1@107.2% | 170.2% |
+| Alternate: Pure Aluminum Ingot | smelter | 268 (267.0970) | 267@250% + 1@24.2% | 249.2% |
+| Iron Ingot | smelter | 51 (50.7819) | 50@250% + 1@195.5% | 248.9% |
+
+### Resource extraction
+
+Miners, water/oil extractors and pressure wells pulled out of All used recipes — every tapped node group at its planned count/clock. (Per-node grouping is further down in the dedicated Resource extraction section.)
+
+| Recipe | machine | count | clock | equivalent all-machine clock |
+|---|---|---:|---:|---:|
 | Bauxite (Impure) Mk.3 | miner_mk3 | 5 (5.0000) | 5@250% | 250.0% |
 | Bauxite (Normal) Mk.3 | miner_mk3 | 6 (6.0000) | 6@250% | 250.0% |
 | Bauxite (Pure) Mk.3 | miner_mk3 | 6 (6.0000) | 6@250% | 250.0% |
@@ -260,31 +291,9 @@ Aggregate material balance across the whole plan (production includes extraction
 | Sulfur (Pure) Mk.3 | miner_mk3 | 5 (5.0000) | 5@250% | 250.0% |
 | Uranium (Impure) Mk.3 | miner_mk3 | 3 (3.0000) | 3@250% | 250.0% |
 | Uranium (Normal) Mk.3 | miner_mk3 | 2 (2.0000) | 2@250% | 250.0% |
-| Nuclear Power (Uranium) | nuclear_power_plant | 101 (100.8000) | 100@250% + 1@200% | 249.5% |
 | Crude Oil (Impure) | oil_extractor | 10 (10.0000) | 10@250% | 250.0% |
 | Crude Oil (Normal) | oil_extractor | 12 (12.0000) | 12@250% | 250.0% |
 | Crude Oil (Pure) | oil_extractor | 8 (8.0000) | 8@250% | 250.0% |
-| Packaged Nitrogen Gas | packager | 2 (1.3606) | 1@250% + 1@90.1% | 170.1% |
-| Packaged Turbofuel | packager | 70 (69.3802) | 69@250% + 1@95.1% | 247.8% |
-| AI Expansion Server | quantum_encoder | 67 (66.6667) | 66@25% + 1@16.7% | 24.9% |
-| AI Expansion Server (2 sloops) | quantum_encoder | 1 (1.0000) | 1@250% | 250.0% |
-| AI Expansion Server (3 sloops) | quantum_encoder | 2 (2.0000) | 2@250% | 250.0% |
-| Neural-Quantum Processor | quantum_encoder | 129 (128.8889) | 128@25% + 1@22.2% | 25.0% |
-| Superposition Oscillator | quantum_encoder | 174 (173.3333) | 173@25% + 1@8.3% | 24.9% |
-| Alternate: Electrode Aluminum Scrap | refinery | 77 (76.3134) | 76@175% + 1@54.8% | 173.4% |
-| Alternate: Heavy Oil Residue | refinery | 240 (240.0000) | 240@175% | 175.0% |
-| Alternate: Pure Caterium Ingot | refinery | 195 (194.6074) | 194@175% + 1@106.3% | 174.6% |
-| Alternate: Pure Copper Ingot | refinery | 1,260 (1259.3629) | 1259@175% + 1@63.5% | 174.9% |
-| Alternate: Pure Iron Ingot | refinery | 1,369 (1368.4319) | 1368@175% + 1@75.6% | 174.9% |
-| Alternate: Pure Quartz Crystal | refinery | 59 (58.8803) | 58@175% + 1@154.1% | 174.6% |
-| Alternate: Recycled Plastic | refinery | 123 (122.9304) | 122@175% + 1@162.8% | 174.9% |
-| Alternate: Recycled Rubber | refinery | 137 (136.7946) | 136@175% + 1@139.1% | 174.7% |
-| Alternate: Sloppy Alumina | refinery | 59 (58.0638) | 58@175% + 1@11.2% | 172.2% |
-| Alternate: Steamed Copper Sheet | refinery | 541 (540.3053) | 540@175% + 1@53.4% | 174.8% |
-| Alternate: Wet Concrete | refinery | 128 (127.1081) | 127@175% + 1@18.9% | 173.8% |
-| Petroleum Coke | refinery | 53 (52.6363) | 52@175% + 1@111.4% | 173.8% |
-| Residual Rubber | refinery | 120 (120.0000) | 120@175% | 175.0% |
-| Sulfuric Acid | refinery | 14 (13.6126) | 13@175% + 1@107.2% | 170.2% |
 | Central Nitrogen Gas Well | resource_well_pressurizer | 1 (1.0000) | 1@250% | 250.0% |
 | Crater Lakes Oil Well | resource_well_pressurizer | 1 (1.0000) | 1@250% | 250.0% |
 | Northern Nitrogen Gas Well | resource_well_pressurizer | 1 (1.0000) | 1@250% | 250.0% |
@@ -294,8 +303,6 @@ Aggregate material balance across the whole plan (production includes extraction
 | Southwestern Nitrogen Gas Well | resource_well_pressurizer | 1 (1.0000) | 1@250% | 250.0% |
 | Spire Coast Oil Well | resource_well_pressurizer | 1 (1.0000) | 1@250% | 250.0% |
 | Swamp Oil Well | resource_well_pressurizer | 1 (1.0000) | 1@250% | 250.0% |
-| Alternate: Pure Aluminum Ingot | smelter | 268 (267.0970) | 267@250% + 1@24.2% | 249.2% |
-| Iron Ingot | smelter | 51 (50.7819) | 50@250% + 1@195.5% | 248.9% |
 | Water Extraction | water_extractor | 819 (818.3166) | 818@225% + 1@71.2% | 224.8% |
 
 ---

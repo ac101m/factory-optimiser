@@ -205,13 +205,17 @@ def optimize_markdown(config: Config, best: AugResult, curve: list[AugResult]) -
     W("")
 
     # ---- all used recipes (summary index) ----------------------
+    producer_rows = [m for m in plan if m.machine not in EXTRACTOR_MACHINES]
+    extractor_rows = [m for m in plan if m.machine in EXTRACTOR_MACHINES]
+
     W("---")
     W("")
     W("# All used recipes")
     W("")
     W(
-        f"{len(plan)} recipe rows from {len({m.recipe_id for m in plan})} distinct recipes "
-        f"(rows repeat a recipe when sloop grades or clocks differ). `count` is the machines "
+        f"{len(producer_rows)} production recipe rows from {len({m.recipe_id for m in producer_rows})} "
+        f"distinct recipes (rows repeat a recipe when sloop grades or clocks differ); extractors are "
+        f"listed in the Resource extraction table underneath. `count` is the machines "
         f"to build, with the raw fractional count in brackets; `clock` shows how to split that "
         f"build into whole machines at the clock tier plus one trimmed remainder (e.g. "
         f"`10@100% + 1@50%`); `equivalent all-machine clock` is the single uniform clock "
@@ -221,13 +225,32 @@ def optimize_markdown(config: Config, best: AugResult, curve: list[AugResult]) -
     W("")
     W("| Recipe | machine | count | clock | equivalent all-machine clock |")
     W("|---|---|---:|---:|---:|")
-    for m in sorted(plan, key=lambda x: (x.machine, x._recipe.name)):
+    for m in sorted(producer_rows, key=lambda x: (x.machine, x._recipe.name)):
         sloop_tag = f" ({m.sloops_per_machine} sloops)" if m.sloops_per_machine else ""
         W(
             f"| {m._recipe.name}{sloop_tag} | {m.machine} | {m.machines:,.0f} "
             f"({m.activity:.4f}) | {_clock_breakdown(m)} | {m.clock_pct:.1f}% |"
         )
     W("")
+
+    if extractor_rows:
+        W("### Resource extraction")
+        W("")
+        W(
+            "Miners, water/oil extractors and pressure wells pulled out of All used recipes — "
+            "every tapped node group at its planned count/clock. (Per-node grouping is further "
+            "down in the dedicated Resource extraction section.)"
+        )
+        W("")
+        W("| Recipe | machine | count | clock | equivalent all-machine clock |")
+        W("|---|---|---:|---:|---:|")
+        for m in sorted(extractor_rows, key=lambda x: (x.machine, x._recipe.name)):
+            sloop_tag = f" ({m.sloops_per_machine} sloops)" if m.sloops_per_machine else ""
+            W(
+                f"| {m._recipe.name}{sloop_tag} | {m.machine} | {m.machines:,.0f} "
+                f"({m.activity:.4f}) | {_clock_breakdown(m)} | {m.clock_pct:.1f}% |"
+            )
+        W("")
 
     # ---- per item breakdown --------------------------------------------------
     producers_by_item: dict[str, list[tuple]] = {}
