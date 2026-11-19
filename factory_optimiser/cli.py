@@ -7,6 +7,9 @@ Commands:
     report                  best build plan as a Markdown planning document
                             (same solve as optimize, but human-readable,
                             per-machine inputs/outputs for build planning)
+    graph                   best build plan as an interactive production-flow
+                            graph (standalone HTML: recipe and resource nodes,
+                            item-rate edges) for planning the actual build
     sweep augmenters        points/min per augmenter count (marginal curve)
     sweep somersloops       points/min per total Somersloop budget
     sweep resources         points/min per unit of each map resource (marginal)
@@ -33,6 +36,7 @@ from docopt import DocoptExit, docopt  # noqa: E402
 
 from . import __version__
 from .consistency import audit_text, check_config, has_errors, has_warnings
+from .graph import optimize_graph
 from .io_config import ConfigError, load_config
 from .markdown import optimize_markdown
 from .report import (
@@ -56,6 +60,7 @@ Usage:
   factory_optimiser check [options] [--strict]
   factory_optimiser optimize [options]
   factory_optimiser report [options] [--output FILE]
+  factory_optimiser graph [options] [--output FILE]
   factory_optimiser sweep (augmenters | somersloops | resources) [options]
   factory_optimiser --version
   factory_optimiser --help
@@ -68,6 +73,10 @@ Commands:
                           (default ./build-plan.md) with a high-level overview and
                           a per-machine breakdown of recipes, counts, clocks and
                           inputs/outputs — for planning an actual build.
+  graph                   Same solve as optimize, but writes a self-contained
+                          interactive HTML production-flow graph (default
+                          ./production-graph.html): recipe and resource nodes,
+                          edges annotated with item rates.
   sweep augmenters        Marginal-value curve: points/min per augmenter count.
   sweep somersloops       Marginal-value curve: points/min per Somersloop budget.
   sweep resources         Marginal-value curve: pts/min per extra extractor node on each raw material.
@@ -78,8 +87,8 @@ Options:
   -t DIR, --items DIR       Directory of item JSON files          [default: items]
   -p FILE, --parameters FILE
                             Parameters JSON                      [default: config/parameters.json]
-  -o FILE, --output FILE    Markdown output path (report only; '-' = stdout)
-                                                                    [default: build-plan.md]
+  -o FILE, --output FILE    Output path ('-' = stdout; report → ./build-plan.md,
+                            graph → ./production-graph.html)
   --max-augmenters N        Cap augmenter count (default: floor(Somersloop budget / cost))
   --no-augmenters           Force N=0 (no Alien Power Augmenters)
   --max-machines N          Global machine cap: total machines <= N (overrides
@@ -134,6 +143,8 @@ def main(argv: list[str] | None = None) -> int:
             return _cmd_optimize(args, config)
         if args["report"]:
             return _cmd_report(args, config)
+        if args["graph"]:
+            return _cmd_graph(args, config)
         return _cmd_sweep(args, config)
     except SolveError as exc:
         print(f"error: {exc}", file=sys.stderr)
@@ -174,6 +185,22 @@ def _cmd_report(args, config) -> int:
         print(md, end="")
     else:
         Path(out).write_text(md)
+        print(f"wrote {Path(out).resolve()}")
+    return 0
+
+
+def _cmd_graph(args, config) -> int:
+    """Solve like ``optimize``, then emit the interactive production-graph HTML."""
+    max_n = _max_augmenters_arg(args)
+    curve = sweep_augmenters(config, max_n)
+    best = _pick_best(curve)
+    best = replace(best, solution=solve(best.solution.problem, minimize_machines=best.points_per_min))
+    html = optimize_graph(config, best)
+    out = args.get("--output") or "production-graph.html"
+    if out == "-":
+        print(html, end="")
+    else:
+        Path(out).write_text(html)
         print(f"wrote {Path(out).resolve()}")
     return 0
 
